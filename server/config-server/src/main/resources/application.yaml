@@ -1,0 +1,36 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: config
+  cloud:
+    config:
+      server:
+        encrypt:
+          enabled: false
+        git:
+          uri: git@github.com:chenghaLim/paranmanzang-secret.git
+          default-label: main
+          ignoreLocalSshSettings: true
+          strictHostKeyChecking: false
+          #          hostKey: # ssh-keyscan ???? ??
+          hostKeyAlgorithm: # ssh-keyscan ???? ??
+          privateKey: |
+        
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show_details: always
+encrypt:
+  key: my-secret
+
+# uri: ????? ?? ? ??
+# default-label: ? ??? ??? ??
+# search-paths: ?? ???? ?? ??

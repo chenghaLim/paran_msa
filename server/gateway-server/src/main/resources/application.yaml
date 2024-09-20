@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: gateway
+  profiles:
+    active: local
+    config:
+      import: optional:configserver:http://localhost:8888
+
+  data:
+    redis:
+      host: localhost               # Redis 서버 호스트
+      port: 6379                    # Redis 서버 포트
+      password: 1234            # Redis 서버 비밀번호
+
