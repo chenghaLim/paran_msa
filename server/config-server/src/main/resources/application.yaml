@@ -15,7 +15,33 @@ spring:
           strictHostKeyChecking: false
           #          hostKey: # ssh-keyscan ???? ??
           hostKeyAlgorithm: # ssh-keyscan ???? ??
-          privateKey: |
+          privateKey:  -----BEGIN OPENSSH PRIVATE KEY-----
+            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
+            -----END OPENSSH PRIVATE KEY-----
         
 
 management:

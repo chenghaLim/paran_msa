@@ -1,14 +1,128 @@
+server:
+  port: 8000
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+
+
 spring:
+
+  config:
+    activate:
+      on-profile: default
+
   application:
-    name: gateway
+    name: api
+
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: reactive
+
+  cloud:
+    gateway:
+      routes:
+        - id: chat-service
+          uri: lb://chat-service
+          predicates:
+            - Path=/chats/**
+            - Method=GET,POST,PUT,DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/chats/(?<path>.*), /$\\{path}
+
+        - id: comment-service
+          uri: lb://comment-service
+          predicates:
+            - Path=/comments/**
+            - Method=GET,POST,PUT,DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/comments/(?<path>.*), /$\\{path}
+
+        - id: file-service
+          uri: lb://file-service
+          predicates:
+            - Path=/files/**
+            - Method=GET,POST,PUT,DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/files/(?<path>.*), /$\\{path}
+
+        - id: group-service
+          uri: lb://group-service
+          predicates:
+            - Path=/api/groups/**
+            - Method=GET,POST,PUT,DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+#            - RewritePath=/groups/(?<path>.*), /$\\{path}
+
+        - id: room-service
+          uri: lb://room-service
+          predicates:
+            - Path=/api/rooms/**  # '/api/rooms/**' 패턴의 모든 요청을 처리
+            - Method=GET,POST,PUT,DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+#            - RewritePath=/api/rooms/(?<path>.*), /${path}  # '/api/rooms/addresses/search'로 들어오는 요청을 '/addresses/search'로 재작성
+
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/users/**
+            - Method=GET,POST,PUT,DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/users/(?<path>.*), /$\\{path}
+
+  jwt:
+    issuer: paranmanzang.com
+    secret: 80d0f49aacda55f952ff27acda9974f057378ae16a528b0ac35593652b1983b7
+    expired:
+      access: 600000
+      refresh: 1200000
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*" # 모든 엔드포인트 노출
+    endpoint:
+      shutdown:
+        enabled: true
+      info:
+        enabled: true
+      health:
+        enabled: true
+      beans:
+        enabled: true
+      httptrace:
+        enabled: true
+    health:
+      circuitbreakers:
+        enabled: true # Circuit Breaker 상태를 확인
+
+  resilience4j:
+    circuitbreaker:
+      configs:
+        default:
+          slidingWindowType: COUNT_BASED
+          slidingWindowSize: 10
+          failureRateThreshold: 50
+          permittedNumberOfCallsInHalfOpenState: 5
+          registerHealthIndicator: true
+
   profiles:
-    active: local
+#    active: local
     config:
       import: optional:configserver:http://localhost:8888
 
   data:
     redis:
-      host: localhost               # Redis 서버 호스트
-      port: 6379                    # Redis 서버 포트
-      password: 1234            # Redis 서버 비밀번호
-
+      host: localhost
+      port: 6379
+      password: 1234

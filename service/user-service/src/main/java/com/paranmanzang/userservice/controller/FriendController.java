@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/friends")
+@RequestMapping("/api/users/friends")
 public class FriendController {
     private final FriendServiceImpl friendService;
     public FriendController(FriendServiceImpl friendService) {

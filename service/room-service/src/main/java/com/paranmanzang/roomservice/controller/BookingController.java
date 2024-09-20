@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/bookings")
+@RequestMapping("/api/rooms/bookings")
 public class BookingController {
     private final BookingServiceImpl bookingService;
 

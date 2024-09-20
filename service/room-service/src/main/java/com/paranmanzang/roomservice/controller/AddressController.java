@@ -20,10 +20,10 @@ import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/addresses")
+@RequestMapping("/api/rooms/addresses")
 public class AddressController {
-    private final String Client_Id="";
-    private final String Client_Secret_Key= "";
+    private final String Client_Id="Hlz9JqBuVxtAsSSKyWHw";
+    private final String Client_Secret_Key= "UamL61rm7F";
     private final AddressServiceImpl addressService;
 
     @GetMapping("/search")

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin
 @RequiredArgsConstructor
-@RequestMapping("/api/rooms")
+@RequestMapping("/api/rooms/rooms")
 public class RoomController {
 
     private final RoomServiceImpl roomService;

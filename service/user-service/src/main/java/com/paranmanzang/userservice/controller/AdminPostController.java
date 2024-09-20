@@ -11,7 +11,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/aboard")
+@RequestMapping("/api/users/aboard")
 public class AdminPostController {
 
     private final AdminPostServiceImpl adminPostService;

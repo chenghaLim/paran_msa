@@ -1,3 +1,13 @@
+server:
+  port: 9002
+
+ncp:
+  storage:
+    region: kr-standard
+    endpoint: https://kr.object.ncloudstorage.com
+    accessKey: 541960C508D02D63BCC7
+    secretKey: D5030BF14BE5556A9FF6460A326D57BA3D085B50
+
 spring:
   application:
     name: file-service
@@ -5,3 +15,9 @@ spring:
     active: local
     config:
       import: optional:configserver:http://localhost:8888
+
+  data:
+    mongodb:
+      uri: mongodb://root:1234@127.0.0.1:27017/parandb?authSource=admin
+    cache:
+      type: redis
