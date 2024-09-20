@@ -28,29 +28,26 @@ spring:
         - id: chat-service
           uri: lb://chat-service
           predicates:
-            - Path=/chats/**
+            - Path=/api/chats/**
             - Method=GET,POST,PUT,DELETE
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/chats/(?<path>.*), /$\\{path}
 
         - id: comment-service
           uri: lb://comment-service
           predicates:
-            - Path=/comments/**
+            - Path=/api/comments/**
             - Method=GET,POST,PUT,DELETE
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/comments/(?<path>.*), /$\\{path}
 
         - id: file-service
           uri: lb://file-service
           predicates:
-            - Path=/files/**
+            - Path=/api/files/**
             - Method=GET,POST,PUT,DELETE
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/files/(?<path>.*), /$\\{path}
 
         - id: group-service
           uri: lb://group-service
@@ -59,25 +56,22 @@ spring:
             - Method=GET,POST,PUT,DELETE
           filters:
             - RemoveRequestHeader=Cookie
-#            - RewritePath=/groups/(?<path>.*), /$\\{path}
 
         - id: room-service
           uri: lb://room-service
           predicates:
-            - Path=/api/rooms/**  # '/api/rooms/**' 패턴의 모든 요청을 처리
+            - Path=/api/rooms/**
             - Method=GET,POST,PUT,DELETE
           filters:
             - RemoveRequestHeader=Cookie
-#            - RewritePath=/api/rooms/(?<path>.*), /${path}  # '/api/rooms/addresses/search'로 들어오는 요청을 '/addresses/search'로 재작성
 
         - id: user-service
           uri: lb://user-service
           predicates:
-            - Path=/users/**
+            - Path=/api/users/**
             - Method=GET,POST,PUT,DELETE
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/users/(?<path>.*), /$\\{path}
 
   jwt:
     issuer: paranmanzang.com
@@ -120,9 +114,3 @@ spring:
 #    active: local
     config:
       import: optional:configserver:http://localhost:8888
-
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      password: 1234

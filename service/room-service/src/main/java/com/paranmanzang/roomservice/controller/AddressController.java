@@ -22,8 +22,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @RequestMapping("/api/rooms/addresses")
 public class AddressController {
-    private final String Client_Id="Hlz9JqBuVxtAsSSKyWHw";
-    private final String Client_Secret_Key= "UamL61rm7F";
+    private final String Client_Id="";
+    private final String Client_Secret_Key= "";
     private final AddressServiceImpl addressService;
 
     @GetMapping("/search")
