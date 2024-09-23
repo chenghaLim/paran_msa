@@ -24,10 +24,15 @@ public class ChatMessageHandler {
 
     // SSE 메시지 구독 # 108
     public Mono<ServerResponse> getMessageList(ServerRequest request) {
-        return ServerResponse.ok()
-                .contentType(MediaType.TEXT_EVENT_STREAM)
-                .body(getSseMessageStream(request.pathVariable("roomId"), request.headers().firstHeader("nickname")), ServerSentEvent.class);
+        return request.queryParam("nickname")
+                .map(nickname ->
+                        ServerResponse.ok()
+                                .contentType(MediaType.TEXT_EVENT_STREAM)
+                                .body(getSseMessageStream(request.pathVariable("roomId"), nickname), ServerSentEvent.class)
+                )
+                .orElseGet(() -> ServerResponse.badRequest().bodyValue(false));
     }
+
 
     // 실시간 및 과거 메시지 스트리밍
     private Flux<ServerSentEvent<ChatMessageModel>> getSseMessageStream(String roomId, String nickname) {

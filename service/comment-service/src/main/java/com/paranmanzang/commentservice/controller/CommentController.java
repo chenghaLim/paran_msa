@@ -19,11 +19,6 @@ public class CommentController {
 
     private final CommentServiceImpl commentService;
 
-    @GetMapping("/{test}")
-    public ResponseEntity<String> getCommentListByPostId(@PathVariable String test) {
-        return ResponseEntity.ok(test);
-    }
-
     @PostMapping
     public ResponseEntity<Boolean> insert(@RequestBody @Valid CommentRequestModel model, @RequestHeader String nickname, BindingResult result)
             throws BindException {

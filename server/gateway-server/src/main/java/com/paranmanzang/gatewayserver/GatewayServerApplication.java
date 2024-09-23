@@ -18,10 +18,10 @@ public class GatewayServerApplication {
 	@Bean
 	public RouteLocator gatewayRoutes(RouteLocatorBuilder builder){
 		return builder.routes()
-//				.route(p -> p
-//						.path("/get")
-//						.filters(f -> f.addRequestHeader("Hello", "World"))
-//						.uri("http://httpbin.org:80"))
+				.route(p -> p
+						.path("/get")
+						.filters(f -> f.addRequestHeader("Hello", "World"))
+						.uri("http://httpbin.org:80"))
 				.route(r -> r.path("/api/chats/**").uri("lb://chat-service"))
 				.route(r -> r.path("/api/comments/**").uri("lb://comment-service"))
 				.route(r -> r.path("/api/files/**").uri("lb://file-service"))

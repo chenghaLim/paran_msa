@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .authorizeExchange(exchange -> exchange
                                 .pathMatchers("/swagger-ui/**").permitAll()
 //                        .pathMatchers("/api/rooms/addresses/search").permitAll()
-//                        .pathMatchers("/get").permitAll()
+                        .pathMatchers("/get").permitAll()
                                 .pathMatchers("/api/comments/{test}").permitAll()
                                 .pathMatchers("/api/groups/{test}").permitAll()
                                 .pathMatchers("/api/users/create").permitAll()
