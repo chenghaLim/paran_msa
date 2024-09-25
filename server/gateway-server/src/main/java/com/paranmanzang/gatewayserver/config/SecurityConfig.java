@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .addFilterBefore(jwtFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .authorizeExchange(exchange -> exchange
                                 .pathMatchers("/swagger-ui/**").permitAll()
+                                .pathMatchers("/**").permitAll()
 //                        .pathMatchers("/api/rooms/addresses/search").permitAll()
                         .pathMatchers("/get").permitAll()
                                 .pathMatchers("/api/comments/{test}").permitAll()
