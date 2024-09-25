@@ -23,6 +23,7 @@ public class JoiningServiceImpl implements JoiningService {
                 .map(joining -> (Object) new ErrorField(joiningModel.getNickname(), "이미 가입되어있는 멤버입니다."))
                 .orElseGet(() -> groupRepository.findById(joiningModel.getGroupId())
                         .map(intergroup -> {
+                            joiningModel.setGroup(intergroup);
                             return joiningRepository.save(joiningModel.toEntity()) != null ? Boolean.TRUE : Boolean.FALSE;
                         })
                         .orElse(Boolean.FALSE));

@@ -40,7 +40,7 @@ public class AccountRepositoryImpl implements AccountCustomRepository {
                         Projections.constructor(
                                 AccountModel.class,
                                 account.orderId.as("orderId"),
-                                account.detail.as("detail"),
+                                account.detail.as("orderName"),
                                 account.amount.as("amount"),
                                 account.amountTaxFree.as("amountTaxFree"),
                                 account.usePoint.as("usePoint"),
@@ -70,7 +70,7 @@ public class AccountRepositoryImpl implements AccountCustomRepository {
                                 AccountModel.class,
                                 account.orderId.as("orderId"),
                                 account.detail.as("detail"),
-                                account.amount.as("amount"),
+                                account.amount.as("orderName"),
                                 account.amountTaxFree.as("amountTaxFree"),
                                 account.usePoint.as("usePoint"),
                                 account.reason.as("reason"),

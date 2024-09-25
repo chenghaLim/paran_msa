@@ -29,14 +29,14 @@ public class GroupServiceImpl implements GroupService {
         return groupRepository.findByNickname(nickname, pageable);
     }
 
-    public Boolean duplicatename(String groupname) {
-        return groupRepository.existsByName(groupname);
+    public Boolean duplicatename(String groupName) {
+        return groupRepository.existsByName(groupName);
     }
 
     @Transactional
     public Object addGroup(GroupModel groupModel) {
         return Optional.ofNullable(groupModel)
-                .filter(group -> !duplicatename(group.getGroupname()))
+                .filter(group -> !duplicatename(group.getGroupName()))
                 .map(group -> {
                     // 그룹 저장 후 Joining 엔티티 저장
                     Optional.of(groupRepository.save(group.toEntity()))

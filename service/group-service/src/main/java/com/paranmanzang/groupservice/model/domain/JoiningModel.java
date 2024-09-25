@@ -21,12 +21,12 @@ public class JoiningModel {
     @NotNull(message = "참여할 그룹 Id는 필수값입니다.")
     private Long groupId;
 
-    private Group grouptojoin;
+    private Group group;
 
     public Joining toEntity() {
         return Joining.builder()
-                .nickname(this.nickname)
-                .group(this.grouptojoin)
+                .nickname(nickname)
+                .group(group)
                 .build();
     }
 

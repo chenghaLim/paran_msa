@@ -29,25 +29,6 @@ public class GroupController {
         return ResponseEntity.ok(groupService.groupList(PageRequest.of(page, size)));
     }
 
-    // 그룹에 해당하는 유저리스트 가져오기
-    @GetMapping("/userlist/{groupId}")
-    public ResponseEntity<?> getUserListById(@PathVariable Long groupId) {
-        return ResponseEntity.ok(joiningService.getUserListById(groupId));
-    }
-
-    // 소모임 하나 조회
-    @GetMapping("/{groupId}")
-    public ResponseEntity<?> getGroupById(@PathVariable Long groupId) {
-        return ResponseEntity.ok(groupService.getGroupById(groupId));
-    }
-
-
-    // 소모임 만든 후 채팅방 개설 후 실행
-    @PutMapping("/chatroomupdate/{groupId}")
-    public ResponseEntity<?> updateChatRoomId(@RequestBody String roomId, @PathVariable Long groupId) {
-        return ResponseEntity.ok(groupService.updateChatRoomId(roomId, groupId));
-    }
-
     //#61. 참여중인 소모임 조회
     @GetMapping("/mygrouplist")
     public ResponseEntity<?> getGrouplistByUserId(@RequestParam("nickname") String nickname,@RequestParam int page, @RequestParam int size) {
@@ -71,6 +52,34 @@ public class GroupController {
         return ResponseEntity.ok(groupService.enableGroup(groupId));
     }
 
+    //#64.소모임 승인 취소
+    @Transactional
+    @PutMapping("/adminoutGroup")
+    public ResponseEntity<?> enableCancelGroup(@RequestParam Long groupId) {
+        return ResponseEntity.ok(groupService.enableCancelGroup(groupId));
+    }
+
+    //#66-2.소모임 멤버승인 취소
+
+    @Transactional
+    @PutMapping("/adminoutMember")
+    public ResponseEntity<?> disableGroupMember(@RequestParam("groupId") Long groupId,
+                                                @RequestParam("nickname") String userNickname) {
+        return ResponseEntity.ok(joiningService.disableMember(groupId, userNickname));
+    }
+
+    // 그룹에 해당하는 유저리스트 가져오기
+    @GetMapping("/userlist/{groupId}")
+    public ResponseEntity<?> getUserListById(@PathVariable Long groupId) {
+        return ResponseEntity.ok(joiningService.getUserListById(groupId));
+    }
+
+    @PutMapping("/chatroomupdate/{groupId}")
+    public ResponseEntity<?> updateChatRoomId(@RequestBody String roomId, @PathVariable Long groupId) {
+        return ResponseEntity.ok(groupService.updateChatRoomId(roomId, groupId));
+    }
+
+
     //#66.소모임 멤버 추가
 
     @PostMapping("/plusmember")//request: userNickname, groupId
@@ -89,14 +98,6 @@ public class GroupController {
     public ResponseEntity<?> ebableGroupMember(@RequestParam("groupId") Long groupId,
                                                @RequestParam("nickname") String userNickname) {
         return ResponseEntity.ok(joiningService.enableMember(groupId, userNickname));
-    }
-    //#66-2.소모임 멤버승인 취소
-
-    @Transactional
-    @PutMapping("/adminoutMember")
-    public ResponseEntity<?> disableGroupMember(@RequestParam("groupId") Long groupId,
-                                                @RequestParam("nickname") String userNickname) {
-        return ResponseEntity.ok(joiningService.disableMember(groupId, userNickname));
     }
     //#64-1.소모임 삭제
 
@@ -134,12 +135,6 @@ public class GroupController {
     }
     //#76-1.소모임 포인트 만료 - date 기준 : Service단에 Scheduled 사용
 
-    //#64.소모임 승인 취소
-    @Transactional
-    @PutMapping("/adminoutGroup")
-    public ResponseEntity<?> enableCancelGroup(@RequestParam Long groupId) {
-        return ResponseEntity.ok(groupService.enableCancelGroup(groupId));
-    }
 
     // 승인해야 하는 소모임 리스트
     @GetMapping("/updateenablelist")

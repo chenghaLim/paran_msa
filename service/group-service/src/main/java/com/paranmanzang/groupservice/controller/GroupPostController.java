@@ -1,6 +1,5 @@
 package com.paranmanzang.groupservice.controller;
 
-import com.paranmanzang.groupservice.enums.GroupPostCategory;
 import com.paranmanzang.groupservice.model.domain.GroupPostModel;
 import com.paranmanzang.groupservice.service.impl.GroupPostServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -34,14 +33,8 @@ public class GroupPostController {
 
     //#70 - 내가 속한 group의 게시물 목록
     @GetMapping("/{groupId}")
-    public ResponseEntity<?> getAllByGroupId(@PathVariable Long groupId,@RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<?> getAllByGroupId(@PathVariable Long groupId, @RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(groupPostService.findByGroupId(groupId, PageRequest.of(page, size)));
-    }
-
-    //#게시글 상세 조회
-    @GetMapping("/postDetail/{postId}")
-    public ResponseEntity<?> getBoardPostByPostId(@PathVariable Long postId) {
-        return ResponseEntity.ok(groupPostService.findById(postId));
     }
 
     // view 카운트 업데이트

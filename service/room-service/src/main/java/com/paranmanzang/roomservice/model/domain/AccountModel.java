@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class AccountModel {
     private String orderId;
-    private String detail;
+    private String orderName;
     private int amount;
     private int amountTaxFree;
     private int usePoint;

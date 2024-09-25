@@ -18,9 +18,9 @@ public class BookController {
     public ResponseEntity<?> getBookList(@RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(bookService.getBookList(PageRequest.of(page, size)));
     }
-
-    @GetMapping("/{bookId}")
-    public ResponseEntity<?> findOneByBookId(@PathVariable("bookId") Long id){
-        return ResponseEntity.ok(bookService.findOneById(id));
-    }
+//
+//    @GetMapping("/{bookId}")
+//    public ResponseEntity<?> findOneByBookId(@PathVariable("bookId") Long id){
+//        return ResponseEntity.ok(bookService.findOneById(id));
+//    }
 }
