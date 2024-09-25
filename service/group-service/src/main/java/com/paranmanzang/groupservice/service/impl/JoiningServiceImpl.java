@@ -2,75 +2,64 @@ package com.paranmanzang.groupservice.service.impl;
 
 import com.paranmanzang.groupservice.model.domain.ErrorField;
 import com.paranmanzang.groupservice.model.domain.JoiningModel;
-import com.paranmanzang.groupservice.model.entity.Group;
-import com.paranmanzang.groupservice.model.entity.Joining;
 import com.paranmanzang.groupservice.model.repository.GroupRepository;
 import com.paranmanzang.groupservice.model.repository.JoiningRepository;
 import com.paranmanzang.groupservice.service.JoiningService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class JoiningServiceImpl implements JoiningService {
-    private JoiningRepository joiningRepository;
-    private GroupRepository groupRepository;
-
-    public JoiningServiceImpl(JoiningRepository joiningRepository, GroupRepository groupRepository) {
-        this.joiningRepository = joiningRepository;
-        this.groupRepository = groupRepository;
-    }
+    private final JoiningRepository joiningRepository;
+    private final GroupRepository groupRepository;
 
     @Transactional
     public Object addMember(JoiningModel joiningModel) {
-        String nickname = joiningModel.getNickname();
-        Long groupId = joiningModel.getGroupId();
-
-        Optional<Joining> alreadyIn = joiningRepository.findJoiningByGroupIdAndNickname(groupId, nickname);
-        if (alreadyIn.isPresent()) {
-            return new ErrorField(nickname, "이미 가입되어있는 멤버입니다.");
-        } else {
-            Optional<Group> grouptoenter = groupRepository.findById(groupId);
-            if (grouptoenter.isPresent()) {
-                joiningModel.setGrouptojoin(grouptoenter.get());
-                joiningModel.setNickname(nickname);
-                return joiningRepository.save(joiningModel.toEntity()) != null ? Boolean.TRUE : Boolean.FALSE;
-            } else {
-                return new ErrorField(groupId, "group이 존재하지 않습니다.");
-            }
-        }
+        return joiningRepository.findJoiningByGroupIdAndNickname(joiningModel.getGroupId(), joiningModel.getNickname())
+                .map(joining -> (Object) new ErrorField(joiningModel.getNickname(), "이미 가입되어있는 멤버입니다."))
+                .orElseGet(() -> groupRepository.findById(joiningModel.getGroupId())
+                        .map(intergroup -> {
+                            return joiningRepository.save(joiningModel.toEntity()) != null ? Boolean.TRUE : Boolean.FALSE;
+                        })
+                        .orElse(Boolean.FALSE));
     }
+
 
     public Object enableMember(Long groupId, String nickname) {
-        Optional<Joining> temp = joiningRepository.findByGroupIdAndNickname(groupId, nickname);
-        if (temp.isPresent()) {
-            Joining joiningToEnable = temp.get();
-            if (!joiningToEnable.isEnabled()) {
-                joiningToEnable.setEnabled(true);
-               return joiningRepository.save(joiningToEnable) != null ? Boolean.TRUE : Boolean.FALSE;
-            } else {
-                return new ErrorField(nickname, "이미 승인된 멤버입니다.");
-            }
-        } else {
-            return new ErrorField(nickname, "가입정보가 없습니다.");
-        }
-
+        return joiningRepository.findByGroupIdAndNickname(groupId, nickname)
+                .map(joiningToEnable -> {
+                    if (!joiningToEnable.isEnabled()) {
+                        joiningToEnable.setEnabled(true);
+                        return joiningRepository.save(joiningToEnable) != null ? Boolean.TRUE : Boolean.FALSE;
+                    } else {
+                        return (Object) new ErrorField(nickname, "이미 승인된 멤버입니다.");
+                    }
+                })
+                .orElseGet(() -> new ErrorField(nickname, "가입정보가 없습니다."));
     }
 
-    public Object disableMember(Long groupId, String nickname) {
-        Optional<Joining> temp = joiningRepository.findByGroupIdAndNickname(groupId, nickname);
-        if (temp.isPresent()) {
-            Joining joiningToEnable = temp.get();
-            if (joiningToEnable.isEnabled()) {
-                joiningToEnable.setEnabled(false);
-                return joiningRepository.save(joiningToEnable) != null ? Boolean.TRUE : Boolean.FALSE;
-            } else {
-                return new ErrorField(nickname, "미승인 멤버입니다.");
-            }
-        } else {
-            return new ErrorField(nickname, "가입정보가 없습니다.");
-        }
 
+    public Object disableMember(Long groupId, String nickname) {
+        return joiningRepository.findByGroupIdAndNickname(groupId, nickname)
+                .map(joiningToEnable -> {
+                    if (joiningToEnable.isEnabled()) {
+                        joiningToEnable.setEnabled(false);
+                        return joiningRepository.save(joiningToEnable) != null ? Boolean.TRUE : Boolean.FALSE;
+                    } else {
+                        return (Object) new ErrorField(nickname, "미승인 멤버입니다.");
+                    }
+                })
+                .orElseGet(() -> new ErrorField(nickname, "가입정보가 없습니다."));
+    }
+
+
+    @Override
+    public Object getUserListById(Long groupId) {
+        return joiningRepository.findByGroupId(groupId).stream()
+                .map(JoiningModel::fromEntity).collect(Collectors.toSet());
     }
 }

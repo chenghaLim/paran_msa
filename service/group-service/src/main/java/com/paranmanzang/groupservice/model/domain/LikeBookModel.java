@@ -1,6 +1,5 @@
 package com.paranmanzang.groupservice.model.domain;
 
-import com.paranmanzang.groupservice.model.entity.LikeBooks;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -15,12 +14,8 @@ public class LikeBookModel {
     private String nickname;
     @NotBlank(message = "도서 아이디는 필수값입니다.")
     private long bookId;
-
-    private String bookName;
-    public static LikeBookModel formEntity(LikeBooks likeBooks){
-        return LikeBookModel.builder()
-                .id(likeBooks.getId())
-                .nickname(likeBooks.getNickname())
-                .bookName(likeBooks.getBook().getTitle()).build();
-    }
+    private String title;
+    private String author;
+    private String categoryName;
+    private int likeBookCount;
 }

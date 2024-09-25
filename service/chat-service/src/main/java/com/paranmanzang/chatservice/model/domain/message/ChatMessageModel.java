@@ -17,13 +17,14 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 public class ChatMessageModel {
-  private MessageType type;
-  private String nickname;
-  private String message;
+    private String id;
+    private MessageType type;
+    private String nickname;
+    private String message;
 
-  @JsonSerialize(using = LocalDateTimeSerializer.class)
-  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-  @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
-  private LocalDateTime time;
-  private String roomId;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime time;
+    private String roomId;
 }

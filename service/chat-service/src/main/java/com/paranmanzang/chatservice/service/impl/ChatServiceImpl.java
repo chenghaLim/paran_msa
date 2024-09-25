@@ -1,7 +1,6 @@
 package com.paranmanzang.chatservice.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.paranmanzang.chatservice.model.domain.ChatUserModel;
 import com.paranmanzang.chatservice.model.domain.message.ChatMessageModel;
 import com.paranmanzang.chatservice.model.domain.message.RequestChatMessageModel;
@@ -52,24 +51,9 @@ public class ChatServiceImpl implements ChatService {
                                     .name(roomModel.getName())
                                     .createAt(LocalDateTime.now())
                                     .build())
-                            .flatMap(insertedRoom -> {
-                                return userRepository.insert(ChatUser.builder()
-                                                .roomId(insertedRoom.getId())
-                                                .nickname(nickname)
-                                                .enterTime(LocalDateTime.now())
-                                                .build())
-                                        .thenReturn(insertedRoom);
-                            })
-                            .flatMap(insertedRoom -> {
-                                return messageRepository.insert(ChatMessage.builder()
-                                                .type(MessageType.ENTER)
-                                                .roomId(insertedRoom.getId())
-                                                .nickname(nickname)
-                                                .message(nickname + MessageType.ENTER.getMessage())
-                                                .createAt(LocalDateTime.now())
-                                                .build())
-                                        .thenReturn(insertedRoom.getId());
-                            });
+                            .flatMap(insertedRoom -> addUserToRoomAndNotify(insertedRoom.getId(), nickname, MessageType.ENTER))
+                            .flatMap(insertedRoom -> insertReadLastTime(insertedRoom.getId(), nickname)
+                                    .thenReturn(insertedRoom.getId()));
                 });
     }
 
@@ -105,27 +89,54 @@ public class ChatServiceImpl implements ChatService {
                 ).onErrorResume(e -> Mono.just(false));
     }
 
+    private Mono<ChatRoom> addUserToRoomAndNotify(String roomId, String nickname, MessageType messageType) {
+        return userRepository.insert(ChatUser.builder()
+                        .roomId(roomId)
+                        .nickname(nickname)
+                        .enterTime(LocalDateTime.now())
+                        .build())
+                .flatMap(insertedUser -> messageRepository.insert(ChatMessage.builder()
+                                .type(messageType)
+                                .roomId(roomId)
+                                .nickname(nickname)
+                                .message(nickname + messageType.getMessage())
+                                .createAt(LocalDateTime.now())
+                                .build())
+                        .flatMap(insertedMessage -> notifyRoom(roomId, insertedMessage)))
+                .then(roomRepository.findById(roomId));  // 방 정보 반환
+    }
+
+    // Redis로 알림을 보내는 로직을 별도로 분리
+    private Mono<Long> notifyRoom(String roomId, ChatMessage insertedMessage) {
+        return redisTemplate.convertAndSend("room:" + roomId, ChatMessageModel.builder()
+                .type(insertedMessage.getType())
+                .nickname(insertedMessage.getNickname())
+                .message(insertedMessage.getMessage())
+                .time(insertedMessage.getCreateAt())
+                .roomId(insertedMessage.getRoomId())
+                .build());
+    }
+
     @Override
     public Flux<ChatRoomModel> getChatListByNickname(String nickname) {
         return userRepository.findByNickname(nickname)
+                .switchIfEmpty(Flux.defer(Flux::empty))
                 .flatMap(chatUser -> roomRepository.findById(chatUser.getRoomId())
+                        .switchIfEmpty(Mono.defer(Mono::empty))
                         .flatMap(chatRoom -> userRepository.countByRoomId(chatRoom.getId())
+                                .switchIfEmpty(Mono.defer(Mono::empty))
                                 .flatMap(userCount -> userTimeStampRepository.findTimeByNicknameAndRoomId(chatRoom.getId(), nickname)
+                                        .switchIfEmpty(Mono.defer(Mono::empty))
                                         .flatMap(lastReadTime -> messageRepository.unReadMessageCountByRoomId(chatRoom.getId(), nickname, lastReadTime)
+                                                .switchIfEmpty(Mono.defer(Mono::empty))
                                                 .map(unReadMessageCount -> ChatRoomModel.builder()
                                                         .roomId(chatRoom.getId())
                                                         .name(chatRoom.getName())
                                                         .password(chatRoom.getPassword())
                                                         .userCount(userCount)
                                                         .unReadMessageCount(unReadMessageCount)
-                                                        .build()
-                                                )
-                                        )
-                                )
-                        )
-                );
+                                                        .build())))));
     }
-
 
     @Override
     public Flux<ChatUserModel> findNicknamesByRoomId(String roomId) {
@@ -139,30 +150,17 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public Mono<Boolean> exitRoom(String roomId, String nickname) {
         return userRepository.deleteByRoomIdAndNickname(roomId, nickname)
-                .flatMap(success ->
-                        messageRepository.insert(ChatMessage.builder()
+                .flatMap(success -> messageRepository.insert(ChatMessage.builder()
                                 .roomId(roomId)
                                 .nickname(nickname)
                                 .type(MessageType.EXIT)
                                 .message(nickname + MessageType.EXIT.getMessage())
-                                .createAt(LocalDateTime.now()) // 시간 추가
-                                .build()
-                        ).flatMap(insertedMessage ->
-                                redisTemplate.convertAndSend("room:" + roomId, ChatMessageModel.builder()
-                                        .type(insertedMessage.getType())
-                                        .nickname(insertedMessage.getNickname())
-                                        .message(insertedMessage.getMessage())
-                                        .time(insertedMessage.getCreateAt())
-                                        .roomId(insertedMessage.getRoomId())
-                                        .build()
-                                ).then(Mono.just(true))
-                        )
-                )
-                .onErrorResume(e -> {
-                    return Mono.just(false);
-                });
+                                .createAt(LocalDateTime.now())
+                                .build())
+                        .flatMap(insertedMessage -> notifyRoom(roomId, insertedMessage))
+                        .then(Mono.just(true)))
+                .onErrorResume(e -> Mono.just(false));
     }
-
 
     @Override
     public Mono<Boolean> deleteChatRoom(String roomId) {
@@ -171,30 +169,24 @@ public class ChatServiceImpl implements ChatService {
                 .then(messageRepository.deleteByRoomId(roomId))
                 .then(userTimeStampRepository.deleteByRoomId(roomId))
                 .then(Mono.just(true))
-                .onErrorResume(e -> {
-                    return Mono.just(false);
-                });
+                .onErrorResume(e -> Mono.just(false));
     }
 
     @Override
     public Mono<Boolean> updateRoomName(String name, String roomId, String nickname) {
         return userRepository.findRoomOriginalCreator(roomId)
-                .flatMap(user ->
-                        user.getNickname().equals(nickname)
-                                ? roomRepository.updateName(roomId, name)
-                                : Mono.just(false)
-                )
+                .flatMap(user -> user.getNickname().equals(nickname)
+                        ? roomRepository.updateName(roomId, name)
+                        : Mono.just(false))
                 .onErrorResume(e -> Mono.just(false));
     }
 
     @Override
     public Mono<Boolean> updateRoomPassword(String password, String roomId, String nickname) {
         return userRepository.findRoomOriginalCreator(roomId)
-                .flatMap(user ->
-                        user.getNickname().equals(nickname)
-                                ? roomRepository.updatePassword(roomId, password)
-                                : Mono.just(false)
-                )
+                .flatMap(user -> user.getNickname().equals(nickname)
+                        ? roomRepository.updatePassword(roomId, password)
+                        : Mono.just(false))
                 .onErrorResume(e -> Mono.just(false));
     }
 
@@ -202,74 +194,64 @@ public class ChatServiceImpl implements ChatService {
     public Flux<ChatMessageModel> getMessageList(String roomId, String nickname) {
         return messageRepository.findByRoomId(roomId, nickname)
                 .map(chatMessage -> ChatMessageModel.builder()
+                        .id(chatMessage.getId())
                         .type(chatMessage.getType())
                         .message(chatMessage.getMessage())
                         .nickname(chatMessage.getNickname())
                         .time(chatMessage.getCreateAt())
                         .roomId(chatMessage.getRoomId())
-                        .build()
-                );
+                        .build());
     }
 
     @Override
     public Mono<Boolean> insertMessage(Mono<RequestChatMessageModel> messageModel, String nickname) {
         return messageModel
-                .flatMap(message -> {
-                    return messageRepository.insert(ChatMessage.builder()
-                                    .type(message.getType())
-                                    .nickname(nickname)
-                                    .message(message.getMessage())
-                                    .createAt(LocalDateTime.now())
-                                    .roomId(message.getRoomId())
-                                    .build()
-                            )
-                            .flatMap(savedMessage -> {
-                                return redisTemplate.convertAndSend("room:" + savedMessage.getRoomId(), ChatMessageModel.builder()
-                                        .type(savedMessage.getType())
-                                        .nickname(savedMessage.getNickname())
-                                        .message(savedMessage.getMessage())
-                                        .time(savedMessage.getCreateAt())
-                                        .roomId(savedMessage.getRoomId())
-                                        .build());
-                            })
-                            .then(Mono.just(true));
-                })
+                .flatMap(message -> messageRepository.insert(ChatMessage.builder()
+                                .type(message.getType())
+                                .nickname(nickname)
+                                .message(message.getMessage())
+                                .createAt(LocalDateTime.now())
+                                .roomId(message.getRoomId())
+                                .build())
+                        .flatMap(savedMessage -> notifyRoom(savedMessage.getRoomId(), savedMessage))
+                        .then(Mono.just(true)))
                 .onErrorResume(e -> Mono.just(false));
     }
 
-    // 실시간 메시지 구독
     @Override
     public Flux<ChatMessageModel> subscribeToRoom(String roomId) {
         return redisMessageListenerContainer.receive(new ChannelTopic("room:" + roomId))
                 .mapNotNull(redisMessage -> {
                     var messageBody = (String) redisMessage.getMessage();
-                    ChatMessageModel message;
                     try {
-                        message = objectMapper.readValue(messageBody, ChatMessageModel.class);
+                        return objectMapper.readValue(messageBody, ChatMessageModel.class);
                     } catch (Exception e) {
                         log.error("Failed to deserialize message: {}", messageBody, e);
                         return null;
                     }
-                    return message;
                 })
                 .filter(Objects::nonNull);
     }
 
-    @Override
+        @Override
     public Mono<Boolean> insertReadLastTime(String roomId, String nickname) {
         return userTimeStampRepository.findByRoomIdAndNickname(roomId, nickname)
-                .flatMap(findOne -> findOne != null
-                        ? userTimeStampRepository.updateReadLastTime(roomId, nickname).then(Mono.just(true))
-                        : userTimeStampRepository.save(ChatUserTimeStamp.builder()
-                                .roomId(roomId)
-                                .nickname(nickname)
-                                .lastReadMessageTime(LocalDateTime.now())
-                                .build())
-                        .then(Mono.just(true))
-                )
-                .onErrorResume(e -> Mono.just(false));
+                .flatMap(findOne -> {
+                    return userTimeStampRepository.updateReadLastTime(roomId, nickname)
+                            .then(Mono.just(true));
+                })
+                .switchIfEmpty(Mono.defer(() -> {
+                    return userTimeStampRepository.save(ChatUserTimeStamp.builder()
+                                    .roomId(roomId)
+                                    .nickname(nickname)
+                                    .lastReadMessageTime(LocalDateTime.now())
+                                    .build())
+                            .then(Mono.just(true));
+                }))
+                .onErrorResume(e -> {
+                    return Mono.just(false);
+                });
     }
-
 
     @Override
     public Mono<Integer> totalUnReadMessageCount(String nickname) {

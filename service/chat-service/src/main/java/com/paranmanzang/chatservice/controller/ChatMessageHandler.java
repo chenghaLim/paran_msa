@@ -33,7 +33,6 @@ public class ChatMessageHandler {
                 .orElseGet(() -> ServerResponse.badRequest().bodyValue(false));
     }
 
-
     // 실시간 및 과거 메시지 스트리밍
     private Flux<ServerSentEvent<ChatMessageModel>> getSseMessageStream(String roomId, String nickname) {
         return chatService.getMessageList(roomId, nickname)

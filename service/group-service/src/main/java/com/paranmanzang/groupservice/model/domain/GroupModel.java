@@ -1,6 +1,5 @@
 package com.paranmanzang.groupservice.model.domain;
 
-import com.paranmanzang.groupservice.model.entity.Category;
 import com.paranmanzang.groupservice.model.entity.Group;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -18,7 +17,6 @@ public class GroupModel {
     private String groupname;
     @NotBlank(message = "카테고리명은 필수값입니다.")
     private String groupconcept;
-    //@NotBlank(message = "사용자 정보를 입력해주세요.")
     private String nickname;
 
     private String categoryName;

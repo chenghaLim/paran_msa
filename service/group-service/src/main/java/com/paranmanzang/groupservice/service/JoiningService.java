@@ -7,4 +7,6 @@ public interface JoiningService {
 
     Object enableMember(Long groupId, String userNickname);
 
+    Object getUserListById(Long groupId);
+
 }

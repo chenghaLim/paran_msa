@@ -16,7 +16,6 @@ public class BookResponseModel {
     private Long id;
     private String title;
     private String author;
-    private String publisher;
 
     private String categoryName;
 
@@ -27,7 +26,6 @@ public class BookResponseModel {
                 .id(book.getId())
                 .title(book.getTitle())
                 .author(book.getAuthor())
-                .publisher(book.getPublisher())
                 .categoryName(book.getCategoryName())
                 .likeBookCount(book.getLike_books() != null ? book.getLike_books().size() : 0)
                 .build();

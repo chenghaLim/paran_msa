@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 @EnableMongoRepositories
 @EnableMongoAuditing
 @RequiredArgsConstructor
-@EnableReactiveMongoRepositories(basePackages = "com.paranmanzang.chatservice.model.repository")
+@EnableReactiveMongoRepositories
 public class MongoConfig implements InitializingBean {
 
 

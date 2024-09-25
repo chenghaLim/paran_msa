@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ChatUnReadUserModel {
-  private String messageId;
-  private String nickname;
-  private String roomId;
+    private String messageId;
+    private String nickname;
+    private String roomId;
 }

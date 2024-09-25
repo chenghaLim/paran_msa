@@ -1,6 +1,7 @@
 package com.paranmanzang.groupservice.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.paranmanzang.groupservice.enums.GroupPostCategory;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -34,7 +35,7 @@ public class GroupPost {
     private LocalDate modifyAt;
 
     @Column(nullable = true)
-    private Long postCategoryId; //with Category(new) ManyToOne
+    private GroupPostCategory postCategory;
 
     @ColumnDefault("0")
     private int viewCount;
@@ -50,5 +51,4 @@ public class GroupPost {
     @ManyToOne///////FK with Book
     @JoinColumn(name = "book_id")//모임장만 등록가능해서 true 로바꿈
     private Book book;
-//enum - type(공지사항,일반게시물)
 }

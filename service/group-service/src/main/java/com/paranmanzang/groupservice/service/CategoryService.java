@@ -1,7 +1,7 @@
 package com.paranmanzang.groupservice.service;
 
-import com.paranmanzang.groupservice.model.domain.CategoryModel;
+import java.util.List;
 
 public interface CategoryService {
-    Boolean addcategory(CategoryModel categoryModel);
+    List<?> getCategoryList();
 }

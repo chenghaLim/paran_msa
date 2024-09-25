@@ -1,10 +1,11 @@
 package com.paranmanzang.groupservice.service;
 
 
-import com.paranmanzang.groupservice.model.domain.BookModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface BookService {
-    Object addbook(BookModel bookModel);
-
     Object findOneById(Long bookId);
+
+    Page<?> getBookList(Pageable pageable);
 }

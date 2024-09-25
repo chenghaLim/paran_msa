@@ -47,11 +47,22 @@ public class ChatRoomHandler {
 
     // #7
     public Mono<ServerResponse> getChatList(ServerRequest request) {
-        return chatService.getChatListByNickname(request.headers().firstHeader("nickname"))
-                .collectList()
-                .flatMap(chatRooms -> ServerResponse.ok().bodyValue(chatRooms))
-                .switchIfEmpty(ServerResponse.ok().bodyValue(false));
+        return Mono.justOrEmpty(request.headers().firstHeader("nickname"))
+                .flatMap(nickname ->
+                        chatService.getChatListByNickname(nickname)
+                                .collectList()
+                                .flatMap(chatRooms -> {
+                                    if (chatRooms.isEmpty()) {
+                                        return ServerResponse.ok().bodyValue(false);
+                                    } else {
+                                        return ServerResponse.ok().bodyValue(chatRooms);
+                                    }
+                                })
+                )
+                .switchIfEmpty(ServerResponse.badRequest().bodyValue(false))
+                .onErrorResume(error -> ServerResponse.badRequest().bodyValue(false));
     }
+
 
     // # 100
     public Mono<ServerResponse> updateName(ServerRequest request) {

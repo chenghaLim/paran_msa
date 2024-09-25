@@ -4,6 +4,16 @@ spring:
     username: root                             # MySQL 사용자 이름
     password: 1234                             # MySQL 비밀번호
     driver-class-name: com.mysql.cj.jdbc.Driver # MySQL 드라이버 클래스
+
+    jpa:
+      hibernate:
+        ddl-auto: update                         # Hibernate DDL 자동 업데이트 설정
+      show-sql: true                             # SQL 쿼리 출력 활성화
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQLDialect
+
+
   application:
     name: group-service  # 서비스 이름, Eureka에 등록될 이름
 
@@ -23,4 +33,4 @@ eureka:
     hostname: localhost
 
 server:
-  port: 8084
+  port: 0

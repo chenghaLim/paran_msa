@@ -6,12 +6,11 @@ import com.paranmanzang.groupservice.model.repository.BookRepository;
 import com.paranmanzang.groupservice.model.repository.LikeBooksRepository;
 import com.paranmanzang.groupservice.service.LikeBookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -54,8 +53,7 @@ public class LikeBookServiceImpl implements LikeBookService {
     }
 
     @Override
-    public List<LikeBookModel> findAllByNickname(String nickname) {
-        return likeBooksRepository.findByNickname(nickname).stream()
-                .map(LikeBookModel::formEntity).collect(Collectors.toList());
+    public Page<LikeBookModel> findAllByNickname(String nickname, Pageable pageable) {
+        return likeBooksRepository.findLikeBooksByNickname(nickname,pageable);
     }
 }

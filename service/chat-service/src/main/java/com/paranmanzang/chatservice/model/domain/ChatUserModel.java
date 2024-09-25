@@ -11,6 +11,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ChatUserModel {
-  private String nickname;
-  private LocalDateTime enterTime;
+    private String nickname;
+    private LocalDateTime enterTime;
 }

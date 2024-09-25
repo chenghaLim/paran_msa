@@ -6,8 +6,13 @@ import com.paranmanzang.commentservice.model.repository.CustomCommentRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+
+import static com.paranmanzang.commentservice.model.entity.QComment.comment;
 
 @RequiredArgsConstructor
 public class CommentRepositoryImpl implements CustomCommentRepository {
@@ -15,24 +20,34 @@ public class CommentRepositoryImpl implements CustomCommentRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<CommentResponseModel> findCommentByPostId(Long postId) {
-        var comment = QComment.comment;
-        return queryFactory
-                .select(Projections.fields(
-                        CommentResponseModel.class,
-                        comment.id.as("id"),
-                        comment.nickname.as("nickname"),
-                        comment.content.as("content"),
-                        comment.postId.as("postId"),
-                        comment.ref.as("ref"),
-                        comment.step.as("step"),
-                        comment.depth.as("depth"),
-                        comment.createdAt.as("createdAt")
-                ))
+    public Page<CommentResponseModel> findCommentByPostId(Long postId, Pageable pageable) {
+
+        var ids = queryFactory
+                .select(comment.id)
                 .from(comment)
                 .where(comment.postId.eq(postId))
                 .orderBy(comment.ref.desc(), comment.step.asc(), comment.depth.asc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+        List<CommentResponseModel> comments = ids.isEmpty() ? List.of() :
+                queryFactory
+                        .select(Projections.constructor(
+                                CommentResponseModel.class,
+                                comment.id.as("id"),
+                                comment.nickname.as("nickname"),
+                                comment.content.as("content"),
+                                comment.postId.as("postId"),
+                                comment.ref.as("ref"),
+                                comment.step.as("step"),
+                                comment.depth.as("depth"),
+                                comment.createdAt.as("createdAt")
+                        ))
+                        .from(comment)
+                        .where(comment.id.in(ids))                   // 조회된 ID 리스트 기반으로 필터링
+                        .fetch();
+
+        return new PageImpl<>(comments, pageable, ids.size());
     }
 
     @Override

@@ -21,7 +21,6 @@ public class PointResponseModel {
     private Long groupId;
     private List<PointDetailResponseModel> pointDetails;
 
-    // Point 엔티티를 받아서 PointResponseModel로 변환하는 메서드
     public static PointResponseModel fromEntity(Point point) {
         return PointResponseModel.builder()
                 .id(point.getId())

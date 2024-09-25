@@ -1,5 +1,4 @@
 package com.paranmanzang.chatservice.model.repository.impl;
-
 import com.paranmanzang.chatservice.model.entity.ChatUserTimeStamp;
 import com.paranmanzang.chatservice.model.repository.CustomChatUserTimeStampRepository;
 import lombok.RequiredArgsConstructor;

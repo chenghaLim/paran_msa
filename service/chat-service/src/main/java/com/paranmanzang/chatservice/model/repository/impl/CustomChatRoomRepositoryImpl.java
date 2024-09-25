@@ -1,6 +1,5 @@
 package com.paranmanzang.chatservice.model.repository.impl;
 
-
 import com.paranmanzang.chatservice.model.entity.ChatRoom;
 import com.paranmanzang.chatservice.model.repository.CustomChatRoomRepository;
 import lombok.RequiredArgsConstructor;

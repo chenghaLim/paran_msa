@@ -6,6 +6,8 @@ import com.paranmanzang.commentservice.model.entity.Comment;
 import com.paranmanzang.commentservice.model.repository.CommentRepository;
 import com.paranmanzang.commentservice.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,7 +59,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentResponseModel> getCommentListByPostId(Long postId) {
-        return repository.findCommentByPostId(postId);
+    public Page<CommentResponseModel> getCommentListByPostId(Long postId, Pageable pageable) {
+        return repository.findCommentByPostId(postId, pageable);
     }
 }

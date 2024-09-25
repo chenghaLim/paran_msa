@@ -5,6 +5,7 @@ import com.paranmanzang.commentservice.model.domain.CommentResponseModel;
 import com.paranmanzang.commentservice.service.impl.CommentServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -20,26 +21,26 @@ public class CommentController {
     private final CommentServiceImpl commentService;
 
     @PostMapping
-    public ResponseEntity<Boolean> insert(@RequestBody @Valid CommentRequestModel model, @RequestHeader String nickname, BindingResult result)
+    public ResponseEntity<?> insert(@RequestBody @Valid CommentRequestModel model, @RequestHeader String nickname, BindingResult result)
             throws BindException {
         if (result.hasErrors()) throw new BindException(result);
         return ResponseEntity.ok(commentService.insert(model, nickname));
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Boolean> delete(@PathVariable Long commentId) {
+    public ResponseEntity<?> delete(@PathVariable Long commentId) {
         return ResponseEntity.ok(commentService.delete(commentId));
     }
 
     @PutMapping("/{commentId}")
-    public ResponseEntity<Boolean> update(@PathVariable Long commentId, @RequestBody String content
+    public ResponseEntity<?> update(@PathVariable Long commentId, @RequestBody String content
             , @RequestHeader String nickname)  {
         return ResponseEntity.ok(commentService.update(commentId,content, nickname));
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<List<CommentResponseModel>> getCommentListByPostId(@PathVariable Long postId) {
-        return ResponseEntity.ok(commentService.getCommentListByPostId(postId));
+    public ResponseEntity<?> getCommentListByPostId(@PathVariable Long postId, @RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(commentService.getCommentListByPostId(postId, PageRequest.of(page, size)));
     }
 
 }

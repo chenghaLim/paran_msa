@@ -13,15 +13,15 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class GroupPostModel {
     private Long boardId;
-    private String userBoardtitle;
-    private String userBoardcontent;
+    private String title;
+    private String content;
     private Long userGroupId;
 
-    public GroupPost toEntitysaving(){
+    public GroupPost toEntity() {
         return GroupPost.builder()
-                .content(this.userBoardtitle)
-                .title(this.userBoardcontent)
-                .group(new Group(this.userGroupId))
+                .content(title)
+                .title(content)
+                .group(new Group(userGroupId))
                 .build();
     }
 }

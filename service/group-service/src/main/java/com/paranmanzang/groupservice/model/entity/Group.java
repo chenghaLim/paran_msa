@@ -1,6 +1,5 @@
 package com.paranmanzang.groupservice.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -58,5 +57,4 @@ public class Group {
     public Group(Long id) {
         this.id = id;
     }
-
 }

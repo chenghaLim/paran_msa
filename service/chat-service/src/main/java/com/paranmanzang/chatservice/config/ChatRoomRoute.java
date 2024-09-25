@@ -1,6 +1,5 @@
 package com.paranmanzang.chatservice.config;
 
-
 import com.paranmanzang.chatservice.controller.ChatRoomHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +26,6 @@ public class ChatRoomRoute {
                         // # 99
                         .andRoute(DELETE("/api/chats/room/{roomId}").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::deleteRoom)
                         // # 109
-                        .andRoute(POST("/api/chats/message/lastreadtime/{roomId}").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::saveLastReadMessageTime);
+                        .andRoute(POST("/api/chats/room/lastreadtime/{roomId}").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::saveLastReadMessageTime);
     }
 }

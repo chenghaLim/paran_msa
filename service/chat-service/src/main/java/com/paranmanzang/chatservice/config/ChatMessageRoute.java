@@ -1,6 +1,5 @@
 package com.paranmanzang.chatservice.config;
 
-
 import com.paranmanzang.chatservice.controller.ChatMessageHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

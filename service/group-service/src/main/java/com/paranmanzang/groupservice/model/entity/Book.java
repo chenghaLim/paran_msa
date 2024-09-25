@@ -1,6 +1,5 @@
 package com.paranmanzang.groupservice.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "books")
-public class Book {//API
+public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,8 +19,6 @@ public class Book {//API
     private String title;
     @Column(nullable = false)
     private String author;
-    @Column(nullable = false)
-    private String publisher;
 
     private String categoryName;
 

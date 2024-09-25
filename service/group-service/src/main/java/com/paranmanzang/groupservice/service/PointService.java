@@ -1,6 +1,8 @@
 package com.paranmanzang.groupservice.service;
 
 import com.paranmanzang.groupservice.model.domain.PointModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 
@@ -13,5 +15,5 @@ public interface PointService {
 
     Object usePoint(PointModel pointModel);
 
-    Object searchPoint(Long groupId);
+    Page<?> searchPoint(Long groupId, Pageable pageable);
 }

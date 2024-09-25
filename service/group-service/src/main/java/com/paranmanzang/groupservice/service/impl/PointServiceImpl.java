@@ -2,12 +2,14 @@ package com.paranmanzang.groupservice.service.impl;
 
 import com.paranmanzang.groupservice.model.domain.ErrorField;
 import com.paranmanzang.groupservice.model.domain.PointModel;
-import com.paranmanzang.groupservice.model.domain.PointResponseModel;
 import com.paranmanzang.groupservice.model.entity.Point;
 import com.paranmanzang.groupservice.model.entity.PointDetail;
 import com.paranmanzang.groupservice.model.repository.PointDetailRepository;
 import com.paranmanzang.groupservice.model.repository.PointRepository;
 import com.paranmanzang.groupservice.service.PointService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -17,17 +19,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PointServiceImpl implements PointService {
-    private PointRepository pointRepository;
-    private PointDetailRepository pointDetailRepository;
-
-    public PointServiceImpl(PointRepository pointRepository, PointDetailRepository pointDetailRepository) {
-        this.pointRepository = pointRepository;
-        this.pointDetailRepository = pointDetailRepository;
-    }
+    private final PointRepository pointRepository;
+    private final PointDetailRepository pointDetailRepository;
 
     @Transactional
     public Object addPoint(PointModel pointModel) {
@@ -124,14 +121,8 @@ public class PointServiceImpl implements PointService {
         }
     }
 
-    public Object searchPoint(Long groupId) {
-        List<Point> ourpoints = pointRepository.findAllByGroupId(groupId);
-        if (ourpoints.isEmpty()) {
-            return new ErrorField(groupId, "포인트가 존재하지 않습니다.");
-        }
-        return ourpoints.stream()
-                .map(PointResponseModel::fromEntity)
-                .collect(Collectors.toList());
+    public Page<?> searchPoint(Long groupId, Pageable pageable) {
+        return pointRepository.findPointsByGroupId(groupId,pageable);
     }
 
 }

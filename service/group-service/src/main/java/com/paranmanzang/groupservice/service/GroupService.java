@@ -1,26 +1,25 @@
 package com.paranmanzang.groupservice.service;
 
-import com.paranmanzang.groupservice.model.entity.Group;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface GroupService {
-    List<Group> groupList();
-
-    Group oneGroup(Long groupId);
-
-    List<Group> groupsByCategory(String categoryId);
+    Page<?> groupList(Pageable pageable);
 
     //참여중인 소모임 - error처리
-    List<Object> groupsByUserNickname(String userNickname);
+    Page<?> groupsByUserNickname(String userNickname, Pageable pageable);
 
     Object enableGroup(Long groupId);
 
     Object enableCancelGroup(Long groupId);
 
-    Object addLeader(Long groupId, String nickname);
-
     Boolean duplicatename(String groupname);
 
     Object deleteGroup(Long groupId);
+
+    Object getGroupById(Long groupId);
+
+    Object updateChatRoomId(String roomId, Long groupId);
+
+    Page<?> enableGroupList(Pageable pageable);
 }

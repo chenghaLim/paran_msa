@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class PointDetail { //상세 포인트
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @Column(nullable = false)
     private String status;

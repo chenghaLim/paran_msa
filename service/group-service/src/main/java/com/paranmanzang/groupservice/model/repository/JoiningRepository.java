@@ -9,4 +9,6 @@ public interface JoiningRepository extends JpaRepository<Joining, Long> {
     Optional<Joining> findJoiningByGroupIdAndNickname(Long groupId, String nickname);
 
     Optional<Joining> findByGroupIdAndNickname(Long groupId, String nickname);
+
+    Optional<Joining> findByGroupId(Long groupId);
 }

@@ -7,5 +7,5 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface PointDetailRepository extends JpaRepository<PointDetail, Long> {
-    List<PointDetail> findAllByExpirationAt(LocalDate expiration);
+    List<?> findAllByExpirationAt(LocalDate expiration);
 }

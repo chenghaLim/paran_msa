@@ -1,5 +1,6 @@
 package com.paranmanzang.groupservice.model.domain;
 
+import com.paranmanzang.groupservice.enums.GroupPostCategory;
 import com.paranmanzang.groupservice.model.entity.GroupPost;
 import lombok.*;
 
@@ -18,7 +19,7 @@ public class GroupPostResponseModel {
     private String content;
     private LocalDateTime createAt;
     private LocalDate modifyAt;
-    private Long postCategoryId;
+    private GroupPostCategory postCategory;
     private int viewCount;
     private String nickname;
     private Long groupId;      // 그룹 ID
@@ -26,7 +27,6 @@ public class GroupPostResponseModel {
     private Long bookId;       // 책 ID
     private String bookTitle;  // 책 제목 (필요시)
 
-    // GroupPost 엔티티를 받아서 GroupPostResponseModel로 변환하는 메서드
     public static GroupPostResponseModel fromEntity(GroupPost groupPost) {
         return GroupPostResponseModel.builder()
                 .id(groupPost.getId())
@@ -34,7 +34,7 @@ public class GroupPostResponseModel {
                 .content(groupPost.getContent())
                 .createAt(groupPost.getCreateAt())
                 .modifyAt(groupPost.getModifyAt())
-                .postCategoryId(groupPost.getPostCategoryId())
+                .postCategory(groupPost.getPostCategory())
                 .viewCount(groupPost.getViewCount())
                 .nickname(groupPost.getNickname())
                 .groupId(groupPost.getGroup() != null ? groupPost.getGroup().getId() : null)
