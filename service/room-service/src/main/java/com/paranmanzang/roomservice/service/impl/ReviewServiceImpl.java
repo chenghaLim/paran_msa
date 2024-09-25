@@ -6,19 +6,17 @@ import com.paranmanzang.roomservice.model.entity.Review;
 import com.paranmanzang.roomservice.model.repository.BookingRepository;
 import com.paranmanzang.roomservice.model.repository.ReviewRepository;
 import com.paranmanzang.roomservice.model.repository.RoomRepository;
-import com.paranmanzang.roomservice.model.repository.impl.ReviewRepositoryImpl;
 import com.paranmanzang.roomservice.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
-    private final ReviewRepositoryImpl reviewRepositoryImpl;
     private final RoomRepository roomRepository;
     private final BookingRepository bookingRepository;
 
@@ -52,11 +50,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<?> findByRoom(Long roomId) {
-        return reviewRepositoryImpl.findByRoom(roomId).stream().map(review ->
-                new ReviewModel(review.getId(), review.getRating(), review.getContent(), review.getNickname(),
-                        review.getCreateAt(), review.getRoom().getId(), review.getBooking().getId())
-        ).toList();
+    public Page<?> findByRoom(Long roomId, Pageable pageable) {
+        return reviewRepository.findByRoom(roomId, pageable);
     }
 
     @Override
@@ -68,10 +63,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<?> findAll() {
-        return reviewRepository.findAll().stream().map(review ->
-                new ReviewModel(review.getId(), review.getRating(), review.getContent(), review.getNickname(),
-                        review.getCreateAt(), review.getRoom().getId(), review.getBooking().getId())
-        ).toList();
+    public Page<?> findAll(Pageable pageable) {
+        return reviewRepository.findAll(pageable);
     }
 }

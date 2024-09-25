@@ -1,10 +1,9 @@
 package com.paranmanzang.roomservice.service;
 
-
 import com.paranmanzang.roomservice.model.domain.ReviewModel;
 import com.paranmanzang.roomservice.model.domain.ReviewUpdateModel;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ReviewService {
     Boolean save(ReviewModel model);
@@ -13,9 +12,9 @@ public interface ReviewService {
 
     Boolean delete(Long id);
 
-    List<?> findByRoom(Long roomId);
+    Page<?> findByRoom(Long roomId, Pageable pageable);
 
     ReviewModel findById(Long id);
 
-    List<?> findAll();
+    Page<?> findAll(Pageable pageable);
 }

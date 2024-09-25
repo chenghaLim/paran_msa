@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 import com.paranmanzang.fileservice.model.domain.FileDeleteModel;
+import com.paranmanzang.fileservice.model.domain.FileModel;
 import com.paranmanzang.fileservice.model.entity.File;
 import com.paranmanzang.fileservice.model.enums.FileType;
 import com.paranmanzang.fileservice.model.repository.FileRepository;
@@ -14,11 +15,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import reactor.core.publisher.Flux;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -29,25 +30,25 @@ public class FileServiceImpl implements FileService {
 
     private final AmazonS3Client objectStorageClient;
     private final String BUCKET_NAME = "paran-test";
-    private final String FOLDER_NAME = "test/";
 
     @Override
-    public Boolean uploadFile(MultipartFile file, String type, Long refId) {
+    public Boolean uploadFile(MultipartFile file, String type, Long refId) throws SdkClientException{
         //        create folder
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(0L);
         objectMetadata.setContentType("application/x-directory");
-        PutObjectRequest putObjectRequest = new PutObjectRequest(BUCKET_NAME, FOLDER_NAME, new ByteArrayInputStream(new byte[0]), objectMetadata);
+        String folderName = type+"s/";
+        PutObjectRequest putObjectRequest = new PutObjectRequest(BUCKET_NAME, folderName, new ByteArrayInputStream(new byte[0]), objectMetadata);
         try {
             objectStorageClient.putObject(putObjectRequest);
         } catch (SdkClientException e) {
-            e.printStackTrace();
+            throw new SdkClientException(e.getMessage());
         }
 
 //        upload file
         try {
             var fileName = file.getOriginalFilename();
-            var uploadName = FOLDER_NAME + UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));
+            var uploadName = folderName + UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));
 
             // MultipartFile의 InputStream을 사용하여 업로드
             objectStorageClient.putObject(BUCKET_NAME, uploadName, file.getInputStream(), new ObjectMetadata());
@@ -65,8 +66,11 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Flux<?> getPathList(Long refId, String type) {
-        return fileRepository.findByRefId(refId, FileType.fromType(type).getCode());
+    public List<?> getPathList(Long refId, String type) {
+        return fileRepository.findByRefId(refId, FileType.fromType(type).getCode())
+                .map(file ->
+                        new FileModel(file.getId(), FileType.fromCode(file.getType()).getType(), file.getPath(), file.getRefId(), file.getUploadAt()))
+                .collectList().block();
     }
 
     @Override

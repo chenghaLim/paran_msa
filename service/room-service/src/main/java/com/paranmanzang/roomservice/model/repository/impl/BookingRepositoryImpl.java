@@ -1,31 +1,68 @@
 package com.paranmanzang.roomservice.model.repository.impl;
 
-import com.paranmanzang.roomservice.model.entity.Booking;
+import com.paranmanzang.roomservice.model.domain.BookingModel;
 import com.paranmanzang.roomservice.model.entity.QBooking;
-import com.paranmanzang.roomservice.model.repository.custom.BookingCustomRepository;
+import com.paranmanzang.roomservice.model.repository.BookingCustomRepository;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
-@Repository
 @RequiredArgsConstructor
 public class BookingRepositoryImpl implements BookingCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
+    private final QBooking booking= QBooking.booking;
 
 
     @Override
-    public List<Booking> findByGroupId(Long id) {
-        QBooking booking= QBooking.booking;
-        return jpaQueryFactory.selectFrom(booking)
-                .where(booking.groupId.eq(id)).fetch();
+    public Page<BookingModel> findByGroupId(Long id, Pageable pageable) {
+        var result= jpaQueryFactory.select(
+                        Projections.constructor(
+                                BookingModel.class,
+                                booking.id.as("id"),
+                                booking.enabled.as("enabled"),
+                                booking.usingStart.as("usingStart"),
+                                booking.usingEnd.as("usingEnd"),
+                                booking.room.id.as("roomId"),
+                                booking.groupId.as("groupId")
+                        )
+                )
+                .from(booking)
+                .where(booking.id.in(
+                        jpaQueryFactory.select(booking.id)
+                                .from(booking)
+                                .where(booking.groupId.eq(id))
+                                .limit((long) pageable.getPageSize() * pageable.getPageSize())
+                                .offset(pageable.getOffset())
+                                .fetch()
+                )).fetch();
+        return new PageImpl<>( result, pageable, result.size());
     }
 
     @Override
-    public List<Booking> findByRoomId(Long id) {
-        QBooking booking= QBooking.booking;
-        return jpaQueryFactory.selectFrom(booking)
-                .where(booking.room.id.eq(id)).fetch();
+    public Page<BookingModel> findByRoomId(Long id, Pageable pageable) {
+        var result= jpaQueryFactory.select(
+                        Projections.constructor(
+                                BookingModel.class,
+                                booking.id.as("id"),
+                                booking.enabled.as("enabled"),
+                                booking.usingStart.as("usingStart"),
+                                booking.usingEnd.as("usingEnd"),
+                                booking.room.id.as("roomId"),
+                                booking.groupId.as("groupId")
+                        )
+                )
+                .from(booking)
+                .where(booking.id.in(
+                        jpaQueryFactory.select(booking.id)
+                                .from(booking)
+                                .where(booking.room.id.eq(id))
+                                .limit((long) pageable.getPageSize() * pageable.getPageSize())
+                                .offset(pageable.getOffset())
+                                .fetch()
+                )).fetch();
+        return new PageImpl<>( result, pageable, result.size());
     }
 }

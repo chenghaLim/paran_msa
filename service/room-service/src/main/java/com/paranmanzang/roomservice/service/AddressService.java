@@ -1,6 +1,5 @@
 package com.paranmanzang.roomservice.service;
 
-
 import com.paranmanzang.roomservice.model.domain.AddressModel;
 import com.paranmanzang.roomservice.model.domain.AddressUpdateModel;
 
@@ -16,4 +15,6 @@ public interface AddressService {
     AddressModel findById(Long id);
 
     List<?> findAll();
+
+    List<?> find(String query);
 }

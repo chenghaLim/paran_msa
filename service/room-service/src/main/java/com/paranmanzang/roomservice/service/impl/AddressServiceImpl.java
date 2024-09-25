@@ -1,6 +1,5 @@
 package com.paranmanzang.roomservice.service.impl;
 
-
 import com.paranmanzang.roomservice.model.domain.AddressModel;
 import com.paranmanzang.roomservice.model.domain.AddressUpdateModel;
 import com.paranmanzang.roomservice.model.entity.Address;
@@ -15,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
+    private final RoomServiceImpl roomService;
 
     @Override
     public Boolean save(AddressModel model) {
@@ -56,7 +56,20 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<?> findAll() {
-        return addressRepository.findAll().stream().map(address ->
+        return addressRepository.findAll().stream()
+                .filter(address ->
+                        roomService.getIdAllEnabled().contains(address.getRoomId()))
+                .map(address ->
+                new AddressModel(address.getId(), address.getAddress(), address.getDetailAddress(), address.getLatitude(), address.getLongitude(), address.getRoomId())
+        ).toList();
+    }
+
+    @Override
+    public List<?> find(String query) {
+        return addressRepository.findQuery(query).stream()
+                .filter(address ->
+                        roomService.getIdAllEnabled().contains(address.getRoomId()))
+                .map(address->
                 new AddressModel(address.getId(), address.getAddress(), address.getDetailAddress(), address.getLatitude(), address.getLongitude(), address.getRoomId())
         ).toList();
     }

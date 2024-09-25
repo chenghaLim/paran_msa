@@ -1,18 +1,17 @@
 package com.paranmanzang.roomservice.service;
 
-
 import com.paranmanzang.roomservice.model.domain.BookingModel;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface BookingService {
     Boolean save(BookingModel model);
     Boolean updateState(Long id);
     Boolean delete(Long id);
 
-    List<?> findByGroup(long groupId);
+    Page<?> findByGroup(long groupId, Pageable pageable);
 
-    List<?> findByRoom(long roomId);
+    Page<?> findByRoom(long roomId, Pageable pageable);
 
     BookingModel findOne(long id);
 

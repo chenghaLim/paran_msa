@@ -1,0 +1,24 @@
+package com.paranmanzang.roomservice.model.domain;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
+
+@Data
+@Component
+@NoArgsConstructor
+@AllArgsConstructor
+public class AccountModel {
+    private String orderId;
+    private String detail;
+    private int amount;
+    private int amountTaxFree;
+    private int usePoint;
+    private boolean canceled;
+    private String reason;
+
+    private Long groupId;
+    private Long roomId;
+    private Long bookingId;
+}
