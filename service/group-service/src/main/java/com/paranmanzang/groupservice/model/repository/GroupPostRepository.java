@@ -2,7 +2,6 @@ package com.paranmanzang.groupservice.model.repository;
 
 import com.paranmanzang.groupservice.enums.GroupPostCategory;
 import com.paranmanzang.groupservice.model.entity.GroupPost;
-import com.paranmanzang.groupservice.model.repository.custom.GroupPostRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

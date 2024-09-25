@@ -1,4 +1,4 @@
-package com.paranmanzang.groupservice.model.repository.custom;
+package com.paranmanzang.groupservice.model.repository;
 
 import com.paranmanzang.groupservice.model.domain.GroupResponseModel;
 import org.springframework.data.domain.Page;

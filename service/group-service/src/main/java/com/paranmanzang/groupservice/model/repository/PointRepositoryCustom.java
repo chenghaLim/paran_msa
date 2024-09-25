@@ -1,4 +1,4 @@
-package com.paranmanzang.groupservice.model.repository.custom;
+package com.paranmanzang.groupservice.model.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

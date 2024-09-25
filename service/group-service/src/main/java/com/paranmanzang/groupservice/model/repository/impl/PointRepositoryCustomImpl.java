@@ -2,7 +2,7 @@ package com.paranmanzang.groupservice.model.repository.impl;
 
 import com.paranmanzang.groupservice.model.domain.PointDetailResponseModel;
 import com.paranmanzang.groupservice.model.domain.PointResponseModel;
-import com.paranmanzang.groupservice.model.repository.custom.PointRepositoryCustom;
+import com.paranmanzang.groupservice.model.repository.PointRepositoryCustom;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

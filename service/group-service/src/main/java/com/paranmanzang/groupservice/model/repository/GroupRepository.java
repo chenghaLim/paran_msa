@@ -1,7 +1,6 @@
 package com.paranmanzang.groupservice.model.repository;
 
 import com.paranmanzang.groupservice.model.entity.Group;
-import com.paranmanzang.groupservice.model.repository.custom.GroupRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

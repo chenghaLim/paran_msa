@@ -1,7 +1,7 @@
 package com.paranmanzang.groupservice.model.repository.impl;
 
 import com.paranmanzang.groupservice.model.domain.GroupPostResponseModel;
-import com.paranmanzang.groupservice.model.repository.custom.GroupPostRepositoryCustom;
+import com.paranmanzang.groupservice.model.repository.GroupPostRepositoryCustom;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
