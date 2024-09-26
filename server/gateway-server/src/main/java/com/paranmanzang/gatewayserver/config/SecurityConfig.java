@@ -13,8 +13,6 @@ import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.Collections;
-
 
 @Configuration
 @EnableWebFluxSecurity
@@ -26,38 +24,35 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http
-                .cors(corsCustomizer -> corsCustomizer
-                        .configurationSource(corsConfigurationSource())
-                )
-                .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
-                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
-                .addFilterBefore(jwtFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+                .cors(corsSpec -> corsSpec.configurationSource(corsConfigurationSource())) // CORS 설정 추가
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)  // CSRF 비활성화
+                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)  // Form-based 로그인 비활성화
+                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)  // HTTP Basic 인증 비활성화
                 .authorizeExchange(exchange -> exchange
-                                .pathMatchers("/swagger-ui/**").permitAll()
-                                .pathMatchers("/**").permitAll()
-//                        .pathMatchers("/api/rooms/addresses/search").permitAll()
-                        .pathMatchers("/get").permitAll()
-                                .pathMatchers("/api/comments/{test}").permitAll()
-                                .pathMatchers("/api/groups/{test}").permitAll()
-                                .pathMatchers("/api/users/create").permitAll()
-                                .anyExchange().authenticated()
+                        .pathMatchers("/swagger-ui/**").permitAll()  // Swagger UI 경로 허용
+                        .pathMatchers("/get").permitAll()  // 특정 경로 허용
+                        .pathMatchers("/api/comments/{test}").permitAll()  // 매개변수 포함 경로 허용
+                        .pathMatchers("/api/groups/{test}").permitAll()  // 매개변수 포함 경로 허용
+                        .pathMatchers("/api/users/create").permitAll()  // 사용자 생성 경로 허용
+                        .pathMatchers("/api/**").permitAll()  // 모든 API 경로 허용
+                        .anyExchange().authenticated()  // 나머지 경로는 인증 필요
                 )
+                .addFilterBefore(jwtFilter, SecurityWebFiltersOrder.AUTHENTICATION)  // JWT 필터 추가
                 .build();
     }
 
-    @Bean
+
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
-        configuration.setExposedHeaders(Arrays.asList("Set-Cookie", "Authorization"));
-        configuration.setMaxAge(3600L); // 1 hour
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.addAllowedOriginPattern("http://localhost:3000");  // 허용할 출처 패턴
+        corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));  // 허용할 메서드
+        corsConfig.addAllowedHeader("*");  // 모든 헤더 허용
+        corsConfig.setAllowCredentials(true);  // 자격 증명 허용
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", corsConfig);
         return source;
     }
 }
+
+

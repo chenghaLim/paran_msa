@@ -233,7 +233,7 @@ public class ChatServiceImpl implements ChatService {
                 .filter(Objects::nonNull);
     }
 
-        @Override
+    @Override
     public Mono<Boolean> insertReadLastTime(String roomId, String nickname) {
         return userTimeStampRepository.findByRoomIdAndNickname(roomId, nickname)
                 .flatMap(findOne -> {

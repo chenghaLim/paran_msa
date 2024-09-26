@@ -10,7 +10,6 @@ eureka:
 
 
 spring:
-
   config:
     activate:
       on-profile: default
@@ -24,14 +23,17 @@ spring:
 
   cloud:
     gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials RETAIN_UNIQUE
       routes:
         - id: chat-service
           uri: lb://chat-service
           predicates:
             - Path=/api/chats/**
-            - Method=GET,POST,PUT,DELETE
           filters:
             - RemoveRequestHeader=Cookie
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin RETAIN_UNIQUE
+            - RemoveResponseHeader=Access-Control-Allow-Origin
 
         - id: comment-service
           uri: lb://comment-service
@@ -114,3 +116,10 @@ spring:
 #    active: local
     config:
       import: optional:configserver:http://localhost:8888
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web.cors: DEBUG
+
+
