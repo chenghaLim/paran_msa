@@ -1,0 +1,69 @@
+package com.paranmanzang.gatewayserver.jwt;
+
+import com.paranmanzang.gatewayserver.model.Domain.oauth.CustomUserDetails;
+import com.paranmanzang.gatewayserver.model.entity.User;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+
+import java.util.Collection;
+
+@Slf4j
+@Component
+public class CustomAuthenticationSuccessHandler {
+
+    private final JWTUtil jwtUtil;
+    private final JwtTokenServiceImpl jwtTokenService;
+
+    public CustomAuthenticationSuccessHandler(JWTUtil jwtUtil, JwtTokenServiceImpl jwtTokenService) {
+        this.jwtUtil = jwtUtil;
+        this.jwtTokenService = jwtTokenService;
+    }
+
+    public Mono<Void> handleSuccess(ServerWebExchange exchange, Authentication authentication) {
+        log.info("authentication : {}", authentication.getPrincipal());
+        User user = (User) authentication.getPrincipal();
+        CustomUserDetails userDetails = new CustomUserDetails(user); // User를 기반으로 CustomUserDetails 생성        log.info("userDetails: {}", userDetails);
+        log.info("userDetails : {}", userDetails);
+
+        String username = userDetails.getUsername();
+        String nickname = userDetails.getNickname();
+        log.info("username : {}", username);
+        log.info("nickname : {}", nickname);
+
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        String role = authorities.iterator().next().getAuthority();
+        log.info("role : {}", role);
+
+        String access = jwtUtil.createAccessJwt(username, role, nickname, 600000L);
+        log.info("access : {}", access);
+
+        String refresh = jwtUtil.createRefreshJwt(username, role, nickname, 86400000L);
+        log.info("refresh : {}", refresh);
+
+        jwtTokenService.storeToken(refresh, username, 86400000L);
+
+        exchange.getResponse().getHeaders().add("Authorization", "Bearer " + access);
+        exchange.getResponse().addCookie(createCookie("refresh", refresh));
+        exchange.getResponse().setStatusCode(HttpStatus.OK);
+        log.info("Response Cookies: {}", exchange.getResponse().getCookies());
+
+
+        return exchange.getResponse().setComplete();
+    }
+
+
+    private ResponseCookie createCookie(String key, String value) {
+        return ResponseCookie.fromClientResponse(key, value)
+                .maxAge(86400)  // 쿠키의 만료 시간을 초 단위로 설정
+                .path("/")
+                .httpOnly(true)
+                .build();
+    }
+    }
+
