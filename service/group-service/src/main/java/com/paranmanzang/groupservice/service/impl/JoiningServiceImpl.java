@@ -22,20 +22,16 @@ public class JoiningServiceImpl implements JoiningService {
         return joiningRepository.findJoiningByGroupIdAndNickname(joiningModel.getGroupId(), joiningModel.getNickname())
                 .map(joining -> (Object) new ErrorField(joiningModel.getNickname(), "이미 가입되어있는 멤버입니다."))
                 .orElseGet(() -> groupRepository.findById(joiningModel.getGroupId())
-                        .map(intergroup -> {
-                            joiningModel.setGroup(intergroup);
-                            return joiningRepository.save(joiningModel.toEntity()) != null ? Boolean.TRUE : Boolean.FALSE;
-                        })
-                        .orElse(Boolean.FALSE));
+                        .map(group -> (Object) JoiningModel.fromEntity(joiningRepository.save(joiningModel.toEntity())))
+                        .orElseGet(() -> (Object) new ErrorField(joiningModel.getNickname(), "그룹을 찾을 수 없습니다.")));
     }
-
 
     public Object enableMember(Long groupId, String nickname) {
         return joiningRepository.findByGroupIdAndNickname(groupId, nickname)
                 .map(joiningToEnable -> {
                     if (!joiningToEnable.isEnabled()) {
                         joiningToEnable.setEnabled(true);
-                        return joiningRepository.save(joiningToEnable) != null ? Boolean.TRUE : Boolean.FALSE;
+                        return JoiningModel.fromEntity(joiningRepository.save(joiningToEnable));
                     } else {
                         return (Object) new ErrorField(nickname, "이미 승인된 멤버입니다.");
                     }
@@ -49,7 +45,7 @@ public class JoiningServiceImpl implements JoiningService {
                 .map(joiningToEnable -> {
                     if (joiningToEnable.isEnabled()) {
                         joiningToEnable.setEnabled(false);
-                        return joiningRepository.save(joiningToEnable) != null ? Boolean.TRUE : Boolean.FALSE;
+                        return JoiningModel.fromEntity(joiningRepository.save(joiningToEnable));
                     } else {
                         return (Object) new ErrorField(nickname, "미승인 멤버입니다.");
                     }

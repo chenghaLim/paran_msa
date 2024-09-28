@@ -2,6 +2,7 @@ package com.paranmanzang.groupservice.service.impl;
 
 import com.paranmanzang.groupservice.model.domain.ErrorField;
 import com.paranmanzang.groupservice.model.domain.PointModel;
+import com.paranmanzang.groupservice.model.domain.PointResponseModel;
 import com.paranmanzang.groupservice.model.entity.Point;
 import com.paranmanzang.groupservice.model.entity.PointDetail;
 import com.paranmanzang.groupservice.model.repository.PointDetailRepository;
@@ -17,8 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,13 +33,18 @@ public class PointServiceImpl implements PointService {
     public Object addPoint(PointModel pointModel) {
         Optional<Point> grouppoint = pointRepository.findByGroupId(pointModel.getGroupId());
         Point point;
+
         if (grouppoint.isPresent()) {//기존 포인트 갱신
             point = grouppoint.get();
             point.setPoint(point.getPoint() + pointModel.getPoint());
+
+
         } else {//신규 저장
             point = new Point();
             point.setPoint(pointModel.getPoint());
             point.setGroupId(pointModel.getGroupId());
+
+
         }
 
         point.setCreateAt(LocalDateTime.now());

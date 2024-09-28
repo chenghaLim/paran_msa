@@ -13,4 +13,5 @@ public interface TImeService {
     void deleteByRoom(Long roomId);
 
     List<?> findByRoom(long roomId);
+    List<?> findByBooking(long bookingId);
 }

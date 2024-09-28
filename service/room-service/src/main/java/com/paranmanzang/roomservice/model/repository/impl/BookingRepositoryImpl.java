@@ -23,8 +23,8 @@ public class BookingRepositoryImpl implements BookingCustomRepository {
                                 BookingModel.class,
                                 booking.id.as("id"),
                                 booking.enabled.as("enabled"),
-                                booking.usingStart.as("usingStart"),
-                                booking.usingEnd.as("usingEnd"),
+                                booking.date.as("date"),
+                                booking.times.as("times"),
                                 booking.room.id.as("roomId"),
                                 booking.groupId.as("groupId")
                         )
@@ -34,7 +34,7 @@ public class BookingRepositoryImpl implements BookingCustomRepository {
                         jpaQueryFactory.select(booking.id)
                                 .from(booking)
                                 .where(booking.groupId.eq(id))
-                                .limit((long) pageable.getPageSize() * pageable.getPageSize())
+                                .limit( pageable.getPageSize())
                                 .offset(pageable.getOffset())
                                 .fetch()
                 )).fetch();
@@ -48,8 +48,8 @@ public class BookingRepositoryImpl implements BookingCustomRepository {
                                 BookingModel.class,
                                 booking.id.as("id"),
                                 booking.enabled.as("enabled"),
-                                booking.usingStart.as("usingStart"),
-                                booking.usingEnd.as("usingEnd"),
+                                booking.date.as("date"),
+                                booking.times.as("times"),
                                 booking.room.id.as("roomId"),
                                 booking.groupId.as("groupId")
                         )
@@ -59,7 +59,7 @@ public class BookingRepositoryImpl implements BookingCustomRepository {
                         jpaQueryFactory.select(booking.id)
                                 .from(booking)
                                 .where(booking.room.id.eq(id))
-                                .limit((long) pageable.getPageSize() * pageable.getPageSize())
+                                .limit(pageable.getPageSize())
                                 .offset(pageable.getOffset())
                                 .fetch()
                 )).fetch();

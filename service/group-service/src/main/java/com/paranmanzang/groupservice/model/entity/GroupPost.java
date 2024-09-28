@@ -43,12 +43,12 @@ public class GroupPost {
     @Column(nullable = true)
     private String nickname;
 
-    @ManyToOne///////FK with Group
+    @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "group_id")
     private Group group;
 
-    @ManyToOne///////FK with Book
+    @ManyToOne
     @JoinColumn(name = "book_id")//모임장만 등록가능해서 true 로바꿈
     private Book book;
 }

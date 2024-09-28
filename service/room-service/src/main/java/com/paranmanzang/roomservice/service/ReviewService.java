@@ -6,9 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ReviewService {
-    Boolean save(ReviewModel model);
+    ReviewModel save(ReviewModel model);
 
-    Boolean update(ReviewUpdateModel model);
+    ReviewModel update(ReviewUpdateModel model);
 
     Boolean delete(Long id);
 

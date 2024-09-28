@@ -3,6 +3,7 @@ package com.paranmanzang.groupservice.service.impl;
 import com.paranmanzang.groupservice.model.domain.ErrorField;
 import com.paranmanzang.groupservice.model.domain.GroupModel;
 import com.paranmanzang.groupservice.model.domain.GroupResponseModel;
+import com.paranmanzang.groupservice.model.domain.PointModel;
 import com.paranmanzang.groupservice.model.entity.Joining;
 import com.paranmanzang.groupservice.model.repository.GroupRepository;
 import com.paranmanzang.groupservice.model.repository.JoiningRepository;
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class GroupServiceImpl implements GroupService {
     private final JoiningRepository joiningRepository;
     private final GroupRepository groupRepository;
+    private final PointServiceImpl pointService;
 
     public Page<GroupResponseModel> groupList(Pageable pageable) {
         return groupRepository.findGroup(pageable);
@@ -36,22 +38,20 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public Object addGroup(GroupModel groupModel) {
         return Optional.ofNullable(groupModel)
-                .filter(group -> !duplicatename(group.getGroupName()))
+                .filter(group -> !duplicatename(group.getGroupname()))
                 .map(group -> {
-                    // 그룹 저장 후 Joining 엔티티 저장
-                    Optional.of(groupRepository.save(group.toEntity()))
-                            .map(savedGroup -> {
-                                joiningRepository.save(Joining.builder()
-                                        .enabled(true)
-                                        .group(savedGroup)
-                                        .nickname(savedGroup.getNickname())
-                                        .build());
-                                return Boolean.TRUE;
-                            });
-                    return true;
-                })
-                .orElse(Boolean.FALSE);
+                    var savedGroup = groupRepository.save(group.toEntity());
+
+                    joiningRepository.save(Joining.builder()
+                            .enabled(true)
+                            .group(savedGroup)
+                            .nickname(savedGroup.getNickname())
+                            .build());
+
+                    return GroupResponseModel.fromEntity(savedGroup);
+                });
     }
+
 
     public Object enableGroup(Long groupId) {
         return groupRepository.findById(groupId)
@@ -59,9 +59,9 @@ public class GroupServiceImpl implements GroupService {
                     if (groupToEnable.isEnabled()) {
                         return (Object) new ErrorField(groupId, "이미 관리자 승인된 group입니다.");
                     } else {
+                        pointService.addPoint(PointModel.builder().groupId(groupId).point(1000).build());
                         groupToEnable.setEnabled(true);
-                        groupRepository.save(groupToEnable);
-                        return (Object) (groupToEnable.isEnabled() ? Boolean.TRUE : Boolean.FALSE);
+                        return GroupResponseModel.fromEntity(groupRepository.save(groupToEnable));
                     }
                 })
                 .orElseGet(() -> new ErrorField(groupId, "group이 존재하지 않습니다."));
@@ -75,8 +75,7 @@ public class GroupServiceImpl implements GroupService {
                         return (Object) new ErrorField(groupId, "이미 관리자 승인 취소된 group입니다.");
                     }
                     groupToEnable.setEnabled(false);
-                    groupRepository.save(groupToEnable);
-                    return (Object) (!groupToEnable.isEnabled() ? Boolean.TRUE : Boolean.FALSE);
+                    return GroupResponseModel.fromEntity(groupRepository.save(groupToEnable));
                 })
                 .orElseGet(() -> new ErrorField(groupId, "group이 존재하지 않습니다."));
     }
@@ -90,21 +89,13 @@ public class GroupServiceImpl implements GroupService {
                 .orElseGet(() -> new ErrorField(groupId, "group이 존재하지 않습니다."));
     }
 
-
-    @Override
-    public Object getGroupById(Long groupId) {
-        return GroupResponseModel.fromEntity(groupRepository.findById(groupId).get());
-    }
-
     @Override
     public Object updateChatRoomId(String roomId, Long groupId) {
         return groupRepository.findById(groupId)
                 .map(group -> {
                     group.setChatRoomId(roomId);
-                    groupRepository.save(group);
-                    return (Object) Boolean.TRUE;
-                })
-                .orElseGet(() -> new ErrorField(groupId, "group이 존재하지 않습니다."));
+                    return GroupResponseModel.fromEntity(groupRepository.save(groupRepository.save(group)));
+                });
     }
 
     @Override

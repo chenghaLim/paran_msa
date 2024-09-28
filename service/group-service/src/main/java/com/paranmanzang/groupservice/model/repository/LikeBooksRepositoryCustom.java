@@ -4,7 +4,9 @@ import com.paranmanzang.groupservice.model.domain.LikeBookModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface LikeBooksRepositoryCustom {
-    Page<LikeBookModel> findLikeBooksByNickname(String nickname, Pageable pageable);
+    List<LikeBookModel> findLikeBooksByNickname(String nickname);
 
 }

@@ -1,13 +1,14 @@
 package com.paranmanzang.roomservice.service.impl;
 
 import com.paranmanzang.roomservice.model.domain.BookingModel;
-import com.paranmanzang.roomservice.model.domain.TimeModel;
 import com.paranmanzang.roomservice.model.domain.TimeSaveModel;
 import com.paranmanzang.roomservice.model.entity.Room;
 import com.paranmanzang.roomservice.model.entity.Time;
+import com.paranmanzang.roomservice.model.repository.BookingRepository;
 import com.paranmanzang.roomservice.model.repository.RoomRepository;
 import com.paranmanzang.roomservice.model.repository.TimeRepository;
 import com.paranmanzang.roomservice.service.TImeService;
+import com.paranmanzang.roomservice.util.Converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,8 @@ import java.util.stream.IntStream;
 public class TimeServiceImpl implements TImeService {
     private final TimeRepository timeRepository;
     private final RoomRepository roomRepository;
+    private final BookingRepository bookingRepository;
+    private final Converter converter;
 
     @Override
     public Boolean saveList(TimeSaveModel model) {
@@ -36,11 +39,14 @@ public class TimeServiceImpl implements TImeService {
     //    @Scheduled(fixedDelay = 3000000)
     @Override
     public void saveListScheduled() {
-         roomRepository.findAll().parallelStream()
+        roomRepository.findAll().parallelStream()
                 .filter(Room::isEnabled)
-                .map(room -> saveList(
-                                new TimeSaveModel(room.getId(), room.getOpenTime().getHour(), room.getCloseTime().getHour())
-                        )
+                .forEach(room -> saveList(
+                        TimeSaveModel.builder()
+                                .roomId(room.getId())
+                                .openTime(room.getOpenTime().getHour())
+                                .closeTime(room.getCloseTime().getHour())
+                                .build())
                 );
     }
 
@@ -49,6 +55,7 @@ public class TimeServiceImpl implements TImeService {
         return !timeRepository.saveAll(
                 timeRepository.findByBooking(model).stream()
                         .peek(time -> time.setEnabled(!time.isEnabled()))
+                        .peek(time -> time.setBooking(bookingRepository.findById(model.getId()).get()))
                         .toList()
         ).isEmpty();
     }
@@ -63,9 +70,14 @@ public class TimeServiceImpl implements TImeService {
         return timeRepository.findByRoomId(roomId).parallelStream()
                 .filter(time -> time.getDate().isAfter(LocalDate.now()))
                 .filter(time -> !time.isEnabled())
-                .map(time ->
-                        new TimeModel(time.getId(), time.getDate().toString(), time.getTime().toString())
-                ).toList();
+                .map(converter::convertToTimeModel).toList();
+    }
+
+    @Override
+    public List<?> findByBooking(long bookingId) {
+        return timeRepository.findByBookingId(bookingId).parallelStream()
+                .map(converter::convertToTimeModel)
+                .toList();
     }
 
 

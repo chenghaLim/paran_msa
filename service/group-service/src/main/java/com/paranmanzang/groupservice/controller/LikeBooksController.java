@@ -3,7 +3,6 @@ package com.paranmanzang.groupservice.controller;
 import com.paranmanzang.groupservice.model.domain.LikeBookModel;
 import com.paranmanzang.groupservice.service.impl.LikeBookServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -29,9 +28,9 @@ public class LikeBooksController {
 
     //좋아요 마이페이지 확인
     @GetMapping("/list/{nickname}")
-    public ResponseEntity<?> getLikeRoomList(@PathVariable String nickname, BindingResult bindingResult,@RequestParam int page, @RequestParam int size)
+    public ResponseEntity<?> getLikeRoomList(@PathVariable String nickname, BindingResult bindingResult)
             throws BindException {
         if (bindingResult.hasErrors()) throw new BindException(bindingResult);
-        return ResponseEntity.ok(likeBookService.findAllByNickname(nickname, PageRequest.of(page, size)));
+        return ResponseEntity.ok(likeBookService.findAllByNickname(nickname));
     }
 }

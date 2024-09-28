@@ -35,7 +35,7 @@ public class ReviewRepositoryImpl implements ReviewCustomRepository {
                         jpaQueryFactory.select(review.id)
                                 .from(review)
                                 .where(review.room.id.eq(roomId))
-                                .limit((long) pageable.getPageSize() * pageable.getPageSize())
+                                .limit(pageable.getPageSize())
                                 .offset(pageable.getOffset())
                                 .fetch()
                 )).fetch();
@@ -60,7 +60,7 @@ public class ReviewRepositoryImpl implements ReviewCustomRepository {
                 .where(review.id.in(
                         jpaQueryFactory.select(review.id)
                                 .from(review)
-                                .limit((long) pageable.getPageSize() * pageable.getPageSize())
+                                .limit(pageable.getPageSize())
                                 .offset(pageable.getOffset())
                                 .fetch()
                 )).fetch();

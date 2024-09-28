@@ -17,9 +17,11 @@ import reactor.core.publisher.Mono;
 @Component
 public class LogoutFilter implements WebFilter {
 
-    @Autowired
-    private JwtTokenServiceImpl jwtTokenService; // JWT 토큰 서비스를 주입받습니다.
-
+    private final JwtTokenServiceImpl jwtTokenService; // JWT 토큰 서비스를 주입받습니다.
+    // 생성자 주입
+    public LogoutFilter(JwtTokenServiceImpl jwtTokenService) {
+        this.jwtTokenService = jwtTokenService;
+    }
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         // 로그아웃 요청인지 확인
@@ -27,21 +29,27 @@ public class LogoutFilter implements WebFilter {
             log.info("Logout request received");
             String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
             String refreshToken = null; // refreshToken 변수를 초기화합니다.
-            log.info("Refresh token header: {}", authHeader);
-            if (exchange.getResponse().getCookies().containsKey("refresh")) { // "refresh" 쿠키가 존재하는지 확인합니다.
-                refreshToken = exchange.getResponse().getCookies().getFirst("refresh").getValue(); // 쿠키 값을 가져옵니다.
-            }
-            log.info("Refresh token: {}", refreshToken);
-            if(refreshToken != null) {
+
+            exchange.getResponse().getHeaders().add(HttpHeaders.SET_COOKIE, "refresh=; Path=/; HttpOnly; Max-Age=0");
+
+
+            if (exchange.getRequest().getCookies().get("refresh").toString() != null) { // "refresh" 쿠키가 존재하는지 확인합니다.
+                refreshToken = exchange.getRequest().getCookies().get("refresh").toString();
+                refreshToken = refreshToken.substring(9, refreshToken.length() - 1);
+                log.info("Refresh token 값 입력: {}", refreshToken);
                 jwtTokenService.deleteToken(refreshToken);
+                exchange.getResponse().getHeaders().add(HttpHeaders.SET_COOKIE, "refresh=; Path=/; HttpOnly; Max-Age=0");
                 exchange.getResponse().addCookie(createCookie("refresh", null));
             }
+            log.info("Refresh token 값 입력: {}", refreshToken);
+
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 String token = authHeader.substring(7); // "Bearer " 이후의 토큰 추출
                 log.info("token : {}", token);
                 jwtTokenService.blacklistToken(token, 600000);
                 // 응답에서 Authorization 헤더를 삭제합니다.
                 exchange.getResponse().getHeaders().remove(HttpHeaders.AUTHORIZATION);
+
                 // 추가적인 로그아웃 처리를 할 수 있습니다.
                 exchange.getResponse().setStatusCode(HttpStatus.OK);
 

@@ -14,7 +14,6 @@ import java.io.IOException;
 
 
 @RestController
-@CrossOrigin
 @Tag(name = "01. File")
 @RequestMapping("/api/files")
 @RequiredArgsConstructor

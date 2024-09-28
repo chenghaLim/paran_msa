@@ -4,14 +4,18 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 
 @Data
+@Builder
 @Component
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,14 +25,13 @@ public class BookingModel {
     private Long id;
     @Schema(title = "승인 여부", description = "공간 등록자의 승인입니다.")
     private boolean enabled;
-    @Schema(title = "이용 시작 시간")
-    @NotNull(message = "이용시작 시간을 입력해주세요.")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime usingStart;
-    @Schema(title = "이용 종료시간", description = "HH:59 까지 이용 가능합니다.")
-    @NotNull(message = "이용 종료 시간을 입력해주세요.")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime usingEnd;
+    @Schema(title = "예약일")
+    @NotNull(message = "예약일을 입력해주세요.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
+    @Schema(title = "이용 시간")
+    @NotNull(message = "이용 시간을 입력해주세요.")
+    private List<LocalTime> usingTime;
     @Schema(title = "공간 id", description = "예약한 곳입니다.")
     @NotNull
     @Positive

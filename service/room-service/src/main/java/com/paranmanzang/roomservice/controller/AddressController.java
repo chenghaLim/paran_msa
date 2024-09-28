@@ -19,41 +19,21 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "05. Address")
 @RequestMapping("/api/rooms/addresses")
 public class AddressController {
-    private final String Client_Id="";
-    private final String Client_Secret_Key= "";
+
     private final AddressServiceImpl addressService;
 
     @GetMapping("/search")
     @Operation(summary = "검색 조회", description = "검색어에 해당하는 주소 정보를 최대 5개까지 조회합니다.", tags = {"05. Address",})
     public ResponseEntity<?> searchAddress(@RequestParam("query") String query){
 
-        return ResponseEntity.ok(Objects.requireNonNull(WebClient.builder()
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .defaultHeader("X-Naver-Client-Id", Client_Id)
-                .defaultHeader("X-Naver-Client-Secret", Client_Secret_Key)
-                .build().get()
-                .uri(UriComponentsBuilder
-                        .fromUriString("https://openapi.naver.com")
-                        .path("/v1/search/local.json")
-                        .queryParam("query",query)
-                        .queryParam("display",5)
-                        .queryParam("start",1)
-                        .queryParam("sort","random")
-                        .encode(StandardCharsets.UTF_8)
-                        .build()
-                        .toUri())
-                .retrieve()
-                .toEntity(String.class)
-                .block()).getBody());
+        return ResponseEntity.ok(addressService.search(query));
 
     }
-    @GetMapping("")
 
     @PostMapping("/add")
     @Operation(summary = "주소 등록", description = "주소를 db에 저장합니다.")

@@ -19,16 +19,14 @@ public class LikeBooksRepositoryCustomImpl implements LikeBooksRepositoryCustom 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<LikeBookModel> findLikeBooksByNickname(String nickname, Pageable pageable) {
+    public List<LikeBookModel> findLikeBooksByNickname(String nickname) {
         var ids = queryFactory
                 .select(likeBooks.id)
                 .from(likeBooks)
                 .where(likeBooks.nickname.eq(nickname))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .fetch();
 
-        List<LikeBookModel> likeBooksList = ids.isEmpty() ? List.of() :
+        return ids.isEmpty() ? List.of() :
                 queryFactory
                         .select(Projections.constructor(
                                 LikeBookModel.class,
@@ -44,7 +42,5 @@ public class LikeBooksRepositoryCustomImpl implements LikeBooksRepositoryCustom 
                         .leftJoin(likeBooks.book, book)
                         .where(likeBooks.id.in(ids))
                         .fetch();
-
-        return new PageImpl<>(likeBooksList, pageable, ids.size());
     }
 }

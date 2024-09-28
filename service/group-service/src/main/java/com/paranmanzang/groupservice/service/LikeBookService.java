@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindException;
 
+import java.util.List;
+
 public interface LikeBookService {
     //책 좋아요
     Object add(LikeBookModel likeBooKModel) throws BindException;
@@ -13,5 +15,5 @@ public interface LikeBookService {
     Boolean remove(LikeBookModel likeBooKModel) throws BindException;
 
     //마이페이지 책 찜 조회
-    Page<LikeBookModel> findAllByNickname(String nickname, Pageable pageable);
+    List<LikeBookModel> findAllByNickname(String nickname);
 }

@@ -7,11 +7,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface GroupPostService {
 
-    GroupPostResponseModel findById(Long id);
+    Page<GroupPostResponseModel> findByGroupId(Long groupId, Pageable pageable, String postCategory);
 
-    Page<?> findByGroupId(Long groupId, Pageable pageable);
-
-    Boolean savePost(GroupPostModel groupPostModel);
+    GroupPostResponseModel savePost(GroupPostModel groupPostModel);
 
     Object updateViewCount(Long postId);
 }

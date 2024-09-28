@@ -33,8 +33,8 @@ public class GroupPostController {
 
     //#70 - 내가 속한 group의 게시물 목록
     @GetMapping("/{groupId}")
-    public ResponseEntity<?> getAllByGroupId(@PathVariable Long groupId, @RequestParam int page, @RequestParam int size) {
-        return ResponseEntity.ok(groupPostService.findByGroupId(groupId, PageRequest.of(page, size)));
+    public ResponseEntity<?> getAllByGroupId(@PathVariable Long groupId, @RequestParam int page, @RequestParam int size, @RequestParam String postCategory) {
+        return ResponseEntity.ok(groupPostService.findByGroupId(groupId, PageRequest.of(page, size), postCategory));
     }
 
     // view 카운트 업데이트

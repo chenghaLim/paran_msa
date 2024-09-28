@@ -1,7 +1,6 @@
 package com.paranmanzang.groupservice.service.impl;
 
 
-import com.paranmanzang.groupservice.enums.GroupPostCategory;
 import com.paranmanzang.groupservice.model.domain.GroupPostModel;
 import com.paranmanzang.groupservice.model.domain.GroupPostResponseModel;
 import com.paranmanzang.groupservice.model.repository.GroupPostRepository;
@@ -12,29 +11,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class GroupPostServiceImpl implements GroupPostService {
     private final GroupPostRepository groupPostRepository;
 
-    public List<GroupPostResponseModel> findAll() {
-        return groupPostRepository.findAll().stream()
-                .map(GroupPostResponseModel::fromEntity).collect(Collectors.toList());
+    public Page<GroupPostResponseModel> findByGroupId(Long groupId, Pageable pageable, String postCategory) {
+        return groupPostRepository.findGroupPostsByGroupId(groupId, pageable, postCategory);
     }
 
-    public GroupPostResponseModel findById(Long boardId) {
-        return GroupPostResponseModel.fromEntity(groupPostRepository.getGroupPostById(boardId));
-    }
-
-    public Page<GroupPostResponseModel> findByGroupId(Long groupId, Pageable pageable) {
-        return groupPostRepository.findGroupPostByGroupId(groupId,pageable);
-    }
-
-    public Boolean savePost(GroupPostModel groupPostModel) {
-        return groupPostRepository.save(groupPostModel.toEntity()) != null ? Boolean.TRUE : Boolean.FALSE;
+    public GroupPostResponseModel savePost(GroupPostModel groupPostModel) {
+        return GroupPostResponseModel.fromEntity(groupPostRepository.save(groupPostModel.toEntity()));
     }
 
     @Transactional
@@ -43,9 +30,8 @@ public class GroupPostServiceImpl implements GroupPostService {
                 .map(boardtoModify -> {
                     boardtoModify.setTitle(groupPostModel.getTitle());
                     boardtoModify.setContent(groupPostModel.getContent());
-                    return groupPostRepository.save(boardtoModify) != null ? Boolean.TRUE : Boolean.FALSE;
-                })
-                .orElse(Boolean.FALSE);
+                    return GroupPostResponseModel.fromEntity(groupPostRepository.save(boardtoModify));
+                });
     }
 
 
@@ -63,10 +49,8 @@ public class GroupPostServiceImpl implements GroupPostService {
         return groupPostRepository.findById(postId)
                 .map(post -> {
                     post.setViewCount(post.getViewCount() + 1);
-                    groupPostRepository.save(post);
-                    return Boolean.TRUE;
-                })
-                .orElse(Boolean.FALSE);
+                    return GroupPostResponseModel.fromEntity(groupPostRepository.save(post));
+                });
     }
 
 }

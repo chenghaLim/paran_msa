@@ -33,4 +33,10 @@ public class Time {
     @JoinColumn(name = "room_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Room room;
+
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "booking_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Booking booking;
 }

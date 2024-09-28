@@ -6,9 +6,10 @@ import com.paranmanzang.roomservice.model.domain.AddressUpdateModel;
 import java.util.List;
 
 public interface AddressService {
-    Boolean save(AddressModel model);
+    String search(String query);
+    AddressModel save(AddressModel model);
 
-    Boolean update(AddressUpdateModel model);
+    AddressModel update(AddressUpdateModel model);
 
     Boolean delete(Long id);
 

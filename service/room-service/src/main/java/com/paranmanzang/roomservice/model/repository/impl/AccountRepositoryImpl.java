@@ -55,7 +55,7 @@ public class AccountRepositoryImpl implements AccountCustomRepository {
                         jpaQueryFactory.select(account.orderId)
                                 .from(account)
                                 .where(account.groupId.eq(groupId))
-                                .limit((long) pageable.getPageSize() * pageable.getPageSize())
+                                .limit(pageable.getPageSize())
                                 .offset(pageable.getOffset())
                                 .fetch()
                 )).fetch();
@@ -69,8 +69,8 @@ public class AccountRepositoryImpl implements AccountCustomRepository {
                         Projections.constructor(
                                 AccountModel.class,
                                 account.orderId.as("orderId"),
-                                account.detail.as("detail"),
-                                account.amount.as("orderName"),
+                                account.detail.as("orderName"),
+                                account.amount.as("amount"),
                                 account.amountTaxFree.as("amountTaxFree"),
                                 account.usePoint.as("usePoint"),
                                 account.reason.as("reason"),
@@ -84,7 +84,7 @@ public class AccountRepositoryImpl implements AccountCustomRepository {
                         jpaQueryFactory.select(account.orderId)
                                 .from(account)
                                 .where(account.roomId.eq(roomId))
-                                .limit((long) pageable.getPageSize() * pageable.getPageSize())
+                                .limit(pageable.getPageSize())
                                 .offset(pageable.getOffset())
                                 .fetch()
                 )).fetch();

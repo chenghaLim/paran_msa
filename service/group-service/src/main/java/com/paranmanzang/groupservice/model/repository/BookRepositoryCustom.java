@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface BookRepositoryCustom {
-    Page<BookResponseModel> findBooks(Pageable pageable);
+    Page<BookResponseModel> findAllBooks(Pageable pageable);
 }

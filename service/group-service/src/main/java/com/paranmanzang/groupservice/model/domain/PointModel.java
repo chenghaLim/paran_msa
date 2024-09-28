@@ -1,8 +1,10 @@
 package com.paranmanzang.groupservice.model.domain;
 
+import com.paranmanzang.groupservice.model.entity.Point;
 import com.paranmanzang.groupservice.model.entity.PointDetail;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PointModel {
 
     private Long pointId;

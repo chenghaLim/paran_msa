@@ -36,7 +36,7 @@ public class RoomRepositoryImpl implements RoomCustomRepository {
                 .where(room.nickname.in(
                                 jpaQueryFactory.select(room.nickname).from(room)
                                         .where(room.nickname.eq(nickname))
-                                        .limit((long) pageable.getPageSize() * pageable.getPageSize())
+                                        .limit(pageable.getPageSize())
                                         .offset(pageable.getOffset())
                                         .fetch()
                         )
@@ -66,7 +66,7 @@ public class RoomRepositoryImpl implements RoomCustomRepository {
                 .where(room.id.in(
                         jpaQueryFactory.select(room.id)
                                 .from(room)
-                                .limit((long) pageable.getPageSize() * pageable.getPageSize())
+                                .limit(pageable.getPageSize())
                                 .offset(pageable.getOffset())
                                 .fetch()
                 ))

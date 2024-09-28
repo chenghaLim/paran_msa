@@ -61,15 +61,25 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountModel findByBookingId(Long bookingId) {
         return accountRepository.findAccountByBookingId(bookingId).map(account ->
-                        new AccountModel(account.getOrderId(), account.getDetail(), account.getAmount(), account.getAmountTaxFree(),
-                                account.getUsePoint(), account.isCanceled(), account.getReason(), account.getGroupId(),
-                                account.getRoomId(), account.getBookingId()))
+                        AccountModel.builder()
+                                .orderId(account.getOrderId())
+                                .orderName(account.getDetail())
+                                .amountTaxFree(account.getAmountTaxFree())
+                                .reason(account.getReason())
+                                .amount(account.getAmount())
+                                .bookingId(account.getBookingId())
+                                .roomId(account.getRoomId())
+                                .groupId(account.getGroupId())
+                                .usePoint(account.getUsePoint())
+                                .canceled(account.isCanceled())
+                                .build()
+                )
                 .orElse(null);
     }
 
     @Override
     public Page<?> findByRoomId(Long roomId, Pageable pageable) {
-        return accountRepository.findAccountByRoomId(roomId,pageable);
+        return accountRepository.findAccountByRoomId(roomId, pageable);
     }
 
     @Override

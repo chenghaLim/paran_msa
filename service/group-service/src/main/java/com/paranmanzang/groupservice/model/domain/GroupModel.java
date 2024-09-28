@@ -14,18 +14,19 @@ import org.springframework.stereotype.Component;
 public class GroupModel {
     //    private Long groupId; //A.I 컬럼이라 api 수정 필요해보임
     @NotBlank(message = "소모임명은 필수값입니다.")
-    private String groupName;
+    private String groupname;
     @NotBlank(message = "카테고리명은 필수값입니다.")
-    private String categoryName;
+    private String groupconcept;
     private String nickname;
 
+    private String categoryName;
 
 
     public Group toEntity() {
         return Group.builder()
-                .name(groupName)
-                .categoryName(categoryName)
-                .nickname(nickname)
+                .name(this.groupname)
+                .categoryName(this.categoryName)
+                .nickname(this.nickname)
                 .build();
     }
 }

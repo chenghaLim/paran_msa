@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+
 @Data
 @Component
 @NoArgsConstructor
@@ -21,12 +23,15 @@ public class JoiningModel {
     @NotNull(message = "참여할 그룹 Id는 필수값입니다.")
     private Long groupId;
 
-    private Group group;
+    private LocalDate requestAt;
+    private LocalDate responseAt;
+
+    private Group grouptojoin;
 
     public Joining toEntity() {
         return Joining.builder()
-                .nickname(nickname)
-                .group(group)
+                .nickname(this.nickname)
+                .group(this.grouptojoin)
                 .build();
     }
 
@@ -34,6 +39,8 @@ public class JoiningModel {
         return JoiningModel.builder()
                 .nickname(joining.getNickname())
                 .groupId(joining.getGroup().getId())
+                .requestAt(joining.getRequestAt())
+                .responseAt(joining.getResponseAt())
                 .build();
     }
 }

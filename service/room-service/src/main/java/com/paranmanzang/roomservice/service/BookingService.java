@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface BookingService {
-    Boolean save(BookingModel model);
-    Boolean updateState(Long id);
+    BookingModel save(BookingModel model);
+    BookingModel updateState(Long id);
     Boolean delete(Long id);
 
     Page<?> findByGroup(long groupId, Pageable pageable);

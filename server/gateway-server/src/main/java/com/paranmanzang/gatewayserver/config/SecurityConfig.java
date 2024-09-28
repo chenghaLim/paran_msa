@@ -3,10 +3,7 @@ package com.paranmanzang.gatewayserver.config;
 import com.paranmanzang.gatewayserver.Filter.JwtGatewayFilter;
 import com.paranmanzang.gatewayserver.Filter.LoginFilter;
 import com.paranmanzang.gatewayserver.Filter.LogoutFilter;
-import com.paranmanzang.gatewayserver.jwt.CustomAuthenticationFailureHandler;
-import com.paranmanzang.gatewayserver.jwt.CustomAuthenticationSuccessHandler;
-import com.paranmanzang.gatewayserver.jwt.CustomReactiveAuthenticationManager;
-import com.paranmanzang.gatewayserver.jwt.JWTUtil;
+import com.paranmanzang.gatewayserver.jwt.*;
 import com.paranmanzang.gatewayserver.model.repository.UserRepository;
 import com.paranmanzang.gatewayserver.oauth.CustomSuccessHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -34,13 +31,15 @@ public class SecurityConfig {
     private final CustomAuthenticationFailureHandler failureHandler;
     private final CustomReactiveAuthenticationManager customReactiveAuthenticationManager;
     private final JWTUtil jwtUtil;
+    private final JwtTokenServiceImpl jwtTokenService;
 
-    public SecurityConfig(CustomAuthenticationSuccessHandler successHandler, CustomAuthenticationFailureHandler failureHandler, CustomReactiveAuthenticationManager customReactiveAuthenticationManager, CustomSuccessHandler customSuccessHandler, UserRepository userRepository, JWTUtil jwtUtil, JwtGatewayFilter jwtGatewayFilter) {
+    public SecurityConfig(CustomAuthenticationSuccessHandler successHandler, CustomAuthenticationFailureHandler failureHandler, CustomReactiveAuthenticationManager customReactiveAuthenticationManager, CustomSuccessHandler customSuccessHandler, UserRepository userRepository, JWTUtil jwtUtil, JwtGatewayFilter jwtGatewayFilter, JwtTokenServiceImpl jwtTokenService) {
         this.customSuccessHandler = customSuccessHandler;
         this.successHandler = successHandler;
         this.failureHandler = failureHandler;
         this.customReactiveAuthenticationManager = customReactiveAuthenticationManager;
         this.jwtUtil = jwtUtil;
+        this.jwtTokenService = jwtTokenService;
     }
 
     @Bean
@@ -93,7 +92,7 @@ public class SecurityConfig {
                 .addFilterAt(new LoginFilter(customReactiveAuthenticationManager, successHandler, failureHandler), SecurityWebFiltersOrder.AUTHENTICATION)
 
                 // 로그아웃 필터 추가
-                .addFilterBefore(new LogoutFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
+                .addFilterBefore(new LogoutFilter(jwtTokenService), SecurityWebFiltersOrder.AUTHENTICATION)
 
                 // OAuth2 설정
                 .oauth2Login(oauth2 -> oauth2
@@ -103,6 +102,7 @@ public class SecurityConfig {
                 // 권한 설정
                 .authorizeExchange(auth -> auth
                         .pathMatchers("/login", "/oauth2/**").permitAll()  // /login과 /oauth2/** 경로는 인증 없이 접근 가능
+                        .pathMatchers("/api/**").permitAll()  // /login과 /oauth2/** 경로는 인증 없이 접근 가능
                         .anyExchange().authenticated() // 그 외 모든 경로는 인증 필요
                 );
 

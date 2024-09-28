@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class LikeBookServiceImpl implements LikeBookService {
@@ -25,11 +28,10 @@ public class LikeBookServiceImpl implements LikeBookService {
                     if (likeBooksRepository.existsByNicknameAndBook(likeBookModel.getNickname(), book)) {
                         return false;
                     }
-                    likeBooksRepository.save(LikeBooks.builder()
+                    return LikeBookModel.fromEntity( likeBooksRepository.save(LikeBooks.builder()
                             .nickname(likeBookModel.getNickname())
                             .book(book)
-                            .build());
-                    return true;
+                            .build()));
                 })
                 .orElseThrow(() -> {
                     var bindException = new BindException(likeBookModel, "likeBookModel");
@@ -53,7 +55,7 @@ public class LikeBookServiceImpl implements LikeBookService {
     }
 
     @Override
-    public Page<LikeBookModel> findAllByNickname(String nickname, Pageable pageable) {
-        return likeBooksRepository.findLikeBooksByNickname(nickname,pageable);
+    public List<LikeBookModel> findAllByNickname(String nickname) {
+        return likeBooksRepository.findLikeBooksByNickname(nickname);
     }
 }

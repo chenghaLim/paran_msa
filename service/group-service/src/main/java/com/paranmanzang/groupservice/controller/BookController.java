@@ -3,26 +3,21 @@ package com.paranmanzang.groupservice.controller;
 
 import com.paranmanzang.groupservice.service.impl.BookServiceImpl;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/groups/books")
 @RequiredArgsConstructor
-@Slf4j
 public class BookController {
-
     private final BookServiceImpl bookService;
 
     @GetMapping
     public ResponseEntity<?> getBookList(@RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(bookService.getBookList(PageRequest.of(page, size)));
     }
-//
-//    @GetMapping("/{bookId}")
-//    public ResponseEntity<?> findOneByBookId(@PathVariable("bookId") Long id){
-//        return ResponseEntity.ok(bookService.findOneById(id));
-//    }
 }

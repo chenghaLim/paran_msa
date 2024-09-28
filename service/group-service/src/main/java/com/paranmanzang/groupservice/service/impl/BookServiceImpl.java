@@ -1,6 +1,5 @@
 package com.paranmanzang.groupservice.service.impl;
 
-
 import com.paranmanzang.groupservice.model.domain.BookResponseModel;
 import com.paranmanzang.groupservice.model.repository.BookRepository;
 import com.paranmanzang.groupservice.service.BookService;
@@ -17,10 +16,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Page<BookResponseModel> getBookList(Pageable pageable) {
-        return bookRepository.findBooks(pageable);
-    }
-
-    public Object findOneById(Long bookId) {
-        return bookRepository.findById(bookId).isPresent() ? BookResponseModel.fromEntity(bookRepository.findById(bookId).get()) : Boolean.FALSE;
+        return bookRepository.findAllBooks(pageable);
     }
 }

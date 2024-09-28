@@ -1,14 +1,12 @@
 package com.paranmanzang.roomservice.model.repository.impl;
 
 import com.paranmanzang.roomservice.model.domain.BookingModel;
-import com.paranmanzang.roomservice.model.entity.Time;
 import com.paranmanzang.roomservice.model.entity.QTime;
+import com.paranmanzang.roomservice.model.entity.Time;
 import com.paranmanzang.roomservice.model.repository.TimeCustomRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -24,14 +22,20 @@ public class TimeRepositoryImpl implements TimeCustomRepository {
     }
 
     @Override
+    public List<Time> findByBookingId(Long bookingId) {
+        return jpaQueryFactory.selectFrom(time)
+                .where(time.booking.id.eq(bookingId))
+                .fetch();
+    }
+
+    @Override
     public List<Time> findByBooking(BookingModel model) {
         return jpaQueryFactory.selectFrom(time)
                 .where(
                         time.date
-                                .eq(LocalDate.of(model.getUsingStart().getYear(), model.getUsingStart().getMonth(),
-                                        model.getUsingStart().getDayOfMonth()))
-                                .and(time.time.goe(LocalTime.of(model.getUsingStart().getHour(), 0)))
-                                .and(time.time.loe(LocalTime.of(model.getUsingEnd().getHour(), 0)))
+                                .eq(model.getDate())
+                                .and(time.time.in(model.getUsingTime()))
+                                .and(time.room.id.eq(model.getRoomId()))
                 )
                 .fetch();
     }

@@ -7,6 +7,7 @@ import com.paranmanzang.roomservice.model.repository.BookingRepository;
 import com.paranmanzang.roomservice.model.repository.ReviewRepository;
 import com.paranmanzang.roomservice.model.repository.RoomRepository;
 import com.paranmanzang.roomservice.service.ReviewService;
+import com.paranmanzang.roomservice.util.Converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,28 +20,26 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final RoomRepository roomRepository;
     private final BookingRepository bookingRepository;
-
+private final Converter converter;
     @Override
-    public Boolean save(ReviewModel model) {
-        return reviewRepository.save(Review.builder()
+    public ReviewModel save(ReviewModel model) {
+        return converter.convertToReviewModel(reviewRepository.save(Review.builder()
                 .content(model.getContent())
                 .rating(model.getRating())
                 .nickname(model.getNickname())
                 .room(roomRepository.findById(model.getRoomId()).get())
                 .booking(bookingRepository.findById(model.getBookingId()).get())
-                .build()) == null ? Boolean.FALSE : Boolean.TRUE;
+                .build()));
     }
 
     @Override
     @Transactional
-    public Boolean update(ReviewUpdateModel model) {
-        if (reviewRepository.findById(model.getId()).isEmpty()) return Boolean.FALSE;
-
+    public ReviewModel update(ReviewUpdateModel model) {
         return reviewRepository.findById(model.getId()).map(review -> {
             review.setRating(model.getRating());
             review.setContent(model.getContent());
             return reviewRepository.save(review);
-        }) == null ? Boolean.FALSE : Boolean.TRUE;
+        }).map(converter::convertToReviewModel).orElse(null);
     }
 
     @Override
@@ -56,10 +55,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ReviewModel findById(Long id) {
-        return reviewRepository.findById(id).map(review ->
-                new ReviewModel(review.getId(), review.getRating(), review.getContent(), review.getNickname(),
-                        review.getCreateAt(), review.getRoom().getId(), review.getBooking().getId())
-        ).orElse(null);
+        return reviewRepository.findById(id).map(converter::convertToReviewModel).orElse(null);
     }
 
     @Override

@@ -1,9 +1,13 @@
 package com.paranmanzang.roomservice.service.impl;
 
-import com.paranmanzang.roomservice.model.domain.*;
+import com.paranmanzang.roomservice.model.domain.RoomModel;
+import com.paranmanzang.roomservice.model.domain.RoomUpdateModel;
+import com.paranmanzang.roomservice.model.domain.RoomWTimeModel;
+import com.paranmanzang.roomservice.model.domain.TimeSaveModel;
 import com.paranmanzang.roomservice.model.entity.Room;
 import com.paranmanzang.roomservice.model.repository.RoomRepository;
 import com.paranmanzang.roomservice.service.RoomService;
+import com.paranmanzang.roomservice.util.Converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,10 +22,11 @@ import java.util.List;
 public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
     private final TimeServiceImpl timeService;
+    private final Converter converter;
 
     @Override
-    public Boolean save(RoomModel model) {
-        return roomRepository.save(Room.builder()
+    public RoomModel save(RoomModel model) {
+        return converter.convertToRoomModel(roomRepository.save(Room.builder()
                 .name(model.getName())
                 .price(model.getPrice())
                 .maxPeople(model.getMaxPeople())
@@ -29,43 +34,50 @@ public class RoomServiceImpl implements RoomService {
                 .openTime(model.getOpenTime())
                 .closeTime(model.getCloseTime())
                 .nickname(model.getNickname())
-                .build()) == null ? Boolean.FALSE : Boolean.TRUE;
+                .build()));
     }
 
     @Override
-    public Boolean update(RoomUpdateModel model) {
-        if (roomRepository.findById(model.getId()).isEmpty()) return Boolean.FALSE;
+    public RoomModel update(RoomUpdateModel model) {
         return roomRepository.findById(model.getId()).map(room -> {
-            room.setName(model.getName());
-            room.setMaxPeople(model.getMaxPeople());
-            room.setPrice(model.getPrice());
-            room.setOpened(model.isOpened());
-            room.setOpenTime(model.getOpenTime());
-            room.setCloseTime(model.getCloseTime());
-            return roomRepository.save(room);
-        }) == null ? Boolean.FALSE : Boolean.TRUE;
+                    room.setName(model.getName());
+                    room.setMaxPeople(model.getMaxPeople());
+                    room.setPrice(model.getPrice());
+                    room.setOpened(model.isOpened());
+                    room.setOpenTime(model.getOpenTime());
+                    room.setCloseTime(model.getCloseTime());
+                    return roomRepository.save(room);
+                }).map(converter::convertToRoomModel)
+                .orElse(null);
     }
 
     @Override
     public Boolean delete(Long id) {
-        roomRepository.delete(Room.builder()
-                .id(id)
-                .build());
-        return roomRepository.findById(id).isEmpty();
+        return roomRepository.findById(id)
+                .map(room -> {
+                    roomRepository.delete(room);
+                    return true;
+                })
+                .orElse(false);
     }
 
     @Override
-    public Boolean enable(Long id) {
-        if (roomRepository.findById(id).get().isEnabled()) return Boolean.FALSE;
-        return roomRepository.findById(id).map(room -> {
+    public RoomModel enable(Long id) {
+        return roomRepository.findById(id)
+                .filter(room -> !room.isEnabled())
+                .map(room -> {
                     room.setEnabled(true);
                     room.setResponseAt(LocalDateTime.now());
-                    return roomRepository.save(room);
-                }).map(savedRoom ->
-                        timeService.saveList(
-                                new TimeSaveModel(savedRoom.getId(), savedRoom.getOpenTime().getHour(), savedRoom.getCloseTime().getHour())
-                        ))
-                .orElse(false); // id에 해당하는 room이 없는 경우 false를 반환
+                    Room savedRoom = roomRepository.save(room);
+                    timeService.saveList(
+                            TimeSaveModel.builder()
+                                    .roomId(savedRoom.getId())
+                                    .openTime(savedRoom.getOpenTime().getHour())
+                                    .closeTime(savedRoom.getCloseTime().getHour())
+                                    .build());
+                    return converter.convertToRoomModel(savedRoom);
+                })
+                .orElse(null);
     }
 
 
@@ -78,6 +90,7 @@ public class RoomServiceImpl implements RoomService {
     public Page<RoomModel> findAllEnabled(Pageable pageable) {
         return roomRepository.findByPagination(pageable);
     }
+
     @Override
     public List<?> getIdAllEnabled() {
         return roomRepository.findAll().stream().filter(Room::isEnabled).map(Room::getId).toList();
@@ -93,20 +106,16 @@ public class RoomServiceImpl implements RoomService {
         return roomRepository.findById(id).filter(Room::isEnabled).map(room ->
                 new RoomWTimeModel(room.getId(), room.getName(), room.getMaxPeople(), room.getPrice(), room.isOpened(),
                         room.getOpenTime(), room.getCloseTime(), room.getCreatedAt(), room.isEnabled(), room.getNickname(),
-                        room.getTimes().stream().filter(time-> time.getDate().isAfter(LocalDate.now()))
+                        room.getTimes().stream().filter(time -> time.getDate().isAfter(LocalDate.now()))
                                 .filter(time -> !time.isEnabled())
-                                .map(time ->
-                                        new TimeModel(time.getId(), time.getDate().toString(), time.getTime().toString())
-                                ).toList())
+                                .map(converter::convertToTimeModel).toList()
+                )
         ).orElse(null);
     }
 
     @Override
     public RoomModel findById(Long id) {
-        return roomRepository.findById(id).map(room ->
-                new RoomModel(room.getId(), room.getName(), room.getMaxPeople(), room.getPrice(), room.isOpened(),
-                        room.getOpenTime(), room.getCloseTime(), room.getCreatedAt(), room.isEnabled(), room.getNickname())
-        ).orElse(null);
+        return roomRepository.findById(id).map(converter::convertToRoomModel).orElse(null);
     }
 
 }

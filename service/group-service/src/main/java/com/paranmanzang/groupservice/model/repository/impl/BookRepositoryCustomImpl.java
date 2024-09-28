@@ -5,7 +5,6 @@ import com.paranmanzang.groupservice.model.repository.BookRepositoryCustom;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -16,13 +15,12 @@ import static com.paranmanzang.groupservice.model.entity.QBook.book;
 import static com.paranmanzang.groupservice.model.entity.QLikeBooks.likeBooks;
 
 @RequiredArgsConstructor
-@Slf4j
 public class BookRepositoryCustomImpl implements BookRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<BookResponseModel> findBooks(Pageable pageable) {
+    public Page<BookResponseModel> findAllBooks(Pageable pageable) {
         // Step 1: ID만 조회
         var ids = queryFactory
                 .select(book.id)
