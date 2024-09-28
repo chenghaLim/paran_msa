@@ -97,7 +97,7 @@ spring:
         - id: group-service
           uri: lb://group-service
           predicates:
-            - Path=/groups/**
+            - Path=/api/groups/**
             - Method=GET,POST,PUT,DELETE
           filters:
             - RemoveRequestHeader=Cookie
@@ -180,7 +180,7 @@ spring:
       host: localhost   # Redis 서버 호스트
       port: 6379        # Redis 서버 포트
       username: root      # Redis 서버 사용자 이름 (필요한 경우)
-      password: 1234    # Redis 서버 비밀번호
+      password: password    # Redis 서버 비밀번호
       lettuce:
         pool:
           max-active: 8       # 최대 활성 연결 수
@@ -202,3 +202,7 @@ logging:
           mongodb:
             core:
               MongoTemplate: DEBUG
+        security: DEBUG
+        web: DEBUG
+      spring:
+        security: DEBUG

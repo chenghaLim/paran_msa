@@ -39,7 +39,7 @@ public class GatewayRouter {
 						.uri(uriConfiguration.getCommentServiceUri()))
 				.route(r -> r.path("/api/groups/**")
 						.filters(f -> f.filter(new JwtGatewayFilter(jwtUtil).apply(new JwtGatewayFilter.Config())))
-						.uri(uriConfiguration.getGroupServiceUri()))
+						.uri("lb://group-service"))
 				.route(r -> r.path("/api/files/**")
 						.filters(f -> f.filter(new JwtGatewayFilter(jwtUtil).apply(new JwtGatewayFilter.Config())))
 						.uri(uriConfiguration.getFileServiceUri()))

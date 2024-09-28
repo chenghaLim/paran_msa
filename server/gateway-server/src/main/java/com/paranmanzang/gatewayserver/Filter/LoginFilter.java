@@ -8,6 +8,8 @@ import com.paranmanzang.gatewayserver.jwt.CustomReactiveAuthenticationManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilterChain;
@@ -30,37 +32,79 @@ public class LoginFilter extends AuthenticationWebFilter {
         this.failureHandler = failureHandler;
 
     }
-
     private Mono<Void> convert(ServerWebExchange exchange, WebFilterChain webFilterChain) {
 
         return exchange.getRequest().getBody()
                 .next()
                 .flatMap(dataBuffer -> {
                     String requestBody = dataBuffer.toString(StandardCharsets.UTF_8);
+                    log.info("Request body: {}", requestBody);
+
                     try {
                         ObjectMapper objectMapper = new ObjectMapper();
-                        Map<String, String> loginData = objectMapper.readValue(requestBody, new TypeReference<Map<String, String>>() {});
-                        String username = loginData.get("username");
-                        String password = loginData.get("password");
+                        // Map<String, Object>로 받기
+                        Map<String, Object> loginData = objectMapper.readValue(requestBody, new TypeReference<Map<String, Object>>() {});
+                        Object usernameObj = loginData.get("username");
+                        Object passwordObj = loginData.get("password");
 
-                        if (username == null || password == null) {
+                        // username과 password가 객체인 경우 내부 값 확인
+                        if (usernameObj instanceof Map) {
+                            usernameObj = ((Map<?, ?>) usernameObj).get("value");
+                        }
+                        if (passwordObj instanceof Map) {
+                            passwordObj = ((Map<?, ?>) passwordObj).get("value");
+                        }
+
+                        // username과 password가 String인지 확인
+                        log.info("Received username object: {}", usernameObj);
+                        log.info("Received password object: {}", passwordObj);
+
+                        if (!(usernameObj instanceof String) || !(passwordObj instanceof String)) {
+                            log.error("Invalid login attempt: Username or password is not a string");
                             return Mono.error(new BadCredentialsException("Invalid username or password"));
                         }
+
+                        String username = (String) usernameObj;
+                        String password = (String) passwordObj;
+
+                        // username이나 password가 비어있는 경우 처리
+                        if (username == null || password == null) {
+                            log.error("Invalid login attempt: Missing username or password");
+                            return Mono.error(new BadCredentialsException("Invalid username or password"));
+                        }
+
                         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
-                        log.info("Authenticated user: {}", username);
-                        log.info("Authenticated password: {}", password);
-                        log.info("Authenticated token: {}", authToken.getPrincipal());
+                        log.info("Authentication token created for user: {}", authToken.getPrincipal());
+
+                        // 인증 처리 시작
                         return authenticationManager.authenticate(authToken)
-                                .doOnSuccess(authentication ->
-                                        successHandler.handleSuccess(exchange, authentication)
-                                ) // 수정된 부분
-                                .doOnError(e -> failureHandler.handleFailure(exchange, e)); // 수정된 부분
+                                .flatMap(authentication -> {
+                                    log.info("Authentication success for user: {}", authentication.getName());
+
+                                    // SecurityContext에 인증 정보 설정
+                                    SecurityContext context = SecurityContextHolder.createEmptyContext();
+                                    context.setAuthentication(authentication);
+                                    SecurityContextHolder.setContext(context);
+
+                                    return successHandler.handleSuccess(exchange, authentication)
+                                            .then(Mono.defer(() -> {
+                                                // 로그인 후 필터 체인으로 이동
+                                                return webFilterChain.filter(exchange);
+                                            }));
+                                })
+                                .onErrorResume(e -> {
+                                    log.error("Authentication failed: {}", e.getMessage());
+                                    return failureHandler.handleFailure(exchange, e);
+                                });
                     } catch (IOException e) {
+                        log.error("Error parsing request body: {}", e.getMessage());
                         return Mono.error(new IllegalArgumentException("Invalid username or password"));
                     }
                 })
                 .then(); // Mono<Void> 반환
     }
+
+
 
 
     @Override

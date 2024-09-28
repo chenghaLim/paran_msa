@@ -3,6 +3,7 @@ package com.paranmanzang.groupservice.controller;
 
 import com.paranmanzang.groupservice.service.impl.BookServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/groups/books")
 @RequiredArgsConstructor
+@Slf4j
 public class BookController {
 
     private final BookServiceImpl bookService;

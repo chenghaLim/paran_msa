@@ -3,6 +3,7 @@ package com.paranmanzang.gatewayserver.jwt;
 import com.paranmanzang.gatewayserver.model.Domain.oauth.CustomUserDetails;
 import com.paranmanzang.gatewayserver.model.entity.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
@@ -50,9 +51,10 @@ public class CustomAuthenticationSuccessHandler {
 
         exchange.getResponse().getHeaders().add("Authorization", "Bearer " + access);
         exchange.getResponse().addCookie(createCookie("refresh", refresh));
+        exchange.getResponse().getHeaders().add(HttpHeaders.SET_COOKIE, "refresh=" + refresh + "; Path=/; HttpOnly");
+        exchange.getResponse().getHeaders().add(HttpHeaders.SET_COOKIE, "token=; Path=/; HttpOnly; Max-Age=0");
         exchange.getResponse().setStatusCode(HttpStatus.OK);
         log.info("Response Cookies: {}", exchange.getResponse().getCookies());
-
 
         return exchange.getResponse().setComplete();
     }

@@ -3,6 +3,7 @@ package com.paranmanzang.gatewayserver.Filter;
 import com.paranmanzang.gatewayserver.Enum.Role;
 import com.paranmanzang.gatewayserver.jwt.JWTUtil;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-
+@Slf4j
 @Component
 public class JwtGatewayFilter extends AbstractGatewayFilterFactory<JwtGatewayFilter.Config> {
 
@@ -27,10 +28,10 @@ public class JwtGatewayFilter extends AbstractGatewayFilterFactory<JwtGatewayFil
 
     @Override
     public GatewayFilter apply(Config config) {
-
         return (exchange, chain) -> {
             String jwtToken = resolveToken(exchange);
             // 토큰이 없으면 필터 체인에 요청 전달
+            log.info("token: "+jwtToken);
             if (jwtToken == null) {
                 return chain.filter(exchange);
             }
@@ -47,15 +48,18 @@ public class JwtGatewayFilter extends AbstractGatewayFilterFactory<JwtGatewayFil
         };
     }
 
-    //쿠키에서 토큰 추출
+    // 쿠키에서 토큰 추출
     private String resolveToken(ServerWebExchange exchange) {
-        String accessToken = exchange.getRequest().getHeaders().getFirst("access");
-        if (accessToken == null) {
+        // Authorization 헤더에서 Bearer 토큰 추출
+        String authHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return null;
         }
+        String accessToken = authHeader.substring(7); // "Bearer " 이후의 토큰만 추출
+
         String refreshToken = exchange.getRequest().getCookies().getFirst("refresh") != null ?
                 exchange.getRequest().getCookies().getFirst("refresh").getValue() : null;
-        if (refreshToken == null){
+        if (refreshToken == null) {
             return null;
         }
         // 두 토큰의 닉네임이 같지 않으면 인증 실패
@@ -64,7 +68,6 @@ public class JwtGatewayFilter extends AbstractGatewayFilterFactory<JwtGatewayFil
         }
         return accessToken;
     }
-
 
     // 에러 응답 처리
     private Mono<Void> sendErrorResponse(ServerWebExchange exchange, String message, HttpStatus status) {
