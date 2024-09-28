@@ -1,11 +1,11 @@
 package com.paranmanzang.gatewayserver.config;
 
 import com.paranmanzang.gatewayserver.Filter.JwtGatewayFilter;
-import com.paranmanzang.gatewayserver.jwt.CustomReactiveAuthenticationManager;
 import com.paranmanzang.gatewayserver.Filter.LoginFilter;
 import com.paranmanzang.gatewayserver.Filter.LogoutFilter;
 import com.paranmanzang.gatewayserver.jwt.CustomAuthenticationFailureHandler;
 import com.paranmanzang.gatewayserver.jwt.CustomAuthenticationSuccessHandler;
+import com.paranmanzang.gatewayserver.jwt.CustomReactiveAuthenticationManager;
 import com.paranmanzang.gatewayserver.jwt.JWTUtil;
 import com.paranmanzang.gatewayserver.model.repository.UserRepository;
 import com.paranmanzang.gatewayserver.oauth.CustomSuccessHandler;
@@ -16,9 +16,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -64,17 +63,31 @@ public class SecurityConfig {
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
 
-                // JWT 토큰 필터 추가
+                // JWT 필터 추가
                 .addFilterBefore((exchange, chain) -> {
-                    return extractAndAuthenticateJWT(exchange)
-                            .flatMap(authentication -> {
-                                // 인증 정보가 있을 경우 SecurityContextHolder에 설정
-                                if (authentication != null) {
-                                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                                }
-                                return chain.filter(exchange);
-                            });
+                    String jwtToken = resolveToken(exchange);
+
+                    if (jwtToken != null && !jwtUtil.isExpired(jwtToken)) {
+                        String nickname = jwtUtil.getNickNameFromToken(jwtToken);
+                        UsernamePasswordAuthenticationToken authentication =
+                                new UsernamePasswordAuthenticationToken(nickname, null, null);
+
+                        // ReactiveSecurityContextHolder에 인증 정보 설정
+                        return chain.filter(exchange)
+                                .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication))
+                                .then(Mono.defer(() -> exchange.getResponse().setComplete()))
+                                .doOnSuccess(unused -> {
+                                    log.info("User '{}' has been authenticated and JWT tokens returned", nickname);
+                                })
+                                .doOnError(error -> {
+                                    log.error("Failed to authenticate user '{}': {}", nickname, error.getMessage());
+                                });
+                    }
+
+                    // JWT 토큰이 없거나 유효하지 않은 경우 필터 체인 계속 진행
+                    return chain.filter(exchange);
                 }, SecurityWebFiltersOrder.AUTHENTICATION)
+
 
                 // 로그인 필터 추가
                 .addFilterAt(new LoginFilter(customReactiveAuthenticationManager, successHandler, failureHandler), SecurityWebFiltersOrder.AUTHENTICATION)
@@ -90,24 +103,10 @@ public class SecurityConfig {
                 // 권한 설정
                 .authorizeExchange(auth -> auth
                         .pathMatchers("/login", "/oauth2/**").permitAll()  // /login과 /oauth2/** 경로는 인증 없이 접근 가능
-                        .pathMatchers("/api/groups/books").permitAll()
                         .anyExchange().authenticated() // 그 외 모든 경로는 인증 필요
                 );
 
-
         return http.build();
-    }
-
-    private Mono<UsernamePasswordAuthenticationToken> extractAndAuthenticateJWT(ServerWebExchange exchange) {
-        // 요청 헤더에서 Authorization 추출
-        String token = resolveToken(exchange);
-        if (token != null && jwtUtil.validateToken(token)) {
-            // JWT 토큰에서 사용자 정보 추출
-            String username = jwtUtil.getUsernameFromToken(token);
-            // 권한이나 추가 정보는 필요에 따라 추가 가능
-            return Mono.just(new UsernamePasswordAuthenticationToken(jwtUtil.getAuthorities(token), username, null));
-        }
-        return Mono.empty();
     }
 
     // Authorization 헤더에서 JWT 토큰을 추출하는 메서드

@@ -8,6 +8,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -30,21 +31,35 @@ public class JwtGatewayFilter extends AbstractGatewayFilterFactory<JwtGatewayFil
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             String jwtToken = resolveToken(exchange);
-            // 토큰이 없으면 필터 체인에 요청 전달
-            log.info("token: "+jwtToken);
+            log.info("Resolved JWT Token: {}", jwtToken);
+
             if (jwtToken == null) {
+                log.warn("JWT token is missing");
                 return chain.filter(exchange);
             }
-            // 토큰 만료 여부 확인
+
             if (jwtUtil.isExpired(jwtToken)) {
+                log.warn("JWT token has expired");
                 return sendErrorResponse(exchange, "Token expired", HttpStatus.UNAUTHORIZED);
             }
 
-            String nickname = jwtUtil.getNickNameFromToken(jwtToken);
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(nickname, null, null);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            return chain.filter(exchange);
+            try {
+                String nickname = jwtUtil.getNickNameFromToken(jwtToken);
+                log.info("Extracted username from JWT: {}", nickname);
+
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(nickname, null, null);
+
+                // ReactiveSecurityContextHolder에 저장
+                return Mono.deferContextual(Mono::just)
+                        .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication))
+                        .then(chain.filter(exchange)) // 필터 체인 계속 진행
+                        .doOnSuccess(unused -> log.info("Authenticated user '{}' with JWT token", nickname));
+
+            } catch (Exception e) {
+                log.error("JWT token validation failed: {}", e.getMessage());
+                return sendErrorResponse(exchange, "Invalid token", HttpStatus.UNAUTHORIZED);
+            }
         };
     }
 

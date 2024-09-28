@@ -90,20 +90,6 @@ public class JWTUtil {
         return getClaim(token, "category");
     }
 
-    // JWT 토큰에서 권한 추출
-    public List<String> getAuthorities(String token) {
-        return (List<String>) getClaimsFromToken(token).get("roles");  // 권한 정보 추출
-    }
-
-    // JWT 유효성 검사
-    public boolean validateToken(String token) {
-        try {
-            getClaimsFromToken(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 }
 
 

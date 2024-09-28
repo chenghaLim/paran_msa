@@ -73,7 +73,7 @@ spring:
         - id: chat-service
           uri: lb://chat-service
           predicates:
-            - Path=/chats/**
+            - Path=/api/chats/**
             - Method=GET,POST,PUT,DELETE
           filters:
             - RemoveRequestHeader=Cookie
@@ -81,7 +81,7 @@ spring:
         - id: comment-service
           uri: lb://comment-service
           predicates:
-            - Path=/comments/**
+            - Path=/api/comments/**
             - Method=GET,POST,PUT,DELETE
           filters:
             - RemoveRequestHeader=Cookie
@@ -89,7 +89,7 @@ spring:
         - id: file-service
           uri: lb://file-service
           predicates:
-            - Path=/files/**
+            - Path=/api/files/**
             - Method=GET,POST,PUT,DELETE
           filters:
             - RemoveRequestHeader=Cookie
@@ -105,7 +105,7 @@ spring:
         - id: room-service
           uri: lb://room-service
           predicates:
-            - Path=/rooms/**
+            - Path=/api/rooms/**
             - Method=GET,POST,PUT,DELETE
           filters:
             - RemoveRequestHeader=Cookie
@@ -113,7 +113,7 @@ spring:
         - id: user-service
           uri: lb://user-service
           predicates:
-            - Path=/users/**
+            - Path=/api/users/**
             - Method=GET,POST,PUT,DELETE
           filters:
             - RemoveRequestHeader=Cookie
@@ -197,12 +197,13 @@ logging:
       hibernate:
         SQL: DEBUG
         orm.jdbc.bind: TRACE
-      springframework:
+      spring:
+        cloud:
+          gateway: DEBUG
         data:
           mongodb:
             core:
               MongoTemplate: DEBUG
         security: DEBUG
         web: DEBUG
-      spring:
-        security: DEBUG
+
