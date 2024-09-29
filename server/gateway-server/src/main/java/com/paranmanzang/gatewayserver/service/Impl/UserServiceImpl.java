@@ -1,5 +1,6 @@
 package com.paranmanzang.gatewayserver.service.Impl;
 
+import com.paranmanzang.gatewayserver.Enum.Role;
 import com.paranmanzang.gatewayserver.model.RegisterModel;
 import com.paranmanzang.gatewayserver.model.entity.User;
 import com.paranmanzang.gatewayserver.model.repository.UserRepository;
@@ -127,7 +128,41 @@ public class UserServiceImpl implements UserService {
                     return Mono.error(new IllegalArgumentException(e.getMessage(), e));
                 });
     }
+    public Mono<Boolean> updateRole(String nickname, Role newRole) {
+        return userRepository.findByNickname(nickname)
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("사용자가 존재하지 않습니다.")))
+                .flatMap(user -> {
+                    if (user.getRole().equals(newRole)) {
+                        return Mono.error(new IllegalArgumentException("기존의 권한과 동일합니다."));
+                    }
+                    user.setRole(newRole);
+                    return userRepository.save(user).then(Mono.just(true));
+                })
+                .onErrorResume(DataAccessException.class, e -> {
+                    return Mono.error(new RuntimeException("권한 변경 중 오류 발생: " + e.getMessage(), e));
+                })
+                .onErrorResume(IllegalArgumentException.class, e -> {
+                    return Mono.error(new IllegalArgumentException(e.getMessage(), e));
+                });
+    }
 
+    public Mono<Boolean> updateDeclaration(String nickname){
+        return userRepository.findByNickname(nickname)
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("사용자가 존재하지 않습니다,")))
+                .flatMap(user -> {
+                    user.setDeclarationCount(user.getDeclarationCount()+1);
+                    if(user.getDeclarationCount()==5){
+                        deleteUser(nickname);
+                    }
+                    return userRepository.save(user).then(Mono.just(true));
+                })
+                .onErrorResume(DataAccessException.class, e ->{
+                    return Mono.error(new RuntimeException("신고 횟수 업데이트 중 오류 발생: " + e.getMessage(), e));
+                })
+                .onErrorResume(IllegalArgumentException.class, e->{
+                    return Mono.error(new IllegalArgumentException(e.getMessage(), e));
+                });
+    }
     public Mono<Boolean> checkNickname(RegisterModel registerModel){
         return userRepository.existsByNickname(registerModel.getNickname())
                 .map(exists -> !exists) // 존재하지 않으면 True

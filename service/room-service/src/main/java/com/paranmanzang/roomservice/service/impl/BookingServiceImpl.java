@@ -3,6 +3,7 @@ package com.paranmanzang.roomservice.service.impl;
 import com.paranmanzang.roomservice.model.domain.BookingModel;
 import com.paranmanzang.roomservice.model.entity.Booking;
 import com.paranmanzang.roomservice.model.entity.Time;
+import com.paranmanzang.roomservice.model.repository.AccountRepository;
 import com.paranmanzang.roomservice.model.repository.BookingRepository;
 import com.paranmanzang.roomservice.model.repository.RoomRepository;
 import com.paranmanzang.roomservice.service.BookingService;
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final RoomRepository roomRepository;
+    private final AccountRepository accountRepository;
     private final TimeServiceImpl timeService;
     private final AccountServiceImpl accountService;
     private final Converter converter;
@@ -41,13 +43,13 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Boolean delete(Long id) {
-        var booking = bookingRepository.findById(id).get();
-        bookingRepository.delete(booking);
-        return bookingRepository.findById(id).isEmpty() && timeService.saveBooking(
-                new BookingModel(booking.getId(), booking.isEnabled(), booking.getDate(),
-                        booking.getTimes().stream().map(Time::getTime).toList(),
-                        booking.getRoom().getId(), booking.getGroupId())
-        ) && accountService.cancel(id);
+        return bookingRepository.findById(id)
+                .map(booking -> {
+                    BookingModel bookingModel = converter.convertToBookingModel(booking);
+                    bookingRepository.delete(booking);
+                    return timeService.saveBooking(bookingModel) && accountService.cancel(id);
+                })
+                .orElse(false);
     }
 
     @Override

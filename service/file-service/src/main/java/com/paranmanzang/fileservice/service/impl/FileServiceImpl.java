@@ -13,6 +13,7 @@ import com.paranmanzang.fileservice.model.enums.FileType;
 import com.paranmanzang.fileservice.model.repository.FileRepository;
 import com.paranmanzang.fileservice.service.FileService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,11 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
@@ -34,17 +33,21 @@ public class FileServiceImpl implements FileService {
     private final AmazonS3Client objectStorageClient;
     private final String BUCKET_NAME = "paran-test";
 
-    public FileModel uploadFile(MultipartFile file, String type, Long refId) {
-        String folderName = type + "s/";
-        String fileName = file.getOriginalFilename();
-        String uploadName = folderName + UUID.randomUUID() + Objects.requireNonNull(fileName).substring(fileName.lastIndexOf("."));
+    @Override
+    public List<?> uploadFile(MultipartFile[] files, String type, Long refId) {
+        return Arrays.stream(files).map(file -> {
+            String folderName = type + "s/";
+            String fileName = file.getOriginalFilename();
+            String uploadName = folderName + UUID.randomUUID() + Objects.requireNonNull(fileName).substring(fileName.lastIndexOf("."));
 
-        return Optional.of(new PutObjectRequest(BUCKET_NAME, folderName, new ByteArrayInputStream(new byte[0]), new ObjectMetadata()))
-                .map(this::createFolder)
-                .map(__ -> uploadFileToStorage(file, uploadName))
-                .map(__ -> saveFileMetadata(uploadName, refId, type))
-                .map(this::convertToFileModel)
-                .orElseThrow(() -> new RuntimeException("Failed to upload file"));
+            return Optional.of(new PutObjectRequest(BUCKET_NAME, folderName, new ByteArrayInputStream(new byte[0]), new ObjectMetadata()))
+                    .map(this::createFolder)
+                    .map(__ -> uploadFileToStorage(file, uploadName))
+                    .map(__ -> saveFileMetadata(uploadName, refId, type))
+                    .map(this::convertToFileModel)
+                    .orElseThrow(() -> new RuntimeException("Failed to upload file"));
+        }).toList();
+
     }
 
     private PutObjectResult createFolder(PutObjectRequest request) {
@@ -77,12 +80,14 @@ public class FileServiceImpl implements FileService {
                 .orElseThrow(() -> new RuntimeException("Failed to save file metadata"));
     }
 
-
     @Override
-    public List<?> getPathList(Long refId, String type) {
-        return fileRepository.findByRefId(refId, FileType.fromType(type).getCode())
-                .map(this::convertToFileModel)
-                .collectList().block();
+    public List<?> getPathList(List<Long> refIdList, String type) {
+        return refIdList.stream().map(refId ->
+                        fileRepository.findByRefId(refId, FileType.fromType(type).getCode())
+                                .map(this::convertToFileModel)
+                                .defaultIfEmpty(FileModel.builder().path(type+"s/default.png").type(type).refId(refId).build())
+                                .collectList().block()).toList();// 파일을 FileModel로 변환
+
     }
 
     @Override
@@ -98,6 +103,7 @@ public class FileServiceImpl implements FileService {
         fileRepository.deleteByPath(model.getPath()).block();
         return Boolean.TRUE;
     }
+
     private FileModel convertToFileModel(File file) {
         return Optional.ofNullable(file)
                 .map(f -> FileModel.builder()

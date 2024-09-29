@@ -25,8 +25,8 @@ public class UserModel {
 
     @Schema(title="전화번호")
     @NotBlank
-    @Pattern(regexp = "^010-\\d{3,4}-\\d{4}$",
-            message = "휴대폰 번호는 010으로 시작하는 11자리 숫자와 '-'로 구성되어야 합니다.")
+    @Pattern(regexp = "^01//d{1}-\\d{3,4}-\\d{4}$",
+            message = "휴대폰 번호는 01으로 시작하는 11자리 숫자와 '-'로 구성되어야 합니다.")
     private String tel;
 
     @Schema(title="닉네임 중복불가")
@@ -37,8 +37,8 @@ public class UserModel {
     @NotBlank
     private String name;
 
-    @Schema(title="권한")
-    private Role role;
+    @Schema(title="권한", defaultValue = "ROLE_USER")
+    private Role role = Role.ROLE_USER; // 기본값 설정
 
     @Schema(title="회원 탈퇴 여부 탈퇴시 false")
     private boolean state;

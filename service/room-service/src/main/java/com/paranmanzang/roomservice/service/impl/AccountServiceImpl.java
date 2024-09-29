@@ -50,11 +50,13 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Boolean cancel(Long bookingId) {
-        return accountRepository.findAccountByBookingId(bookingId).map(account -> {
-            account.setCanceled(true);
-            account.setReason("예약 취소");
-            return accountRepository.save(account);
-        }) == null ? Boolean.FALSE : Boolean.TRUE;
+        return accountRepository.findAccountByBookingId(bookingId)
+                .map(account -> {
+                    account.setCanceled(true);
+                    account.setReason("예약 취소");
+                    return accountRepository.save(account);
+                })
+                .isPresent();
 
     }
 

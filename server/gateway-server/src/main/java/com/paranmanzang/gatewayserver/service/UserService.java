@@ -1,5 +1,6 @@
 package com.paranmanzang.gatewayserver.service;
 
+import com.paranmanzang.gatewayserver.Enum.Role;
 import com.paranmanzang.gatewayserver.model.RegisterModel;
 import com.paranmanzang.gatewayserver.model.entity.User;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ public interface UserService {
 
         Mono<Boolean> deleteUser(String nickname);
 
+        Mono<Boolean> updateRole(String nickname, Role newRole);
 
         Mono<Boolean> logoutTime(String nickname);
 

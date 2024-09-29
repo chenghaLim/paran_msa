@@ -1,5 +1,6 @@
 package com.paranmanzang.gatewayserver.controller;
 
+import com.paranmanzang.gatewayserver.Enum.Role;
 import com.paranmanzang.gatewayserver.model.RegisterModel;
 import com.paranmanzang.gatewayserver.model.repository.UserRepository;
 import com.paranmanzang.gatewayserver.service.Impl.UserServiceImpl;
@@ -19,7 +20,6 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class UserController {
     private final UserServiceImpl userService;
-    private final UserRepository userRepository;
     private final Validator validator;
 
     public Mono<ServerResponse> createUser(ServerRequest request) {
@@ -74,6 +74,20 @@ public class UserController {
                 .onErrorResume(e ->
                         ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).bodyValue("비밀번호 업데이트 중 오류 발생"));
     }
+
+
+    public Mono<ServerResponse> updateDeclaration(ServerRequest request) {
+        String nickname = request.queryParam("nickname")
+                .orElseThrow(() -> new IllegalArgumentException("닉네임이 필요합니다"));
+        return userService.updateDeclaration(nickname)
+                .flatMap(success -> ServerResponse.ok().bodyValue("신고횟수가 성공적으로 업데이트되었습니다."))
+                .onErrorResume(IllegalArgumentException.class, e ->
+                        ServerResponse.badRequest().bodyValue("신고횟수 업데이트 실패: " + e.getMessage()))
+                .onErrorResume(e ->
+                        ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).bodyValue("신고 횟수 업데이트 중 오류 발생"));
+    }
+
+
     public Mono<ServerResponse> getAllUsers(ServerRequest request) {
         String nickname = request.queryParam("nickname")
                 .orElseThrow(() -> new IllegalArgumentException("관리자 닉네임이 필요합니다"));
@@ -147,4 +161,25 @@ public class UserController {
                 .onErrorResume(e ->
                         ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).bodyValue("로그아웃 처리 중 예기치 않은 오류 발생: " + e.getMessage()));
     }
+
+    public Mono<ServerResponse> updateRole(ServerRequest request) {
+        String nickname = request.queryParam("nickname")
+                .orElseThrow(() -> new IllegalArgumentException("닉네임이 필요합니다"));
+        Role newRole = Role.valueOf(request.queryParam("newRole")
+                .orElseThrow(() -> new IllegalArgumentException("새로운 권한이 필요합니다")));
+
+        return userService.updateRole(nickname, newRole)
+                .flatMap(success -> {
+                    if (success) {
+                        return ServerResponse.ok().bodyValue("사용자의 권한이 성공적으로 업데이트되었습니다.");
+                    } else {
+                        return ServerResponse.status(HttpStatus.NOT_FOUND).bodyValue("사용자를 찾을 수 없습니다.");
+                    }
+                })
+                .onErrorResume(IllegalArgumentException.class, e ->
+                        ServerResponse.badRequest().bodyValue("권한 업데이트 실패: " + e.getMessage()))
+                .onErrorResume(e ->
+                        ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).bodyValue("권한 업데이트 중 오류 발생"));
+    }
+
 }

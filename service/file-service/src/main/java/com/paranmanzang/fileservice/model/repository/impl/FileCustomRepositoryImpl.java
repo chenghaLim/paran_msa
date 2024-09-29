@@ -3,18 +3,23 @@ package com.paranmanzang.fileservice.model.repository.impl;
 import com.paranmanzang.fileservice.model.entity.File;
 import com.paranmanzang.fileservice.model.repository.custom.FileCustomRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+
+
+@Slf4j
 @RequiredArgsConstructor
 public class FileCustomRepositoryImpl implements FileCustomRepository {
     private final ReactiveMongoTemplate reactiveMongoTemplate;
 
     @Override
     public Flux<File> findByRefId(Long refId, int type) {
+        log.info("findByRefId called with refId: {}, type: {}", refId, type);
         return reactiveMongoTemplate.find(Query.query(Criteria.where("refId").is(refId).and("type").is(type)), File.class);
     }
 

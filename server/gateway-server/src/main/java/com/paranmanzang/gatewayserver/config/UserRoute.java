@@ -25,15 +25,11 @@ public class UserRoute {
                         .andRoute(GET("/api/users/getUserDetail").and(accept(MediaType.APPLICATION_JSON)), userController::getUserDetail)
                         .andRoute(POST("/api/users/checkNickname").and(accept(MediaType.APPLICATION_JSON)), userController::checkNickname)
                         .andRoute(POST("/api/users/checkPassword").and(accept(MediaType.APPLICATION_JSON)), userController::checkPassword)
-                        .andRoute(PUT("/api/users/logoutUserTime").and(accept(MediaType.APPLICATION_JSON)), userController::logoutUserTime);
+                        .andRoute(PUT("/api/users/logoutUserTime").and(accept(MediaType.APPLICATION_JSON)), userController::logoutUserTime)
+                        .andRoute(PUT("/api/users/updateDeclaration").and(accept(MediaType.APPLICATION_JSON)), userController::updateDeclaration)
+                        .andRoute(PUT("/api/users/updateRole").and(accept(MediaType.APPLICATION_JSON)), userController::updateRole);
     }
 }
 
-//GET getAllUsers 82번 포트 탐 근데 갑자기 됨???
-
-//안되는거 목록
-
-//PUT logoutUserTime 유저를 못찾음
-//PUT updatePassword 82번 포트 탐
 
 

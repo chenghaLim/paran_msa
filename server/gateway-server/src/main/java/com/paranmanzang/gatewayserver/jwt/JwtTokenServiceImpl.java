@@ -28,6 +28,7 @@ public class JwtTokenServiceImpl {
         //redis에서 JWT 조회
         return redisTemplate.opsForValue().get(token);
     }
+
     public void blacklistToken(String token, long expirationTime){
         //블랙리스트에 토큰 추가 => 해당 토큰은 접속이 차단 됨
         redisTemplate.opsForValue().set(token, "blacklist",expirationTime, TimeUnit.MILLISECONDS);
