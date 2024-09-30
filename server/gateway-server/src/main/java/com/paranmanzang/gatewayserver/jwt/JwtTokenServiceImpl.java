@@ -5,6 +5,7 @@ import com.paranmanzang.gatewayserver.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.concurrent.TimeUnit;
 
@@ -22,7 +23,12 @@ public class JwtTokenServiceImpl {
         //redis에 jwt를 저장, 만료 시간도 설정
         redisTemplate.opsForValue().set(token, nickname, duration, TimeUnit.MILLISECONDS);
     }
-
+    public Mono<Void> storeTokenM(String token, String nickname, long duration) {
+        // Redis에 JWT를 저장하고, 만료 시간도 설정
+        return Mono.fromRunnable(() ->
+                redisTemplate.opsForValue().set(token, nickname, duration, TimeUnit.MILLISECONDS)
+        );
+    }
 
     public String getUserFromToken(String token) {
         //redis에서 JWT 조회
@@ -49,13 +55,8 @@ public class JwtTokenServiceImpl {
         }
         else{return false;}
     }
-
-    /*//로그아웃 시간 찍기
-    public void updateLogoutTime(String username) {
-        User user = userRepository.findByUsername(username);
-        if (user != null) {
-            user.setLogoutAt(LocalDateTime.now());
-            userRepository.save(user);
-        }
-    }*/
+    public Mono<Boolean> isExistM(String token) {
+        // Redis에서 키가 존재하는지 비동기로 확인
+        return Mono.fromCallable(() -> redisTemplate.hasKey(token));
+    }
 }

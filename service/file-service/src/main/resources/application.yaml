@@ -3,6 +3,8 @@ server:
 
 ncp:
   storage:
+    accessKey: ncp_iam_BPASKR5v1Hekg1oSwboI
+    secretKey: ncp_iam_BPKSKRLeX8QfYjS5RaANbRaO6Q2XThf0aR
     region: kr-standard
     endpoint: https://kr.object.ncloudstorage.com
 

@@ -27,7 +27,9 @@ public class UserRoute {
                         .andRoute(POST("/api/users/checkPassword").and(accept(MediaType.APPLICATION_JSON)), userController::checkPassword)
                         .andRoute(PUT("/api/users/logoutUserTime").and(accept(MediaType.APPLICATION_JSON)), userController::logoutUserTime)
                         .andRoute(PUT("/api/users/updateDeclaration").and(accept(MediaType.APPLICATION_JSON)), userController::updateDeclaration)
-                        .andRoute(PUT("/api/users/updateRole").and(accept(MediaType.APPLICATION_JSON)), userController::updateRole);
+                        .andRoute(PUT("/api/users/updateRole").and(accept(MediaType.APPLICATION_JSON)), userController::updateRole)
+                        .andRoute(GET("/api/users/checkRole").and(accept(MediaType.APPLICATION_JSON)), userController::checkRole);
+
     }
 }
 

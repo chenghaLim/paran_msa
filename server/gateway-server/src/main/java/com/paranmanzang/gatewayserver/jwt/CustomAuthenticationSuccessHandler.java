@@ -59,7 +59,7 @@ public class CustomAuthenticationSuccessHandler {
 
         // RefreshToken을 쿠키에 추가
         exchange.getResponse().addCookie(createCookie("refresh", refresh));
-        exchange.getResponse().getHeaders().add(HttpHeaders.SET_COOKIE, "refresh=" + refresh + "; Path=/; HttpOnly");
+        //exchange.getResponse().getHeaders().add(HttpHeaders.SET_COOKIE, "refresh=" + refresh + "; Path=/; HttpOnly");
 
         log.info("Response Cookies: {}", exchange.getResponse().getCookies());
 
@@ -76,8 +76,8 @@ public class CustomAuthenticationSuccessHandler {
 
     // 리프레시 토큰을 위한 쿠키 생성 메서드
     private ResponseCookie createCookie(String key, String value) {
-        return ResponseCookie.fromClientResponse(key, value)
-                .maxAge(86400)  // 쿠키의 만료 시간을 초 단위로 설정
+        return ResponseCookie.from(key, value)
+                .maxAge(86400)
                 .path("/")
                 .httpOnly(true)
                 .build();

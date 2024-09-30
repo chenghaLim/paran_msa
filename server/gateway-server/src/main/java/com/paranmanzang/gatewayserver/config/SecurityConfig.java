@@ -3,6 +3,7 @@ package com.paranmanzang.gatewayserver.config;
 import com.paranmanzang.gatewayserver.Filter.JwtGatewayFilter;
 import com.paranmanzang.gatewayserver.Filter.LoginFilter;
 import com.paranmanzang.gatewayserver.Filter.LogoutFilter;
+import com.paranmanzang.gatewayserver.Filter.ReissueFilter;
 import com.paranmanzang.gatewayserver.jwt.*;
 import com.paranmanzang.gatewayserver.model.repository.UserRepository;
 import com.paranmanzang.gatewayserver.oauth.CustomSuccessHandler;
@@ -98,6 +99,9 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .authenticationSuccessHandler(customSuccessHandler)
                 )
+                //reissue 필터
+                .addFilterBefore(new ReissueFilter(jwtUtil, jwtTokenService), SecurityWebFiltersOrder.AUTHORIZATION)
+
 
                 // 권한 설정
                 .authorizeExchange(auth -> auth
