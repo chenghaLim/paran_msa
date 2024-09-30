@@ -86,7 +86,7 @@ public class FileServiceImpl implements FileService {
                         fileRepository.findByRefId(refId, FileType.fromType(type).getCode())
                                 .map(this::convertToFileModel)
                                 .defaultIfEmpty(FileModel.builder().path(type+"s/default.png").type(type).refId(refId).build())
-                                .collectList().block()).toList();// 파일을 FileModel로 변환
+                                .block()).toList();// 파일을 FileModel로 변환
 
     }
 
