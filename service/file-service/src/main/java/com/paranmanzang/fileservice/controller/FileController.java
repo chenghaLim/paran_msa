@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 
 @RestController
@@ -21,10 +20,10 @@ import java.util.List;
 public class FileController {
     private final FileServiceImpl fileService;
 
-    @GetMapping("/list")
+    @GetMapping("/list/{refId}")
     @Operation(summary = "리스트 조회", description = "type의 refId인 파일 path 리스트를 조회합니다.", tags = {"01. File",})
-    public ResponseEntity<?> getPathByRefId(@RequestParam("refIdList") List<Long> refIdList, @RequestParam("type") String type) {
-        return ResponseEntity.ok(fileService.getPathList(refIdList, type));
+    public ResponseEntity<?> getPathByRefId(@PathVariable("refId") Long refId, @RequestParam("type") String type) {
+        return ResponseEntity.ok(fileService.getPathList(refId, type));
     }
 
     @GetMapping("/one")
@@ -35,7 +34,7 @@ public class FileController {
 
     @PostMapping("/upload")
     @Operation(summary = "파일 저장", description = "파일을 업로드하고 파일정보를 db에 저장합니다.")
-    public ResponseEntity<?> uploadFile(MultipartFile[] file, String type, Long refId) {
+    public ResponseEntity<?> uploadFile(MultipartFile file, String type, Long refId) {
         return ResponseEntity.ok(fileService.uploadFile(file, type, refId));
     }
 

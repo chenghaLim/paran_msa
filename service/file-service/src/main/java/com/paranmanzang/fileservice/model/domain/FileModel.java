@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
 @Component
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class FileModel {
