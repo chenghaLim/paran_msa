@@ -1,25 +1,19 @@
-package com.paranmanzang.userservice.model.repository;/*
-package com.paranmanzang.userservice.model.repository.user;
+package com.paranmanzang.userservice.model.repository;
 
-import com.paranmanzang.userservice.model.entity.user.LikePosts;
-import com.paranmanzang.userservice.model.entity.user.LikeRooms;
+import com.paranmanzang.userservice.model.entity.LikePosts;
+import com.paranmanzang.userservice.model.repository.custom.LikePostRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface LikePostRepository extends JpaRepository<LikePosts,Long> {
-    // 사용자 ID와 게시판 ID로 LikePost 조회
-    LikePosts findByUserIdAndPostId(Long userId, Long postId);
+public interface LikePostRepository extends JpaRepository<LikePosts,Long>, LikePostRepositoryCustom {
+    // 사용자 닉네임과 룸 ID로 LikePosts 조회
+    LikePosts findByNicknameAndPostId(String nickname, Long postId);
 
-    // 사용자 ID와 게시판 ID로 LikePost 삭제
-    boolean deleteByUserIdAndPostId(Long userId, Long postId);
+    // 사용자 낙네임과 룸 ID로 LikePost 삭제
+    int deleteByNicknameAndPostId(String nickname, Long postId);
 
-    // 사용자 ID와 게시판 ID로 LikePost 조회
-    Boolean existsByUserIdAndPostId(Long userId, Long postId);
+    // 사용자 닉네임과 룸 ID로 LikePost 조회
+    Boolean existsByNicknameAndPostId(String nickname, Long postId);
 
-    // 사용자 ID로 LikePost 목록 조회
-    List<LikePosts> findByUserId(long userId);
 }
-*/

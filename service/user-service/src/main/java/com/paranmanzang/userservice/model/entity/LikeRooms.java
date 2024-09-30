@@ -1,13 +1,10 @@
 package com.paranmanzang.userservice.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Setter
@@ -23,11 +20,7 @@ public class LikeRooms {
     @Column(nullable = false)
     private Long roomId;
 
-    //
-    @ManyToOne
-    @JsonBackReference
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(nullable = false)
+    private String nickname;
 
 }

@@ -1,95 +1,99 @@
-package com.paranmanzang.userservice.service.impl;/*
-package com.paranmanzang.userservice.service.user.impl;
+package com.paranmanzang.userservice.service.impl;
 
-import com.paranmanzang.userservice.model.domain.user.LikePostModel;
-import com.paranmanzang.userservice.model.domain.user.LikeRoomModel;
-import com.paranmanzang.userservice.model.entity.group.GroupPost;
-import com.paranmanzang.userservice.model.entity.user.LikePosts;
-import com.paranmanzang.userservice.model.entity.user.LikeRooms;
-import com.paranmanzang.userservice.model.entity.user.User;
-import com.paranmanzang.userservice.model.repository.user.LikePostRepository;
-import com.paranmanzang.userservice.model.repository.user.UserRepository;
-import com.paranmanzang.userservice.service.user.LikePostService;
+
+import com.paranmanzang.userservice.model.domain.LikePostModel;
+import com.paranmanzang.userservice.model.entity.LikePosts;
+import com.paranmanzang.userservice.model.repository.LikePostRepository;
+import com.paranmanzang.userservice.service.LikePostService;
+import jakarta.transaction.Transactional;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class LikePostServiceImpl implements LikePostService {
     private final LikePostRepository likePostRepository;
-    private final UserRepository userRepository;
-    private final PostRepository postRepository;
 
-    public LikePostServiceImpl(LikePostRepository likePostRepository,UserRepository userRepository, PostRepository postRepository){
+    public LikePostServiceImpl(LikePostRepository likePostRepository) {
         this.likePostRepository = likePostRepository;
-        this.userRepository = userRepository;
-        this.postRepository = postRepository;
     }
-
-
     @Override
-    public boolean add(LikePostModel likePostModel) {
-        Long userId = likePostModel.getUserId();
+    public List<LikePostModel> findAllByUserNickname(String userNickname) {
+        return likePostRepository.findLikePostByNickname(userNickname);
+    }
+    @Override
+    public Object add(LikePostModel likePostModel) {
+        String nickname = likePostModel.getNickname();
         Long postId = likePostModel.getPostId();
 
-        Optional<User> optionalUser = userRepository.findById(userId);
-        Optional<GroupPost> optionalPost = postRepository.findById(postId);
+        try {
+            if (likePostRepository.existsByNicknameAndPostId(nickname, postId)) {
+                return false; // 이미 좋아요를 눌렀으면 false 반환
+            }
 
-        if(optionalUser.isPresent() && optionalPost.isPresent()) {
-            throw new RuntimeException("사용자나 방의 정보가 잘못되었습니다.");
+            LikePosts likePosts = new LikePosts();
+            likePosts.setPostId(postId);
+            likePosts.setNickname(nickname);
+            return LikePostModel.fromEntity(likePostRepository.save(likePosts));
+        } catch (DataAccessException e) {
+            // 데이터베이스 접근 예외 처리
+            System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
+            return false;
+        } catch (IllegalArgumentException e) {
+            // 비즈니스 로직 예외 처리
+            System.err.println("비즈니스 로직 오류 발생: " + e.getMessage());
+            return false;
         }
-
-        if (likePostRepository.existsByUserIdAndPostId(userId, postId)) {
-            System.out.println("test");
-            return false; // 이미 좋아요를 눌렀으면 false 반환
-        }
-
-        LikePosts likePosts = new LikePosts();
-        likePosts.setPostId(postId);
-        likePosts.setUser(optionalUser.get());
-        likePostRepository.save(likePosts);
-        return true;
     }
 
     @Override
+    @Transactional
     public boolean remove(LikePostModel likePostModel) {
-        LikePosts likePosts = likePostRepository.findByUserIdAndPostId(likePostModel.getUserId(), likePostModel.getPostId());
-        if (likePosts != null) {
-            likePostRepository.deleteByUserIdAndPostId(likePostModel.getUserId(), likePostModel.getPostId());
-            return true;
+        try {
+            LikePosts likePosts = likePostRepository.findByNicknameAndPostId(likePostModel.getNickname(), likePostModel.getPostId());
+            if (likePosts != null) {
+                likePostRepository.deleteByNicknameAndPostId(likePostModel.getNickname(), likePostModel.getPostId());
+                return true;
+            }
+            return false;
+        } catch (DataAccessException e) {
+            // 데이터베이스 접근 예외 처리
+            System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
+            return false;
         }
-        return false;
     }
 
-    @Override
+/*    @Override
     public boolean removeLikeById(Long id) {
-        likePostRepository.deleteById(id);
-        System.out.println(!likePostRepository.existsById(id));
-        return !likePostRepository.existsById(id);
-    }
-
-    @Override
-    public List<LikePostModel> findAll(long userId) {
-        List<LikePosts> likePosts = likePostRepository.findByUserId(userId);
-        return likePosts.stream()
-                .map(likePost -> new LikePostModel(likePost.getId(),
-                        likePost.getPostId(),
-                        likePost.getUser().getId()))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public LikePostModel existsByUserIdAndPostId(Long userId, Long postId) {
-        LikePosts likePosts = likePostRepository.findByUserIdAndPostId(userId, postId);
-        if(likePosts != null) {
-            System.out.println(new LikePostModel(likePosts.getId(), likePosts.getPostId(),likePosts.getUser().getId()));
-            return new LikePostModel(likePosts.getId(), likePosts.getPostId(),likePosts.getUser().getId());
+        try {
+            if (!likePostRepository.existsById(id)) {
+                throw new IllegalArgumentException("해당 좋아요 정보가 존재하지 않습니다.");
+            }
+            likePostRepository.deleteById(id);
+            return !likePostRepository.existsById(id);
+        } catch (DataAccessException e) {
+            // 데이터베이스 접근 예외 처리
+            System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
+            return false;
+        } catch (IllegalArgumentException e) {
+            // 비즈니스 로직 예외 처리
+            System.err.println("비즈니스 로직 오류 발생: " + e.getMessage());
+            return false;
         }
-        System.out.println("null");
-        return null;
     }
+    @Override
+    public LikePostModel existsByNicknameAndPostId(String nickname, Long postId) {
+        try {
+            LikePosts likePosts = likePostRepository.findByUserNicknameAndPostId(nickname, postId);
+            if (likePosts != null) {
+                return new LikePostModel(likePosts.getId(), likePosts.getPostId(), likePosts.getUser().getId());
+            }
+            return null;
+        } catch (DataAccessException e) {
+            // 데이터베이스 접근 예외 처리
+            System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
+            return null;
+        }
+    }*/
 }
-
-*/

@@ -1,11 +1,11 @@
 package com.paranmanzang.userservice.model.repository;
 
 import com.paranmanzang.userservice.model.entity.DeclarationPosts;
+import com.paranmanzang.userservice.model.repository.custom.DeclarationPostRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface DeclarationPostRepository extends JpaRepository<DeclarationPosts, Long> {
-    List<DeclarationPosts> findByUserId(Long userId); // 유저 ID로 게시글 조회
+@Repository
+public interface DeclarationPostRepository extends JpaRepository<DeclarationPosts, Long>, DeclarationPostRepositoryCustom {
 
 }

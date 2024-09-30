@@ -1,49 +1,49 @@
-/*
 package com.paranmanzang.userservice.controller;
 
-import com.paranmanzang.userservice.model.domain.user.LikeRoomModel;
+import com.paranmanzang.userservice.model.domain.LikeRoomModel;
 import com.paranmanzang.userservice.service.impl.LikeRoomServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/likerooms")
+@Tag(name = "08. LikeRoom")
+@RequestMapping("/api/users/likerooms")
+@RequiredArgsConstructor
 public class LikeRoomController {
     private final LikeRoomServiceImpl likeRoomService;
 
-    public LikeRoomController(LikeRoomServiceImpl likeRoomService) {
-        this.likeRoomService = likeRoomService;
-    }
-
     //좋아요
     @PostMapping("/add")
+    @Operation(summary = "방 찜하기", description="방 찜하기", tags={"08. LikeRoom"})
     public ResponseEntity<?> likeRoom(@RequestBody LikeRoomModel likeRoomModel) {
-        likeRoomService.add(likeRoomModel);
-        return ResponseEntity.ok("like");
+        return ResponseEntity.ok(likeRoomService.add(likeRoomModel));
     }
     //좋아요 취소
     @DeleteMapping("/remove")
+    @Operation(summary = "방 찜 취소", description="찜한 방을 취소합니다.")
     public ResponseEntity<?> remove(@RequestBody LikeRoomModel likeRoomModel) {
-        likeRoomService.remove(likeRoomModel);
-        return ResponseEntity.ok("remove");
+        return ResponseEntity.ok(likeRoomService.remove(likeRoomModel));
     }
 
-    //좋아요 토글 확인
-    @GetMapping("/{userId}/{roomId}")
-    public ResponseEntity<?> getLikeRoom(@PathVariable Long userId, @PathVariable Long roomId) {
-        return ResponseEntity.ok(likeRoomService.existsByUserIdAndRoomId(userId, roomId));
-    }
     //좋아요 마이페이지 확인
-    @GetMapping("/list/{userId}")
-    public ResponseEntity<?> getLikeRoomList(@PathVariable Long userId) {
-        return ResponseEntity.ok(likeRoomService.findAll(userId));
+    @GetMapping("/list/{nickname}")
+    @Operation(summary = "방 찜 확인", description="찜하기 누른 방을 마이페이지에서 확인합니다.")
+    public ResponseEntity<?> getLikeRoomList(@PathVariable String nickname) {
+        return ResponseEntity.ok(likeRoomService.findAllByUserNickname(nickname));
     }
-
+/*    //좋아요 토글 확인
+    @GetMapping("/{nickname}/{roomId}")
+    @Operation(summary = "방 찜하기 확인", description="토글로 방의 찜 상태를 확인합니다.")
+    public ResponseEntity<?> getLikeRoom(@PathVariable String nickname, @PathVariable Long roomId) {
+        return ResponseEntity.ok(likeRoomService.existsByUserIdAndRoomId(nickname, roomId));
+    }
     //좋아요 마이페이지 취소
     @DeleteMapping("/{likeRoomId}")
+    @Operation(summary = "방 찜 취소", description="마이페이지에서 찜하기 누르 방을 취소합니다.")
     public ResponseEntity<?> removeLikeRoom(@PathVariable Long likeRoomId) {
-        likeRoomService.removeLikeById(likeRoomId);
-        return ResponseEntity.ok("remove mypage likeroom");
-    }
+        return ResponseEntity.ok(likeRoomService.removeLikeById(likeRoomId));
+    }*/
 }
-*/

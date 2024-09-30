@@ -1,93 +1,108 @@
-/*
 package com.paranmanzang.userservice.service.impl;
 
-import com.paranmanzang.userservice.model.domain.user.LikeRoomModel;
+
+
+import com.paranmanzang.userservice.model.domain.LikeRoomModel;
 import com.paranmanzang.userservice.model.entity.LikeRooms;
-import com.paranmanzang.userservice.model.entity.User;
 import com.paranmanzang.userservice.model.repository.LikeRoomRepository;
-import com.paranmanzang.userservice.model.repository.UserRepository;
 import com.paranmanzang.userservice.service.LikeRoomService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class LikeRoomServiceImpl implements LikeRoomService {
     private final LikeRoomRepository likeRoomRepository;
-    private final UserRepository userRepository;
-    private final RoomRepository roomRepository;
 
-    public LikeRoomServiceImpl(LikeRoomRepository likeRoomRepository, UserRepository userRepository, RoomRepository roomRepository) {
+    public LikeRoomServiceImpl(LikeRoomRepository likeRoomRepository ) {
         this.likeRoomRepository = likeRoomRepository;
-        this.userRepository = userRepository;
-        this.roomRepository = roomRepository;
     }
 
-    //좋아요
-    public boolean add(LikeRoomModel likeRoomModel) {
-        Long userId = likeRoomModel.getUserId();
+    @Override
+    public List<LikeRoomModel> findAllByUserNickname(String userNickname) {
+        return likeRoomRepository.findLikeRoomByNickname(userNickname);
+    }
+
+
+    @Override
+    public Object add(LikeRoomModel likeRoomModel) {
+        String nickname = likeRoomModel.getNickname();
         Long roomId = likeRoomModel.getRoomId();
 
-        Optional<User> optionalUser = userRepository.findById(userId);
-        Optional<Room> optionalRoom = roomRepository.findById(roomId);
+        try {
+            if (likeRoomRepository.existsByNicknameAndRoomId(nickname, roomId)) {
+                return false; // 이미 좋아요를 눌렀으면 false 반환
+            }
 
-        if(optionalUser.isPresent() && optionalRoom.isPresent()) {
-            throw new RuntimeException("사용자나 방의 정보가 잘못되었습니다.");
+            LikeRooms likeRooms = new LikeRooms();
+            likeRooms.setRoomId(roomId);
+            likeRooms.setNickname(nickname);
+            return LikeRoomModel.fromEntity(likeRoomRepository.save(likeRooms));
+
+        } catch (DataAccessException e) {
+            // 데이터베이스 접근 예외 처리
+            System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
+            return false;
+
+        } catch (IllegalArgumentException e) {
+            // 비즈니스 로직 예외 처리
+            System.err.println("비즈니스 로직 오류 발생: " + e.getMessage());
+            return false;
         }
-
-        if (likeRoomRepository.existsByUserIdAndRoomId(userId, roomId)) {
-            System.out.println("test");
-            return false; // 이미 좋아요를 눌렀으면 false 반환
-        }
-
-        LikeRooms likeRooms = new LikeRooms();
-        likeRooms.setRoomId(roomId);
-        likeRooms.setUser(optionalUser.get());
-        likeRoomRepository.save(likeRooms);
-        return true;
     }
 
-    //좋아요 취소
+    @Override
+    @Transactional
     public boolean remove(LikeRoomModel likeRoomModel) {
-        LikeRooms likeRooms = likeRoomRepository.findByUserIdAndRoomId(likeRoomModel.getUserId(), likeRoomModel.getRoomId());
-        if (likeRooms != null) {
-            likeRoomRepository.deleteByUserIdAndRoomId(likeRoomModel.getUserId(), likeRoomModel.getRoomId());
-            return true;
+        try {
+            LikeRooms likeRooms = likeRoomRepository.findByNicknameAndRoomId(likeRoomModel.getNickname(), likeRoomModel.getRoomId());
+            if (likeRooms != null) {
+                likeRoomRepository.deleteByNicknameAndRoomId(likeRoomModel.getNickname(), likeRoomModel.getRoomId());
+                return true;
+            }
+            return false;
+        } catch (DataAccessException e) {
+            // 데이터베이스 접근 예외 처리
+            System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
+            return false;
         }
-        return false;
     }
 
-    //마이페이지 공간 찜 삭제
+    /*@Override
     public boolean removeLikeById(Long id) {
-        likeRoomRepository.deleteById(id);
-        System.out.println(!likeRoomRepository.existsById(id));
-        return !likeRoomRepository.existsById(id);
-    }
-
-    //마이페이지 공간 찜 조회
-    public List<LikeRoomModel> findAll(long userId) {
-        List<LikeRooms> likeRooms = likeRoomRepository.findByUserId(userId);
-        return likeRooms.stream()
-                .map(likeRoom -> new LikeRoomModel(likeRoom.getId(),
-                        likeRoom.getRoomId(),
-                        likeRoom.getUser().getId()))
-                .collect(Collectors.toList());
-    }
-
-    //공간 찜 확인 -> 수정
-    public LikeRoomModel existsByUserIdAndRoomId(Long userId , Long roomId) {
-        LikeRooms likeRooms = likeRoomRepository.findByUserIdAndRoomId(userId, roomId);
-        if(likeRooms != null) {
-            System.out.println(new LikeRoomModel(likeRooms.getId(), likeRooms.getRoomId(),likeRooms.getUser().getId()));
-            return new LikeRoomModel(likeRooms.getId(), likeRooms.getRoomId(),likeRooms.getUser().getId());
+        try {
+            if (!likeRoomRepository.existsById(id)) {
+                throw new IllegalArgumentException("해당 좋아요 정보가 존재하지 않습니다.");
+            }
+            likeRoomRepository.deleteById(id);
+            return !likeRoomRepository.existsById(id);
+        } catch (DataAccessException e) {
+            // 데이터베이스 접근 예외 처리
+            System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
+            return false;
+        } catch (IllegalArgumentException e) {
+            // 비즈니스 로직 예외 처리
+            System.err.println("비즈니스 로직 오류 발생: " + e.getMessage());
+            return false;
         }
-        System.out.println("null");
-        return null;
     }
 
+    @Override
+    public LikeRoomModel existsByUserIdAndRoomId(String nickname, Long roomId) {
+        try {
+            LikeRooms likeRooms = likeRoomRepository.findByNicknameAndRoomId(nickname, roomId);
+            if (likeRooms != null) {
+                return new LikeRoomModel(likeRooms.getId(), likeRooms.getRoomId(), likeRooms.getNickname());
+            }
+            return null;
+        } catch (DataAccessException e) {
+            // 데이터베이스 접근 예외 처리
+            System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
+            return null;
+        }
+    }*/
 }
-
-
-*/

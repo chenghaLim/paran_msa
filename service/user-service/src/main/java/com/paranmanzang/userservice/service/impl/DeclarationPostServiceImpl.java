@@ -1,97 +1,91 @@
-    package com.paranmanzang.userservice.service.impl;
+package com.paranmanzang.userservice.service.impl;
 
+import com.paranmanzang.userservice.model.domain.DeclarationPostModel;
+import com.paranmanzang.userservice.model.entity.DeclarationPosts;
+import com.paranmanzang.userservice.model.repository.DeclarationPostRepository;
+import com.paranmanzang.userservice.service.DeclarationPostService;
+import lombok.AllArgsConstructor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-    import com.paranmanzang.userservice.model.domain.user.DeclarationPostModel;
-    import com.paranmanzang.userservice.model.entity.DeclarationPosts;
-    import com.paranmanzang.userservice.model.entity.User;
-    import com.paranmanzang.userservice.model.repository.DeclarationPostRepository;
-    import com.paranmanzang.userservice.model.repository.UserRepository;
-    import com.paranmanzang.userservice.service.DeclarationPostService;
-    import org.springframework.stereotype.Service;
+@Service
+@AllArgsConstructor
+public class DeclarationPostServiceImpl implements DeclarationPostService {
 
-    import java.util.List;
-    import java.util.Optional;
+    private final DeclarationPostRepository declarationPostRepository;
 
-    @Service
-    public class DeclarationPostServiceImpl implements DeclarationPostService {
-
-        private final UserRepository userRepository;
-        private final DeclarationPostRepository declarationPostRepository;
-
-        public DeclarationPostServiceImpl(DeclarationPostRepository declarationPostRepository, UserRepository userRepository) {
-            this.declarationPostRepository = declarationPostRepository;
-            this.userRepository = userRepository;
-        }
-
-        // 신고 게시글 작성
-        public Boolean createDPost(DeclarationPostModel declarationPostModel) {
-            Optional<User> userOptional = userRepository.findById(declarationPostModel.getUserId());
-            if (userOptional.isEmpty()) {
-                System.out.println("실패");
-                return false; // 사용자가 존재하지 않을 경우
+    // 신고 게시글 작성
+    @Override
+    public Object createDPost(DeclarationPostModel declarationPostModel) {
+        try {
+            if(declarationPostModel.getDeclarer().equals(declarationPostModel.getTarget())){
+                throw new IllegalArgumentException("신고자와 대상이 동일합니다.");
             }
-            User user = userOptional.get();
-
             DeclarationPosts createPost = declarationPostRepository.save(DeclarationPosts.builder()
                     .title(declarationPostModel.getTitle())
                     .content(declarationPostModel.getContent())
                     .target(declarationPostModel.getTarget())
-                    .user(user) // User 설정
+                    .declarer(declarationPostModel.getDeclarer())
                     .build());
 
-            return createPost != null;
+            return DeclarationPostModel.fromEntity(createPost);
+
+        } catch (DataAccessException e) {
+            System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
+            return false;
         }
-
-
-
-        //신고 게시글 조회 (관리자 이거나 신고자 본인만)
-        public List<DeclarationPosts> getDPost(Long userId) {
-            // 사용자 정보 조회
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다."));
-
-            // 관리자인 경우
-            if (user.getRole().equals("ROLE_ADMIN")) {
-                return declarationPostRepository.findAll();
-            }
-            // 본인이 신고한 게시글만 조회
-            return declarationPostRepository.findByUserId(userId);
-        }
-
-        //신고 게시글 상세 조회 (관리자 이거나 신고자 본인만)
-        public DeclarationPosts getPostDetail(Long postId, Long userId) {
-            // 사용자 정보 조회
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다."));
-            // 게시글 정보 조회
-            DeclarationPosts post = declarationPostRepository.findById(postId)
-                    .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
-            // 관리자인 경우 또는 해당 게시글 작성자인 경우에만 조회 허용
-            if (user.getRole().equals("ROLE_ADMIN") || post.getUser().getId().equals(userId)) {
-                return post;
-            }
-            throw new SecurityException("권한이 없습니다.");
-        }
-
-        //신고 게시글 접수 상태 변경(boolean값을 받아서 수락이면 카운트 메서드 진행 후 삭제 거절이면 그냥 삭제)
-        public boolean deleteDPost(boolean check, Long target, Long id){
-
-            if(check){
-                User user = userRepository.findById(target)
-                                .orElseThrow(()->new IllegalArgumentException("사용자가 존재하지 않습니다."));
-                //신고 당한사람 카운트 추가
-                user.setDeclarationCount(user.getDeclarationCount()+1);
-                if(user.getDeclarationCount()>=5){
-                    userRepository.delete(user);
-                }
+    }
+    // 신고 게시글 삭제(수락 누르면 프론트에서 신고횟수 추가 메서드 호출 후 삭제, 거절 누르면 그냥 삭제)
+    public boolean deleteDPost(Long id) {
+        try{
+            if (declarationPostRepository.existsById(id)) {
                 declarationPostRepository.deleteById(id);
-                return true;
+                return !declarationPostRepository.existsById(id);
             }
-            else{
-                declarationPostRepository.deleteById(id);
-                return true;
-            }
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글이 존재하지 않습니다.");
+        }catch (EmptyResultDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글이 존재하지 않습니다.", e);
         }
+    }
 
+    // 신고 게시글 전체 조회 (관리자만)
+    @Override
+    public Page<DeclarationPostModel> getDPostAdmin(Pageable pageable) {
+
+            /*if (user.getRole().equals("ROLE_ADMIN")) {
+                return declarationPostRepository.findAllPost(pageable);
+            }*/
+        return declarationPostRepository.findAllPost(pageable);
 
     }
+    //신고자 본인 신고내역 조회
+    @Override
+    public Page<DeclarationPostModel> getDPost(String nickname, Pageable pageable){
+        return declarationPostRepository.findByNickname(nickname, pageable);
+    }
+
+    /*@Override
+    public Page<AdminPostModel> getAPost(Pageable pageable) {
+        return adminPostRepository.findAllPost(pageable);
+    }*/
+    // 신고 게시글 상세 조회
+    @Override
+    public Object getPostDetail(Long postId) {
+        try {
+            DeclarationPosts post = declarationPostRepository.findById(postId)
+                    .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+            return post;
+        } catch (DataAccessException e) {
+            // 데이터 접근 예외 처리
+            System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
+            throw new RuntimeException("게시글 상세 조회 중 오류 발생", e);
+        }
+    }
+
+
+}

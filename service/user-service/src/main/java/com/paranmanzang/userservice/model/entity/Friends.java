@@ -1,10 +1,8 @@
 package com.paranmanzang.userservice.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
@@ -20,22 +18,33 @@ public class Friends {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
+    private String responseUser;
+
+    @Column(nullable = false)
+    private String requestUser;
+
+    @CreatedDate
+    @Column(nullable = false)
     private LocalDateTime request_at;
 
-    @Column
+    @CreatedDate
+    @Column(nullable = false)
     private LocalDateTime response_at;
     //
-    @ManyToOne
-    @JsonBackReference
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @PrePersist
+    public void prePersist() {
+        if (request_at == null) {
+            request_at = LocalDateTime.now();
+        }
+        if (response_at == null) {
+            response_at = LocalDateTime.now();
+        }
+    }
 
-    @ManyToOne
-    @JsonBackReference
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "send_user_id", referencedColumnName = "id")
-    private User sendUser;
+    @PreUpdate
+    public void preUpdate() {
+        response_at = LocalDateTime.now();
+    }
 
 }

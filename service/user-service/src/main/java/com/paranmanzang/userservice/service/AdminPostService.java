@@ -1,27 +1,25 @@
 package com.paranmanzang.userservice.service;
 
-import com.paranmanzang.userservice.model.domain.user.AdminPostModel;
+import com.paranmanzang.userservice.model.domain.AdminPostModel;
 import com.paranmanzang.userservice.model.entity.AdminPosts;
-
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface AdminPostService {
-
-    Boolean createAPost(AdminPostModel adminPostModel);
-
-    // 게시글 수정
-    boolean updateAPost(Long id, AdminPostModel adminPostModel);
-
-    // 게시글 삭제
+    //게시글 작성
+    Object createAPost(AdminPostModel adminPostModel);
+    //게시글 업데이트
+    Object updateAPost(Long id, AdminPostModel adminPostModel);
+    //게시글 삭제
     boolean deleteAPost(Long id);
-
-    // 게시글 리스트 조회
-    List<AdminPosts> getAPost();
-
-    // 게시글 상세 조회
-    Optional<AdminPosts> getAPostById(Long id);
-
-    // 조회수 확인
+    //내가 쓴 게시글 확인
+    Page<AdminPostModel> getMyAPost(String nickname, Pageable pageable);
+    //게시판 들어가면 뜨는거
+    Page<AdminPostModel> getAPost(Pageable pageable);
+    //게시글 상세조회
+    AdminPosts getAdminPostsById(Long id);
+    //조회수 확인
     Long getViewCount(Long id);
 }
+
+

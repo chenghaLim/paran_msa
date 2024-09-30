@@ -1,59 +1,92 @@
 package com.paranmanzang.userservice.service.impl;
 
-import com.paranmanzang.userservice.model.domain.user.FriendModel;
+import com.paranmanzang.userservice.model.domain.FriendModel;
 import com.paranmanzang.userservice.model.entity.Friends;
 import com.paranmanzang.userservice.model.repository.FriendRepository;
-import com.paranmanzang.userservice.model.repository.UserRepository;
 import com.paranmanzang.userservice.service.FriendService;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-//friendId : id, 친구요청 받는 친구 user_id, 친구 요청 보내는 친구  send_user_id, request_at, response_at
 
-
-
+@Slf4j
 @Service
 public class FriendServiceImpl implements FriendService {
-    private final UserRepository userRepository;
     private final FriendRepository friendRepository;
 
-    public FriendServiceImpl(UserRepository userRepository, FriendRepository friendRepository) {
-        this.userRepository = userRepository;
+    public FriendServiceImpl(FriendRepository friendRepository) {
         this.friendRepository = friendRepository;
     }
 
-    //친구 추가
-    public boolean createFriend(FriendModel friendModel) {
-        boolean isFriendRequestExist = friendRepository.existsBySendUserIdAndUserId(friendModel.getSendUserId(), friendModel.getUserId());
+    // 친구 추가
+    @Override
+    public Object createFriend(FriendModel friendModel) {
+        try {
+            System.out.println("friend1"+ friendModel.getRequestUser() +"friend2" + friendModel.getResponseUser());
+            log.info("friend1 {},friend2 {} ", friendModel.getRequestUser(), friendModel.getResponseUser());
+            Boolean isFriendRequestExist1 = friendRepository.existsByRequestUserAndResponseUser(friendModel.getRequestUser(), friendModel.getResponseUser());
+            Boolean isFriendRequsetExist2 = friendRepository.existsByRequestUserAndResponseUser(friendModel.getResponseUser(), friendModel.getRequestUser());
+            if (isFriendRequestExist1) {
+                throw new IllegalArgumentException("이미 친구 요청이 존재합니다.");
+            }
+            else if (isFriendRequsetExist2) {
+                throw new IllegalArgumentException("이미 친구 요청이 존재합니다.");
+            }
+            if(friendModel.getRequestUser().equals(friendModel.getResponseUser())) {
+                throw new IllegalArgumentException("잘못된 요청입니다.");
+            }
+            // 유저 조회 및 친구 추가
+            Friends friends = friendRepository.save(Friends.builder()
+                    .responseUser(friendModel.getResponseUser())
+                    .requestUser(friendModel.getRequestUser())
+                    .response_at(LocalDateTime.now()) // response_at에 현재 시간 저장
+                    .build());
 
-        if (isFriendRequestExist) {
-            System.out.println("실패");
+            return FriendModel.fromEntity(friends);
+        } catch (DataAccessException e) {
+            // 데이터베이스 접근 예외 처리
+            System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
+            return false;
+        } catch (IllegalArgumentException e) {
+            // 비즈니스 로직 예외 처리
+            System.err.println("비즈니스 로직 오류 발생: " + e.getMessage());
             return false;
         }
-        Friends friends = friendRepository.save(Friends.builder()
-                .user(userRepository.findById(friendModel.getUserId())
-                        .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다.")))
-                .sendUser(userRepository.findById(friendModel.getSendUserId())
-                        .orElseThrow(() -> new IllegalArgumentException("보낸 유저가 없습니다.")))
-                .response_at(LocalDateTime.now()) // response_at에 현재 시간 저장
-                .build());
-        System.out.println(friends);
-        return friends != null;
     }
 
-    //친구 삭제
+    // 친구 삭제
+    @Override
+    @Transactional
     public boolean deleteFriend(Long id) {
-
-        if (!friendRepository.existsById(id)) {
+        try {
+            if (!friendRepository.existsById(id)) {
+                throw new IllegalArgumentException("해당 친구 요청이 존재하지 않습니다.");
+            }
+            friendRepository.deleteById(id);
+            return true;
+        } catch (DataAccessException e) {
+            // 데이터베이스 접근 예외 처리
+            System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
+            return false;
+        } catch (IllegalArgumentException e) {
+            // 비즈니스 로직 예외 처리
+            System.err.println("비즈니스 로직 오류 발생: " + e.getMessage());
             return false;
         }
-        friendRepository.deleteById(id);
-        return true;
     }
 
-    //친구 리스트 조회
-    public List<Friends> listFriends() {
-        return friendRepository.findAll();
+    // 내 친구 리스트 조회
+    @Override
+    public List<FriendModel> listFriends(String nickname) {
+        try {
+            return friendRepository.findFriendByRequestUser(nickname);
+        } catch (DataAccessException e) {
+            // 데이터베이스 접근 예외 처리
+            System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
+            return List.of(); // 빈 리스트 반환
+        }
     }
 }

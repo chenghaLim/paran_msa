@@ -1,18 +1,20 @@
-package com.paranmanzang.userservice.controller;/*
-package com.paranmanzang.userservice.controller.user;
+package com.paranmanzang.userservice.controller;
 
-import com.paranmanzang.userservice.model.domain.user.LikePostModel;
-import com.paranmanzang.userservice.model.domain.user.LikeRoomModel;
-import com.paranmanzang.userservice.service.user.impl.LikePostServiceImpl;
+
+import com.paranmanzang.userservice.model.domain.LikePostModel;
+import com.paranmanzang.userservice.service.impl.LikePostServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/likeposts")
+@Tag(name = "07. LikePost")
+@RequestMapping("/api/users/likeposts")
 public class LikePostController {
 
-    private LikePostServiceImpl likePostService;
+    private final LikePostServiceImpl likePostService;
 
     public LikePostController(LikePostServiceImpl likePostService) {
         this.likePostService = likePostService;
@@ -20,33 +22,38 @@ public class LikePostController {
 
     //좋아요
     @PostMapping("/add")
+    @Operation(summary = "게시물 좋아요", description="게시물 좋아요 추가", tags={"07. LikePost"})
     public ResponseEntity<?> likePost(@RequestBody LikePostModel likepostModel) {
-        likePostService.add(likepostModel);
-        return ResponseEntity.ok("like");
+        return ResponseEntity.ok(likePostService.add(likepostModel));
     }
     //좋아요 취소
     @DeleteMapping("/remove")
+    @Operation(summary = "게시물 좋아요 취소", description="게시물 좋아요 취소")
     public ResponseEntity<?> remove(@RequestBody LikePostModel likepostModel) {
-        likePostService.remove(likepostModel);
-        return ResponseEntity.ok("remove");
+        return ResponseEntity.ok(likePostService.remove(likepostModel));
     }
 
-    //좋아요 토글 확인
-    @GetMapping("/{userId}/{postId}")
-    public ResponseEntity<?> getLikeRoom(@PathVariable Long userId, @PathVariable Long postId) {
-        return ResponseEntity.ok(likePostService.existsByUserIdAndPostId(userId, postId));
-    }
+
     //좋아요 마이페이지 확인
-    @GetMapping("/list/{userId}")
-    public ResponseEntity<?> getLikeRoomList(@PathVariable Long userId) {
-        return ResponseEntity.ok(likePostService.findAll(userId));
+    @GetMapping("/list/{nickname}")
+    @Operation(summary = "마이페이지에서 좋아요 확인", description="마이페이지에서 좋아요 누른 게시물을 전부 확인할 수 있습니다.")
+    public ResponseEntity<?> getLikeRoomList(@PathVariable String nickname) {
+        return ResponseEntity.ok(likePostService.findAllByUserNickname(nickname));
     }
+
+/*    //좋아요 토글 확인
+    @GetMapping("/{nickname}/{postId}")
+    @Operation(summary = "게시물 좋아요 확인", description="토글로 좋아요를 눌렀는지 확인")
+    public ResponseEntity<?> getLikeRoom(@PathVariable String nickname, @PathVariable Long postId) {
+        return ResponseEntity.ok(likePostService.existsByNicknameAndPostId(nickname, postId));
+    }
+
 
     //좋아요 마이페이지 취소
     @DeleteMapping("/{likeRoomId}")
+    @Operation(summary = "좋아요 취소", description="마이페이지에서 누른 게시물 좋아요를 취소할 수 있습니다.")
     public ResponseEntity<?> removeLikeRoom(@PathVariable Long likeRoomId) {
         likePostService.removeLikeById(likeRoomId);
         return ResponseEntity.ok("remove");
-    }
+    }*/
 }
-*/

@@ -1,10 +1,7 @@
 package com.paranmanzang.userservice.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -28,17 +25,14 @@ public class DeclarationPosts {
 
     //신고대상자
     @Column(nullable = false)
-    private Long target;
+    private String target;
+
+    @Column(nullable = false)
+    private String declarer;
 
     @Column(name = "create_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-    //
-    //신고자
-    @ManyToOne
-    @JsonBackReference
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "user_id")
-    private User user;
+
 
     @PrePersist
     public void prePersist() {

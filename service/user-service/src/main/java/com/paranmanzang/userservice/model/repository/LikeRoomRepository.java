@@ -1,22 +1,19 @@
 package com.paranmanzang.userservice.model.repository;
 
 import com.paranmanzang.userservice.model.entity.LikeRooms;
+import com.paranmanzang.userservice.model.repository.custom.LikeRoomRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface LikeRoomRepository extends JpaRepository<LikeRooms,Long> {
-    // 사용자 ID와 룸 ID로 LikeRooms 조회
-    LikeRooms findByUserIdAndRoomId(Long userId, Long roomId);
+public interface LikeRoomRepository extends JpaRepository<LikeRooms,Long>, LikeRoomRepositoryCustom {
+    // 사용자 닉네임과 룸 ID로 LikeRooms 조회
+    LikeRooms findByNicknameAndRoomId(String nickname, Long roomId);
 
-    // 사용자 ID와 룸 ID로 LikeRoom 삭제
-    boolean deleteByUserIdAndRoomId(Long userId, Long roomId);
+    // 사용자 낙네임과 룸 ID로 LikeRoom 삭제
+    int deleteByNicknameAndRoomId(String nickname, Long roomId);
 
-    // 사용자 Id와 룸 ID로 Likeroom 조회
-    Boolean existsByUserIdAndRoomId(Long userId, Long roomId);
+    // 사용자 닉네임과 룸 ID로 Likeroom 조회
+    Boolean existsByNicknameAndRoomId(String nickname, Long roomId);
 
-    // 사용자 ID로 Likeroom 목록 조회
-    List<LikeRooms> findByUserId(long userId);
 }

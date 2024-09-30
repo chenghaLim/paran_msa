@@ -1,6 +1,5 @@
 package com.paranmanzang.userservice.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,10 +35,8 @@ public class AdminPosts {
     @Column(nullable = false)
     private String category;
 
-    @ManyToOne
-    @JsonBackReference
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(nullable = false)
+    private String nickname;
 
     @PrePersist
     public void prePersist() {
