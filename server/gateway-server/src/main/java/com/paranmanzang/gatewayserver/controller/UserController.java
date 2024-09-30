@@ -181,14 +181,5 @@ public class UserController {
                 .onErrorResume(e ->
                         ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).bodyValue("권한 업데이트 중 오류 발생"));
     }
-    public Mono<ServerResponse> checkRole(ServerRequest request){
-        String nickname = request.queryParam("nickname")
-                .orElseThrow(() -> new IllegalArgumentException("닉네임이 필요합니다"));
-        return userService.checkRole(nickname)
-                .flatMap(role -> ServerResponse.ok().bodyValue("사용자의 권한: " + role))
-                .onErrorResume(IllegalArgumentException.class, e ->
-                        ServerResponse.badRequest().bodyValue("권한 조회 실패: " + e.getMessage())) // 잘못된 요청(닉네임이 잘못되거나 사용자 없음)
-                .onErrorResume(e ->
-                        ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).bodyValue("권한 조회 중 오류 발생: " + e.getMessage())); // 그 외 오류
-    }
+
 }
