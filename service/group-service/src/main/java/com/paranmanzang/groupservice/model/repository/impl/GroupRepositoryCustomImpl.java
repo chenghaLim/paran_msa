@@ -37,8 +37,9 @@ public class GroupRepositoryCustomImpl implements GroupRepositoryCustom {
                                 group.categoryName,
                                 group.createAt,
                                 group.enabled,
-                                group.nickname,
-                                group.chatRoomId
+                                group.detail,
+                                group.chatRoomId,
+                                group.nickname
                         ))
                         .from(group)
                         .where(group.id.in(ids))
@@ -66,8 +67,9 @@ public class GroupRepositoryCustomImpl implements GroupRepositoryCustom {
                                 group.categoryName,
                                 group.createAt,
                                 group.enabled,
-                                group.nickname,
-                                group.chatRoomId
+                                group.detail,
+                                group.chatRoomId,
+                                group.nickname
                         ))
                         .from(group)
                         .where(group.id.in(ids))
@@ -95,8 +97,9 @@ public class GroupRepositoryCustomImpl implements GroupRepositoryCustom {
                                 group.categoryName,
                                 group.createAt,
                                 group.enabled,
-                                group.nickname,
-                                group.chatRoomId
+                                group.detail,
+                                group.chatRoomId,
+                                group.nickname
                         ))
                         .from(group)
                         .where(group.id.in(ids))

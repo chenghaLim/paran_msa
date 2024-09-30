@@ -7,8 +7,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class GroupResponseModel {
 
@@ -16,7 +14,7 @@ public class GroupResponseModel {
     private String name;
     private String categoryName;
     private LocalDateTime createAt;
-    private boolean enabled;
+    private Boolean enabled;
     private String detail;
     private String nickname;  // 관리자 nickname
     private String chatRoomId;
@@ -32,5 +30,16 @@ public class GroupResponseModel {
                 .nickname(group.getNickname())
                 .chatRoomId(group.getChatRoomId())
                 .build();
+    }
+
+    public GroupResponseModel(Long id, String name, String categoryName, LocalDateTime createAt, Boolean enabled, String detail, String nickname, String chatRoomId) {
+        this.id = id;
+        this.name = name;
+        this.categoryName = categoryName;
+        this.createAt = createAt;
+        this.enabled = enabled;
+        this.detail = detail;
+        this.nickname = nickname;
+        this.chatRoomId = chatRoomId;
     }
 }

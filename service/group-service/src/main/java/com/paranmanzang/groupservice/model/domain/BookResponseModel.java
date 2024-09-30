@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class BookResponseModel {
     private Long id;
     private String title;
@@ -29,5 +28,13 @@ public class BookResponseModel {
                 .categoryName(book.getCategoryName())
                 .likeBookCount(book.getLike_books() != null ? book.getLike_books().size() : 0)
                 .build();
+    }
+
+    public BookResponseModel(Long id, String title, String author, String categoryName, int likeBookCount) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.categoryName = categoryName;
+        this.likeBookCount = likeBookCount;
     }
 }
