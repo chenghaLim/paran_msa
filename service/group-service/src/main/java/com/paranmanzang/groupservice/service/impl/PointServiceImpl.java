@@ -18,10 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,13 +47,13 @@ public class PointServiceImpl implements PointService {
 
         point.setCreateAt(LocalDateTime.now());
         point.setDetail("적립");
-        pointRepository.save(point);
+        Point save = pointRepository.save(point);
         pointDetailRepository.save(new PointDetail("신규적립",
                 pointModel.getPoint(),
                 LocalDateTime.now(),
                 LocalDate.now().plusMonths(3),
                 point));
-        return Boolean.TRUE;
+        return PointResponseModel.fromEntity(save);
     }
 
     public Object usePoint(PointModel pointModel) {//결제
@@ -64,11 +62,11 @@ public class PointServiceImpl implements PointService {
             Point beforepoint = grouppoint.get();
             if (beforepoint.getPoint() >= pointModel.getPoint()) { //기존포인트 > 사용하려는 포인트
                 beforepoint.setPoint(beforepoint.getPoint() - pointModel.getPoint()); // 결제완료
-                pointRepository.save(beforepoint);
+                Point save = pointRepository.save(beforepoint);
 
                 PointDetail newPointDetail = new PointDetail("사용완료", pointModel.getPoint(), LocalDateTime.now(), beforepoint);
                 pointDetailRepository.save(newPointDetail);
-                return Boolean.TRUE;
+                return PointResponseModel.fromEntity(save);
             } else {
                 return new ErrorField(pointModel.getPointId(), "포인트가 부족합니다.");
             }
@@ -86,8 +84,8 @@ public class PointServiceImpl implements PointService {
             Optional<Point> target = pointRepository.findById(pointDetail.getParentPoint().getId());
             Point targetPoint = target.get();
             targetPoint.setPoint(targetPoint.getPoint() - pointDetail.getPoint());
-            pointRepository.save(targetPoint);
-            return Boolean.TRUE;
+            Point save = pointRepository.save(targetPoint);
+            return PointResponseModel.fromEntity(save);
         } else {
             return new ErrorField(pointId, "포인트 이력이 존재하지 않습니다.");
         }
@@ -130,7 +128,7 @@ public class PointServiceImpl implements PointService {
     }
 
     public Page<?> searchPoint(Long groupId, Pageable pageable) {
-        return pointRepository.findPointsByGroupId(groupId,pageable);
+        return pointRepository.findPointsByGroupId(groupId, pageable);
     }
 
 }
