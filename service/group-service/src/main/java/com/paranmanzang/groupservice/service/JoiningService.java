@@ -9,4 +9,6 @@ public interface JoiningService {
 
     Object getUserListById(Long groupId);
 
+    Object deleteUser(String nickname, Long groupId);
+
 }

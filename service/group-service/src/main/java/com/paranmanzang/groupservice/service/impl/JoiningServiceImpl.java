@@ -9,7 +9,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,5 +59,14 @@ public class JoiningServiceImpl implements JoiningService {
         return joiningRepository.findByGroupId(groupId).stream()
                 .map(JoiningModel::fromEntity)
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Object deleteUser(String nickname, Long groupId) {
+        joiningRepository.findByGroupId(groupId).stream()
+                .filter(joining -> joining.getNickname().equals(nickname))
+                .forEach(joining -> joiningRepository.deleteById(joining.getId()));
+
+        return true;
     }
 }

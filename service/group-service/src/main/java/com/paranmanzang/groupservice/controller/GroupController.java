@@ -107,4 +107,10 @@ public class GroupController {
     public ResponseEntity<?> enableGroupList(@RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(groupService.enableGroupList(PageRequest.of(page, size)));
     }
+
+    @DeleteMapping("/exitgroup/{groupId}")
+    public ResponseEntity<?> exitGroup(@RequestBody String nickname, @PathVariable Long groupId ){
+        return ResponseEntity.ok(joiningService.deleteUser(nickname,groupId));
+    }
+
 }
