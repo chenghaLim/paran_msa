@@ -25,7 +25,7 @@ public class JoiningModel {
 
     private LocalDate requestAt;
     private LocalDate responseAt;
-
+    private boolean enabled;
     private Group grouptojoin;
 
     public Joining toEntity() {
@@ -41,6 +41,7 @@ public class JoiningModel {
                 .groupId(joining.getGroup().getId())
                 .requestAt(joining.getRequestAt())
                 .responseAt(joining.getResponseAt())
+                .enabled(joining.isEnabled())
                 .build();
     }
 }

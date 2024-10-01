@@ -3,7 +3,6 @@ package com.paranmanzang.groupservice.service.impl;
 import com.paranmanzang.groupservice.model.domain.ErrorField;
 import com.paranmanzang.groupservice.model.domain.GroupModel;
 import com.paranmanzang.groupservice.model.domain.GroupResponseModel;
-import com.paranmanzang.groupservice.model.domain.PointModel;
 import com.paranmanzang.groupservice.model.entity.Joining;
 import com.paranmanzang.groupservice.model.repository.GroupRepository;
 import com.paranmanzang.groupservice.model.repository.JoiningRepository;
@@ -21,7 +20,6 @@ import java.util.Optional;
 public class GroupServiceImpl implements GroupService {
     private final JoiningRepository joiningRepository;
     private final GroupRepository groupRepository;
-    private final PointServiceImpl pointService;
 
     public Page<GroupResponseModel> groupList(Pageable pageable) {
         return groupRepository.findGroup(pageable);
@@ -59,8 +57,6 @@ public class GroupServiceImpl implements GroupService {
                     if (groupToEnable.isEnabled()) {
                         return (Object) new ErrorField(groupId, "이미 관리자 승인된 group입니다.");
                     } else {
-                        pointService.addPoint(PointModel.builder().groupId(groupId).point(1000).build());
-                        groupToEnable.setEnabled(true);
                         return GroupResponseModel.fromEntity(groupRepository.save(groupToEnable));
                     }
                 })

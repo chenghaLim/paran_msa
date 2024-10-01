@@ -25,7 +25,7 @@ public class ChatUserHandler {
     }
 
     // # 8
-    public Mono<ServerResponse> getPeopleList(ServerRequest request) {
+    public Mono<ServerResponse> findPeopleList(ServerRequest request) {
         return chatService.findNicknamesByRoomId(request.pathVariable("roomId"))
                 .collectList()
                 .flatMap(chatUsers -> ServerResponse.ok().bodyValue(chatUsers))

@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,6 +58,7 @@ public class JoiningServiceImpl implements JoiningService {
     @Override
     public Object getUserListById(Long groupId) {
         return joiningRepository.findByGroupId(groupId).stream()
-                .map(JoiningModel::fromEntity).collect(Collectors.toSet());
+                .map(JoiningModel::fromEntity)
+                .collect(Collectors.toSet());
     }
 }

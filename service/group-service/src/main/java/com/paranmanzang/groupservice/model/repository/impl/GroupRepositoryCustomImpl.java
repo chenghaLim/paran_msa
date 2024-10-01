@@ -38,9 +38,9 @@ public class GroupRepositoryCustomImpl implements GroupRepositoryCustom {
                                 group.createAt,
                                 group.enabled,
                                 group.detail,
-                                group.chatRoomId,
-                                group.nickname
-                        ))
+                                group.nickname,
+                                group.chatRoomId
+                                ))
                         .from(group)
                         .where(group.id.in(ids))
                         .fetch();

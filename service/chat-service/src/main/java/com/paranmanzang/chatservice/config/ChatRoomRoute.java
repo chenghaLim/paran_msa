@@ -18,7 +18,7 @@ public class ChatRoomRoute {
         return // # 3
                 route(POST("/api/chats/room").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::createRoom)
                         // # 7
-                        .andRoute(GET("/api/chats/room/getchatlist").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::getChatList)
+                        .andRoute(GET("/api/chats/room/getchatlist").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::findChatList)
                         // # 100
                         .andRoute(PUT("/api/chats/room/updatename").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::updateName)
                         // # 101

@@ -2,10 +2,8 @@ package com.paranmanzang.groupservice.controller;
 
 import com.paranmanzang.groupservice.model.domain.GroupModel;
 import com.paranmanzang.groupservice.model.domain.JoiningModel;
-import com.paranmanzang.groupservice.model.domain.PointModel;
 import com.paranmanzang.groupservice.service.impl.GroupServiceImpl;
 import com.paranmanzang.groupservice.service.impl.JoiningServiceImpl;
-import com.paranmanzang.groupservice.service.impl.PointServiceImpl;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 public class GroupController {
     private final GroupServiceImpl groupService;
     private final JoiningServiceImpl joiningService;
-    private final PointServiceImpl pointService;
 
     //(#61 Old Ver.) 전체 그룹 가져오기
     @GetMapping("/grouplist")
@@ -96,34 +93,6 @@ public class GroupController {
     @DeleteMapping("/deleteGroup")
     public ResponseEntity<?> deleteGroup(@RequestParam("groupId") Long groupId) {
         return ResponseEntity.ok(groupService.deleteGroup(groupId));
-    }
-    //#75.소모임 포인트 적립
-
-    @PostMapping("/pointup")//request : groupId point
-    public ResponseEntity<?> addPoint(@Valid @RequestBody PointModel pointModel,
-                                      BindingResult bindingResult) throws BindException {
-        if (bindingResult.hasErrors()) {
-            throw new BindException(bindingResult);
-        }
-        return ResponseEntity.ok(pointService.addPoint(pointModel));
-    }
-    // 소모임 포인트 조회
-
-    @GetMapping("/mygrouppoint")//request : groupId
-    public ResponseEntity<?> mygrouppoint(@RequestParam Long groupId, @RequestParam int page, @RequestParam int size) {
-        return ResponseEntity.ok(pointService.searchPoint(groupId, PageRequest.of(page, size)));
-    }
-
-    // 소모임 포인트 사용
-    @PostMapping("/usepoint")//request :  groupId point
-    public ResponseEntity<?> usePoint(@RequestBody PointModel pointModel) {
-        return ResponseEntity.ok(pointService.usePoint(pointModel));
-    }
-
-    //#76.소모임 포인트 취소 (PR-90.결제상태 변경 시)
-    @DeleteMapping("/paymentcancel")
-    public ResponseEntity<?> cancelPoint(@RequestParam Long pointId) {
-        return ResponseEntity.ok(pointService.deletePoint(pointId));
     }
 
     //#64.소모임 승인 취소

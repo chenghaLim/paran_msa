@@ -46,7 +46,7 @@ public class ChatRoomHandler {
     }
 
     // #7
-    public Mono<ServerResponse> getChatList(ServerRequest request) {
+    public Mono<ServerResponse> findChatList(ServerRequest request) {
         return Mono.justOrEmpty(request.headers().firstHeader("nickname"))
                 .flatMap(nickname ->
                         chatService.getChatListByNickname(nickname)

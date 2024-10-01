@@ -17,7 +17,6 @@ public class BookResponseModel {
     private String author;
 
     private String categoryName;
-
     private int likeBookCount;
 
     public static BookResponseModel fromEntity(Book book) {
