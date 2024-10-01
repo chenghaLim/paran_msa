@@ -6,14 +6,11 @@ import com.paranmanzang.groupservice.model.repository.BookRepository;
 import com.paranmanzang.groupservice.model.repository.LikeBooksRepository;
 import com.paranmanzang.groupservice.service.LikeBookService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +25,7 @@ public class LikeBookServiceImpl implements LikeBookService {
                     if (likeBooksRepository.existsByNicknameAndBook(likeBookModel.getNickname(), book)) {
                         return false;
                     }
-                    return LikeBookModel.fromEntity( likeBooksRepository.save(LikeBooks.builder()
+                    return LikeBookModel.fromEntity(likeBooksRepository.save(LikeBooks.builder()
                             .nickname(likeBookModel.getNickname())
                             .book(book)
                             .build()));
