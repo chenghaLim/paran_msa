@@ -21,7 +21,6 @@ import java.util.Optional;
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final RoomRepository roomRepository;
-    private final AccountRepository accountRepository;
     private final TimeServiceImpl timeService;
     private final AccountServiceImpl accountService;
     private final Converter converter;

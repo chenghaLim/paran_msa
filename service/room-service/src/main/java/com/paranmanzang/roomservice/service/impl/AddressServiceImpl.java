@@ -89,17 +89,13 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<?> findAll() {
-        return addressRepository.findAll().stream()
-                .filter(address ->
-                        roomService.getIdAllEnabled().contains(address.getRoomId()))
+        return addressRepository.findEnabledRoom(roomService.getIdAllEnabled()).stream()
                 .map(converter::convertTonAddressModel).toList();
     }
 
     @Override
     public List<?> find(String query) {
-        return addressRepository.findQuery(query).stream()
-                .filter(address ->
-                        roomService.getIdAllEnabled().contains(address.getRoomId()))
+        return addressRepository.findQuery(query, roomService.getIdAllEnabled()).stream()
                 .map(converter::convertTonAddressModel).toList();
     }
 }

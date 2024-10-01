@@ -92,7 +92,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<?> getIdAllEnabled() {
+    public List<Long> getIdAllEnabled() {
         return roomRepository.findAll().stream().filter(Room::isEnabled).map(Room::getId).toList();
     }
 
