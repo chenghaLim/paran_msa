@@ -32,6 +32,12 @@ public class FileController {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(fileService.getFile(path));
     }
 
+    @GetMapping("/one/{refId}")
+    @Operation(summary = "파일 로드", description = "type의 refId에 해당하는 파일을 불러옵니다.")
+    public ResponseEntity<?> getImageRefId(@PathVariable("refId") Long refId, @RequestParam String type) throws IOException {
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(fileService.getFileByRefId(refId, type));
+    }
+
     @PostMapping("/upload")
     @Operation(summary = "파일 저장", description = "파일을 업로드하고 파일정보를 db에 저장합니다.")
     public ResponseEntity<?> uploadFile(MultipartFile file, String type, Long refId) {
