@@ -1,4 +1,4 @@
-FROM openjdk:17-silm
+FROM openjdk:17-slim
 VOLUME /tmp
 ADD ./build/libs/*.jar room-service.jar
 

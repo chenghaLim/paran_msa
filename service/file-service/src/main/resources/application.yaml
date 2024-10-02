@@ -12,6 +12,7 @@ cloud:
     access-key: AKIAQXPZDAMK3DSXSQTL
     access-secret-key: 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
 
+
 spring:
   application:
     name: file-service
@@ -24,3 +25,7 @@ spring:
       web:
         exposure:
           include: health,info
+
+  data:
+    mongodb:
+      uri: mongodb://root:1234@mongo:27017/parandb?authSource=admin

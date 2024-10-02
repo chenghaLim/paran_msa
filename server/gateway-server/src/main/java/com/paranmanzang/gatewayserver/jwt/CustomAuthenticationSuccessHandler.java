@@ -3,17 +3,20 @@ package com.paranmanzang.gatewayserver.jwt;
 import com.paranmanzang.gatewayserver.model.Domain.oauth.CustomUserDetails;
 import com.paranmanzang.gatewayserver.model.entity.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
 @Slf4j
@@ -31,8 +34,8 @@ public class CustomAuthenticationSuccessHandler {
     public Mono<Void> handleSuccess(ServerWebExchange exchange, Authentication authentication) {
         log.info("authentication : {}", authentication.getPrincipal());
         User user = (User) authentication.getPrincipal();
-        CustomUserDetails userDetails = new CustomUserDetails(user); // User를 기반으로 CustomUserDetails 생성        log.info("userDetails: {}", userDetails);
-        log.info("userDetails : {}", userDetails);
+        CustomUserDetails userDetails = new CustomUserDetails(user); // User를 기반으로 CustomUserDetails 생성
+        log.info("userDetails: {}", userDetails);
 
         String username = userDetails.getUsername();
         String nickname = userDetails.getNickname();
@@ -51,25 +54,32 @@ public class CustomAuthenticationSuccessHandler {
 
         jwtTokenService.storeToken(refresh, username, 86400000L);
 
+        // Authorization 헤더에 accessToken 추가
         exchange.getResponse().getHeaders().add("Authorization", "Bearer " + access);
+
+        // RefreshToken을 쿠키에 추가
         exchange.getResponse().addCookie(createCookie("refresh", refresh));
-        exchange.getResponse().getHeaders().add(HttpHeaders.SET_COOKIE, "refresh=" + refresh + "; Path=/; HttpOnly");
-        exchange.getResponse().getHeaders().add(HttpHeaders.SET_COOKIE, "token=; Path=/; HttpOnly; Max-Age=0");
-        exchange.getResponse().setStatusCode(HttpStatus.OK);
+        //exchange.getResponse().getHeaders().add(HttpHeaders.SET_COOKIE, "refresh=" + refresh + "; Path=/; HttpOnly");
+
         log.info("Response Cookies: {}", exchange.getResponse().getCookies());
 
-
-        return exchange.getResponse().setComplete();
+        // 응답 완료
+        return exchange.getResponse().setComplete()
+                .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication))
+                .doOnSuccess(unused -> {
+                    log.info("User '{}' has been authenticated and JWT tokens returned", username);
+                })
+                .doOnError(error -> {
+                    log.error("Failed to authenticate user '{}': {}", username, error.getMessage());
+                });
     }
 
-
+    // 리프레시 토큰을 위한 쿠키 생성 메서드
     private ResponseCookie createCookie(String key, String value) {
         return ResponseCookie.from(key, value)
                 .maxAge(86400)
                 .path("/")
                 .httpOnly(true)
-                .secure(true)  // HTTPS에서만 전송
-                .sameSite("None")  // Cross-site 요청 허용
                 .build();
     }
 }
