@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
-    public Mono<Void> create(RegisterModel registerModel) {
+    public Mono<Void> insert(RegisterModel registerModel) {
         return userRepository.existsByUsername(registerModel.getUsername())
                 .flatMap(exists -> {
                     if (exists) {
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
                 });
     }
 
-    public Mono<Boolean> deleteUser(String nickname){
+    public Mono<Boolean> remove(String nickname){
        return userRepository.findByNickname(nickname)
                .switchIfEmpty(Mono.error(new IllegalArgumentException("사용자가 존재하지 않습니다.")))
                .flatMap(user-> {
@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
                });
     }
 
-    public Mono<Boolean> logoutTime(String nickname){
+    public Mono<Boolean> updateLogoutTime(String nickname){
         System.out.println(nickname);
         log.info("이거 이상하다 : {}", userRepository.findByUsername(nickname));
         return userRepository.findByNickname(nickname)
@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
                 .flatMap(user -> {
                     user.setDeclarationCount(user.getDeclarationCount()+1);
                     if(user.getDeclarationCount()==5){
-                        deleteUser(nickname);
+                        remove(nickname);
                     }
                     return userRepository.save(user).then(Mono.just(true));
                 })
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
         return Mono.just(false);
     }
 
-    public Mono<List<User>> getAllUsers(String nickname){
+    public Mono<List<User>> findAllByNickname(String nickname){
         return userRepository.findByNickname(nickname)
                 .flatMap(user -> {
                     if (user.getRole().equals(ROLE_ADMIN)) {
@@ -196,7 +196,7 @@ public class UserServiceImpl implements UserService {
                     return Mono.error(new IllegalArgumentException(e.getMessage(), e));
                 });
     }
-    public Mono<User> getUserDetail(String nickname){
+    public Mono<User> findByNickname(String nickname){
         return userRepository.findByNickname(nickname)
                 .switchIfEmpty(Mono.error(new IllegalArgumentException("사용자가 존재하지 않습니다."))) // 사용자 존재 여부 확인
                 .onErrorResume(DataAccessException.class, e -> {

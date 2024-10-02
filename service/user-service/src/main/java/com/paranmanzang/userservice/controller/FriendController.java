@@ -21,22 +21,22 @@ public class FriendController {
     }
 
     //친구 등록
-    @PostMapping("/register")
+    @PostMapping
     @Operation(summary = "친구 등록", description = "친구 등록을 합니다. 해당 정보를 저장합니다.", tags = {"03. Friend"})
-    public ResponseEntity<?> register(@RequestBody FriendModel friendModel) {
-        return ResponseEntity.ok(friendService.createFriend(friendModel));
+    public ResponseEntity<?> insert(@RequestBody FriendModel friendModel) {
+        return ResponseEntity.ok(friendService.insert(friendModel));
     }
     //친구 삭제
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @Operation(summary = "친구 삭제", description = "입력받은 id를 통해 해당 친구를 삭제합니다.")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        return ResponseEntity.ok(friendService.deleteFriend(id));
+    public ResponseEntity<?> remove(@PathVariable Long id) {
+        return ResponseEntity.ok(friendService.remove(id));
     }
     //친구 목록 조회
-    @GetMapping("/list/{nickname}")
+    @GetMapping("/{nickname}")
     @Operation(summary = "친구 리스트 조회", description = "친구의 목록을 조회합니다.")
-    public ResponseEntity<?> list(@PathVariable String nickname) {
-        return ResponseEntity.ok(friendService.listFriends(nickname));
+    public ResponseEntity<?> findAllByNickname(@PathVariable String nickname) {
+        return ResponseEntity.ok(friendService.findAllByNickname(nickname));
     }
 }
 

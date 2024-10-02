@@ -72,5 +72,5 @@ public class CustomAuthenticationSuccessHandler {
                 .sameSite("None")  // Cross-site 요청 허용
                 .build();
     }
-    }
+}
 

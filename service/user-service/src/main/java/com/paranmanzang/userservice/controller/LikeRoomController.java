@@ -18,22 +18,22 @@ public class LikeRoomController {
     private final LikeRoomServiceImpl likeRoomService;
 
     //좋아요
-    @PostMapping("/add")
+    @PostMapping
     @Operation(summary = "방 찜하기", description="방 찜하기", tags={"08. LikeRoom"})
-    public ResponseEntity<?> likeRoom(@RequestBody LikeRoomModel likeRoomModel) {
-        return ResponseEntity.ok(likeRoomService.add(likeRoomModel));
+    public ResponseEntity<?> insert(@RequestBody LikeRoomModel likeRoomModel) {
+        return ResponseEntity.ok(likeRoomService.insert(likeRoomModel));
     }
     //좋아요 취소
-    @DeleteMapping("/remove")
+    @DeleteMapping
     @Operation(summary = "방 찜 취소", description="찜한 방을 취소합니다.")
     public ResponseEntity<?> remove(@RequestBody LikeRoomModel likeRoomModel) {
         return ResponseEntity.ok(likeRoomService.remove(likeRoomModel));
     }
 
     //좋아요 마이페이지 확인
-    @GetMapping("/list/{nickname}")
+    @GetMapping("/{nickname}")
     @Operation(summary = "방 찜 확인", description="찜하기 누른 방을 마이페이지에서 확인합니다.")
-    public ResponseEntity<?> getLikeRoomList(@PathVariable String nickname) {
+    public ResponseEntity<?> findAllByUserNickname(@PathVariable String nickname) {
         return ResponseEntity.ok(likeRoomService.findAllByUserNickname(nickname));
     }
 /*    //좋아요 토글 확인

@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public interface LikeRoomService {
     //좋아요
-    Object add(LikeRoomModel likeRoomModel);
+    Object insert(LikeRoomModel likeRoomModel);
 
     //좋아요 취소
     boolean remove(LikeRoomModel likeRoomModel);

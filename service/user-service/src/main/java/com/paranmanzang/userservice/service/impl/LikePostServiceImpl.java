@@ -22,11 +22,11 @@ public class LikePostServiceImpl implements LikePostService {
         this.likePostRepository = likePostRepository;
     }
     @Override
-    public List<LikePostModel> findAllByUserNickname(String userNickname) {
+    public List<LikePostModel> findAllByNickname(String userNickname) {
         return likePostRepository.findLikePostByNickname(userNickname);
     }
     @Override
-    public Object add(LikePostModel likePostModel) {
+    public Object insert(LikePostModel likePostModel) {
         String nickname = likePostModel.getNickname();
         Long postId = likePostModel.getPostId();
 

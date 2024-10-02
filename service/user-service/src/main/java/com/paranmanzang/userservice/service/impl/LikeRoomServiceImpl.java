@@ -32,7 +32,7 @@ public class LikeRoomServiceImpl implements LikeRoomService {
 
 
     @Override
-    public Object add(LikeRoomModel likeRoomModel) {
+    public Object insert(LikeRoomModel likeRoomModel) {
         String nickname = likeRoomModel.getNickname();
         Long roomId = likeRoomModel.getRoomId();
 

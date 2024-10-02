@@ -2,7 +2,6 @@ package com.paranmanzang.gatewayserver.controller;
 
 import com.paranmanzang.gatewayserver.Enum.Role;
 import com.paranmanzang.gatewayserver.model.RegisterModel;
-import com.paranmanzang.gatewayserver.model.repository.UserRepository;
 import com.paranmanzang.gatewayserver.service.Impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,7 @@ public class UserController {
     private final UserServiceImpl userService;
     private final Validator validator;
 
-    public Mono<ServerResponse> createUser(ServerRequest request) {
+    public Mono<ServerResponse> insert(ServerRequest request) {
         return request.bodyToMono(RegisterModel.class)
                 .doOnNext(userModel -> {
                     var errors = new BeanPropertyBindingResult(userModel, RegisterModel.class.getName());
@@ -32,7 +31,7 @@ public class UserController {
                         throw new IllegalArgumentException(errors.getAllErrors().get(0).getDefaultMessage());
                     }
                 })
-                .flatMap(model -> userService.create(model)
+                .flatMap(model -> userService.insert(model)
                         .flatMap(result -> ServerResponse.ok().bodyValue("회원가입 성공")))
                 .onErrorResume(IllegalArgumentException.class, e ->
                         ServerResponse.badRequest().bodyValue("회원가입 실패: " + e.getMessage()))
@@ -40,11 +39,11 @@ public class UserController {
                         ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).bodyValue("회원가입 처리 중 오류 발생"));
 
     }
-    public Mono<ServerResponse> delete(ServerRequest request) {
+    public Mono<ServerResponse> remove(ServerRequest request) {
         String nickname = request.queryParam("nickname")
                 .orElseThrow(() -> new IllegalArgumentException("닉네임이 필요합니다"));
         log.info("nickname: " + nickname);
-        return userService.deleteUser(nickname)
+        return userService.remove(nickname)
                 .flatMap(success -> {
                     if (success) {
                         // 삭제 성공 시 200 OK 응답 반환
@@ -88,11 +87,11 @@ public class UserController {
     }
 
 
-    public Mono<ServerResponse> getAllUsers(ServerRequest request) {
+    public Mono<ServerResponse> findAllByNickname(ServerRequest request) {
         String nickname = request.queryParam("nickname")
                 .orElseThrow(() -> new IllegalArgumentException("관리자 닉네임이 필요합니다"));
 
-        return userService.getAllUsers(nickname)
+        return userService.findAllByNickname(nickname)
                 .flatMap(users -> ServerResponse.ok().bodyValue(users))
                 .onErrorResume(IllegalArgumentException.class, e ->
                         ServerResponse.status(HttpStatus.FORBIDDEN).bodyValue("사용자 목록 조회 실패: " + e.getMessage()))
@@ -100,11 +99,11 @@ public class UserController {
                         ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).bodyValue("사용자 목록 조회 중 오류 발생"));
     }
 
-    public Mono<ServerResponse> getUserDetail(ServerRequest request) {
+    public Mono<ServerResponse> findByNickname(ServerRequest request) {
         String nickname = request.queryParam("nickname")
                 .orElseThrow(() -> new IllegalArgumentException("닉네임이 필요합니다"));
 
-        return userService.getUserDetail(nickname)
+        return userService.findByNickname(nickname)
                 .flatMap(user -> ServerResponse.ok().bodyValue(user))
                 .onErrorResume(IllegalArgumentException.class, e ->
                         ServerResponse.notFound().build())
@@ -142,13 +141,13 @@ public class UserController {
                 .onErrorResume(IllegalArgumentException.class, e ->
                         ServerResponse.badRequest().bodyValue("비밀번호 체크 실패: " + e.getMessage()));
     }
-    public Mono<ServerResponse> logoutUserTime(ServerRequest request) {
+    public Mono<ServerResponse> updateLogoutUserTime(ServerRequest request) {
         String nickname = request.queryParam("nickname")
                 .orElseThrow(() -> new IllegalArgumentException("닉네임이 필요합니다."));
 
         log.info("로그아웃 요청: 닉네임 {}", nickname);
 
-        return userService.logoutTime(nickname)
+        return userService.updateLogoutTime(nickname)
                 .flatMap(success -> {
                     if (success) {
                         return ServerResponse.ok().bodyValue("사용자의 로그아웃 시간이 업데이트되었습니다.");

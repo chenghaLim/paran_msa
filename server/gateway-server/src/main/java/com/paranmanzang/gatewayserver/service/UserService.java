@@ -10,13 +10,13 @@ import java.util.List;
 
 @Service
 public interface UserService {
-        Mono<Void> create(RegisterModel registerModel);
+        Mono<Void> insert(RegisterModel registerModel);
 
-        Mono<Boolean> deleteUser(String nickname);
+        Mono<Boolean> remove(String nickname);
 
         Mono<Boolean> updateRole(String nickname, Role newRole);
 
-        Mono<Boolean> logoutTime(String nickname);
+        Mono<Boolean> updateLogoutTime(String nickname);
 
         Mono<Boolean> updatePassword(String nickname, String newPassword);
 
@@ -24,8 +24,8 @@ public interface UserService {
 
         Mono<Boolean> checkPassword(RegisterModel registerModel);
 
-        Mono<List<User>> getAllUsers(String nickname);
+        Mono<List<User>> findAllByNickname(String nickname);
 
-        Mono<User> getUserDetail(String nickname);
+        Mono<User> findByNickname(String nickname);
 
 }

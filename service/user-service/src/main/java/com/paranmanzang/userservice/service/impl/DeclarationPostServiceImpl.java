@@ -24,7 +24,7 @@ public class DeclarationPostServiceImpl implements DeclarationPostService {
 
     // 신고 게시글 작성
     @Override
-    public Object createDPost(DeclarationPostModel declarationPostModel) {
+    public Object insert(DeclarationPostModel declarationPostModel) {
         try {
             if(declarationPostModel.getDeclarer().equals(declarationPostModel.getTarget())){
                 throw new IllegalArgumentException("신고자와 대상이 동일합니다.");
@@ -44,7 +44,7 @@ public class DeclarationPostServiceImpl implements DeclarationPostService {
         }
     }
     // 신고 게시글 삭제(수락 누르면 프론트에서 신고횟수 추가 메서드 호출 후 삭제, 거절 누르면 그냥 삭제)
-    public boolean deleteDPost(Long id) {
+    public boolean remove(Long id) {
         try{
             if (declarationPostRepository.existsById(id)) {
                 declarationPostRepository.deleteById(id);
@@ -58,7 +58,7 @@ public class DeclarationPostServiceImpl implements DeclarationPostService {
 
     // 신고 게시글 전체 조회 (관리자만)
     @Override
-    public Page<DeclarationPostModel> getDPostAdmin(Pageable pageable) {
+    public Page<DeclarationPostModel> findAll(Pageable pageable) {
 
             /*if (user.getRole().equals("ROLE_ADMIN")) {
                 return declarationPostRepository.findAllPost(pageable);
@@ -68,17 +68,17 @@ public class DeclarationPostServiceImpl implements DeclarationPostService {
     }
     //신고자 본인 신고내역 조회
     @Override
-    public Page<DeclarationPostModel> getDPost(String nickname, Pageable pageable){
+    public Page<DeclarationPostModel> findAllByNickname(String nickname, Pageable pageable){
         return declarationPostRepository.findByNickname(nickname, pageable);
     }
 
     /*@Override
-    public Page<AdminPostModel> getAPost(Pageable pageable) {
+    public Page<AdminPostModel> findAll(Pageable pageable) {
         return adminPostRepository.findAllPost(pageable);
     }*/
     // 신고 게시글 상세 조회
     @Override
-    public Object getPostDetail(Long postId) {
+    public Object findByPostId(Long postId) {
         try {
             DeclarationPosts post = declarationPostRepository.findById(postId)
                     .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));

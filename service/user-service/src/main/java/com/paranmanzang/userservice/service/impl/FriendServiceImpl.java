@@ -23,7 +23,7 @@ public class FriendServiceImpl implements FriendService {
 
     // 친구 추가
     @Override
-    public Object createFriend(FriendModel friendModel) {
+    public Object insert(FriendModel friendModel) {
         try {
             System.out.println("friend1"+ friendModel.getRequestUser() +"friend2" + friendModel.getResponseUser());
             log.info("friend1 {},friend2 {} ", friendModel.getRequestUser(), friendModel.getResponseUser());
@@ -60,7 +60,7 @@ public class FriendServiceImpl implements FriendService {
     // 친구 삭제
     @Override
     @Transactional
-    public boolean deleteFriend(Long id) {
+    public boolean remove(Long id) {
         try {
             if (!friendRepository.existsById(id)) {
                 throw new IllegalArgumentException("해당 친구 요청이 존재하지 않습니다.");
@@ -80,7 +80,7 @@ public class FriendServiceImpl implements FriendService {
 
     // 내 친구 리스트 조회
     @Override
-    public List<FriendModel> listFriends(String nickname) {
+    public List<FriendModel> findAllByNickname(String nickname) {
         try {
             return friendRepository.findFriendByRequestUser(nickname);
         } catch (DataAccessException e) {

@@ -15,8 +15,8 @@ spring:
           strictHostKeyChecking: false
           #          hostKey: # ssh-keyscan ???? ??
           hostKeyAlgorithm: # ssh-keyscan ???? ??
-          privateKey:
-        
+          privateKey: |
+            
 
 management:
   endpoints:

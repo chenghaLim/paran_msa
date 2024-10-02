@@ -14,11 +14,11 @@ import java.util.List;
 
 @Service
 public interface DeclarationPostService {
-    Object createDPost(DeclarationPostModel declarationPostModel);
-    boolean deleteDPost(Long id);
-    Page<DeclarationPostModel> getDPostAdmin(Pageable pageable);
-    Page<DeclarationPostModel> getDPost(String nickname, Pageable pageable);
-    //Page<AdminPostModel> getAPost(Pageable pageable);
-    Object getPostDetail(Long postId);
+    Object insert(DeclarationPostModel declarationPostModel);
+    boolean remove(Long id);
+    Page<DeclarationPostModel> findAll(Pageable pageable);
+    Page<DeclarationPostModel> findAllByNickname(String nickname, Pageable pageable);
+    //Page<AdminPostModel> findAll(Pageable pageable);
+    Object findByPostId(Long postId);
 
 }

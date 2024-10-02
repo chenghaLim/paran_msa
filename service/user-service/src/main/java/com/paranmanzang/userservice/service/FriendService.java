@@ -10,11 +10,11 @@ import java.util.List;
 public interface FriendService {
 
     //친구 추가
-    Object createFriend(FriendModel friendModel);
+    Object insert(FriendModel friendModel);
 
     //친구 삭제
-    boolean deleteFriend(Long id);
+    boolean remove(Long id);
 
     //친구 리스트 조회
-    List<FriendModel> listFriends(String nickname) ;
+    List<FriendModel> findAllByNickname(String nickname) ;
 }

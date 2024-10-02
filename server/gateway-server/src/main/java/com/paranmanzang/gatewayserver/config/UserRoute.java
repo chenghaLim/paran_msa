@@ -18,16 +18,16 @@ public class UserRoute {
     public RouterFunction<ServerResponse> setUserRoute(UserController userController) {
         log.info("여기 도착");
         return  //회원가입
-                route(POST("/api/users/create").and(accept(MediaType.APPLICATION_JSON)), userController::createUser)
-                        .andRoute(DELETE("/api/users/delete").and(accept(MediaType.APPLICATION_JSON)), userController::delete)
-                        .andRoute(PUT("/api/users/updatePassword").and(accept(MediaType.APPLICATION_JSON)), userController::updatePassword)
-                        .andRoute(GET("/api/users/getAllUsers").and(accept(MediaType.APPLICATION_JSON)), userController::getAllUsers)
-                        .andRoute(GET("/api/users/getUserDetail").and(accept(MediaType.APPLICATION_JSON)), userController::getUserDetail)
+                route(POST("/api/users").and(accept(MediaType.APPLICATION_JSON)), userController::insert)
                         .andRoute(POST("/api/users/checkNickname").and(accept(MediaType.APPLICATION_JSON)), userController::checkNickname)
                         .andRoute(POST("/api/users/checkPassword").and(accept(MediaType.APPLICATION_JSON)), userController::checkPassword)
-                        .andRoute(PUT("/api/users/logoutUserTime").and(accept(MediaType.APPLICATION_JSON)), userController::logoutUserTime)
+                        .andRoute(DELETE("/api/users").and(accept(MediaType.APPLICATION_JSON)), userController::remove)
+                        .andRoute(PUT("/api/users/updatePassword").and(accept(MediaType.APPLICATION_JSON)), userController::updatePassword)
+                        .andRoute(PUT("/api/users/updateLogoutUserTime").and(accept(MediaType.APPLICATION_JSON)), userController::updateLogoutUserTime)
                         .andRoute(PUT("/api/users/updateDeclaration").and(accept(MediaType.APPLICATION_JSON)), userController::updateDeclaration)
                         .andRoute(PUT("/api/users/updateRole").and(accept(MediaType.APPLICATION_JSON)), userController::updateRole)
+                        .andRoute(GET("/api/users/findAllByNickname").and(accept(MediaType.APPLICATION_JSON)), userController::findAllByNickname)
+                        .andRoute(GET("/api/users/findByNickname").and(accept(MediaType.APPLICATION_JSON)), userController::findByNickname)
                         .andRoute(GET("/api/users/checkRole").and(accept(MediaType.APPLICATION_JSON)), userController::checkRole);
     }
 }
