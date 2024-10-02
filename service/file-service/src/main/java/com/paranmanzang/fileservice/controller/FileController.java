@@ -20,7 +20,7 @@ import java.io.IOException;
 public class FileController {
     private final FileServiceImpl fileService;
 
-    @GetMapping("")
+    @GetMapping("/list")
     @Operation(summary = "리스트 조회", description = "type의 refId인 파일 path 리스트를 조회합니다.", tags = {"01. File",})
     public ResponseEntity<?> findByRefId(@RequestParam("refId") Long refId, @RequestParam("type") String type) {
         return ResponseEntity.ok(fileService.findByRefId(refId, type));

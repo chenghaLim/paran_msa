@@ -60,7 +60,7 @@ public class RoomController {
         return ResponseEntity.ok(roomService.findAll(pageable));
     }
 
-    @GetMapping("/Enabled")
+    @GetMapping("/enabled")
     @Operation(summary = "승인된 공간 조회", description = "승인된 모든 공간정보를 조회합니다. ver.pagination")
     public ResponseEntity<?> findByEnabled(Pageable pageable) {
         return ResponseEntity.ok(roomService.findByEnabled(pageable));
