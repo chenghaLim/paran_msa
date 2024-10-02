@@ -54,6 +54,11 @@ private final Converter converter;
     }
 
     @Override
+    public Page<?> findByUser(String nickname, Pageable pageable) {
+        return reviewRepository.findByUser(nickname, pageable);
+    }
+
+    @Override
     public ReviewModel findById(Long id) {
         return reviewRepository.findById(id).map(converter::convertToReviewModel).orElse(null);
     }

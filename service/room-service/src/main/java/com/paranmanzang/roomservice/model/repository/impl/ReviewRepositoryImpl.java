@@ -43,6 +43,32 @@ public class ReviewRepositoryImpl implements ReviewCustomRepository {
     }
 
     @Override
+    public Page<?> findByUser(String nickname, Pageable pageable) {
+        var result=  jpaQueryFactory.select(
+                        Projections.constructor(
+                                ReviewModel.class,
+                                review.id.as("id"),
+                                review.rating.as("rating"),
+                                review.content.as("content"),
+                                review.nickname.as("nickname"),
+                                review.createAt.as("createAt"),
+                                review.room.id.as("roomId"),
+                                review.booking.id.as("bookingId")
+                        )
+                )
+                .from(review)
+                .where(review.id.in(
+                        jpaQueryFactory.select(review.id)
+                                .from(review)
+                                .where(review.room.nickname.eq(nickname))
+                                .limit(pageable.getPageSize())
+                                .offset(pageable.getOffset())
+                                .fetch()
+                )).fetch();
+        return new PageImpl<>( result, pageable, result.size());
+    }
+
+    @Override
     public Page<?> findAll(Pageable pageable) {
         var result=  jpaQueryFactory.select(
                         Projections.constructor(

@@ -14,6 +14,7 @@ public interface ReviewService {
 
     Page<?> findByRoom(Long roomId, Pageable pageable);
 
+    Page<?> findByUser(String nickname, Pageable pageable);
     ReviewModel findById(Long id);
 
     Page<?> findAll(Pageable pageable);

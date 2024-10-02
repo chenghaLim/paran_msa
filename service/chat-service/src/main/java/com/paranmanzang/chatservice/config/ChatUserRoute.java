@@ -15,10 +15,10 @@ public class ChatUserRoute {
     @Bean
     public RouterFunction<ServerResponse> userRoute(ChatUserHandler chatUserHandler) {
         return // # 4
-                route(POST("/api/chats/user").and(accept(MediaType.APPLICATION_JSON)), chatUserHandler::invite)
+                route(POST("/api/chats/users").and(accept(MediaType.APPLICATION_JSON)), chatUserHandler::insert)
                         // # 8
-                        .andRoute(GET("/api/chats/user/getpoplelist/{roomId}").and(accept(MediaType.APPLICATION_JSON)), chatUserHandler::findPeopleList)
+                        .andRoute(GET("/api/chats/users/people-list/{roomId}").and(accept(MediaType.APPLICATION_JSON)), chatUserHandler::findList)
                         // # 9
-                        .andRoute(DELETE("/api/chats/user/{roomId}").and(accept(MediaType.APPLICATION_JSON)), chatUserHandler::exit);
+                        .andRoute(DELETE("/api/chats/users/{roomId}").and(accept(MediaType.APPLICATION_JSON)), chatUserHandler::delete);
     }
 }

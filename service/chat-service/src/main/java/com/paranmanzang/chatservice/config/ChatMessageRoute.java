@@ -16,11 +16,11 @@ public class ChatMessageRoute {
     public RouterFunction<ServerResponse> messageRoute(ChatMessageHandler chatMessageHandler) {
         return route()
                 // # 108
-                .GET("/api/chats/message/{roomId}", accept(MediaType.TEXT_EVENT_STREAM), chatMessageHandler::getMessageList)
+                .GET("/api/chats/messages/{roomId}", accept(MediaType.TEXT_EVENT_STREAM), chatMessageHandler::findList)
                 // # 6
-                .POST("/api/chats/message", accept(MediaType.APPLICATION_JSON), chatMessageHandler::insertMessage)
+                .POST("/api/chats/messages", accept(MediaType.APPLICATION_JSON), chatMessageHandler::insert)
                 // # 110
-                .GET("/api/chats/message/totalunread", accept(MediaType.APPLICATION_JSON), chatMessageHandler::unReadTotalMessageCount)
+                .GET("/api/chats/messages/total-un-read", accept(MediaType.APPLICATION_JSON), chatMessageHandler::findUnReadTotalCount)
                 .build();
     }
 

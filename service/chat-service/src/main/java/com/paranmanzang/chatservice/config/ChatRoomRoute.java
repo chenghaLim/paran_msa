@@ -16,16 +16,16 @@ public class ChatRoomRoute {
     @Bean
     public RouterFunction<ServerResponse> roomRoute(ChatRoomHandler chatRoomHandler) {
         return // # 3
-                route(POST("/api/chats/room").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::createRoom)
+                route(POST("/api/chats/rooms").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::insert)
                         // # 7
-                        .andRoute(GET("/api/chats/room/getchatlist").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::findChatList)
+                        .andRoute(GET("/api/chats/rooms/list").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::findList)
                         // # 100
-                        .andRoute(PUT("/api/chats/room/updatename").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::updateName)
+                        .andRoute(PUT("/api/chats/rooms/name").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::updateName)
                         // # 101
-                        .andRoute(PUT("/api/chats/room/updatepassword").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::updatePassword)
+                        .andRoute(PUT("/api/chats/rooms/password").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::updatePassword)
                         // # 99
-                        .andRoute(DELETE("/api/chats/room/{roomId}").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::deleteRoom)
+                        .andRoute(DELETE("/api/chats/rooms/{roomId}").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::delete)
                         // # 109
-                        .andRoute(POST("/api/chats/room/lastreadtime/{roomId}").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::saveLastReadMessageTime);
+                        .andRoute(POST("/api/chats/rooms/last-read-time/{roomId}").and(accept(MediaType.APPLICATION_JSON)), chatRoomHandler::insertLastReadMessageTime);
     }
 }

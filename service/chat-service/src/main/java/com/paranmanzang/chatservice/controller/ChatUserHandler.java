@@ -14,7 +14,7 @@ public class ChatUserHandler {
     private final ChatServiceImpl chatService;
 
     // # 4
-    public Mono<ServerResponse> invite(ServerRequest request) {
+    public Mono<ServerResponse> insert(ServerRequest request) {
         return chatService.addUserToChatRoom(request.queryParam("roomId").orElse("defaultRoomId")
                         , request.headers().firstHeader("nickname"))
                 .flatMap(success ->
@@ -25,7 +25,7 @@ public class ChatUserHandler {
     }
 
     // # 8
-    public Mono<ServerResponse> findPeopleList(ServerRequest request) {
+    public Mono<ServerResponse> findList(ServerRequest request) {
         return chatService.findNicknamesByRoomId(request.pathVariable("roomId"))
                 .collectList()
                 .flatMap(chatUsers -> ServerResponse.ok().bodyValue(chatUsers))
@@ -33,7 +33,7 @@ public class ChatUserHandler {
     }
 
     // # 9
-    public Mono<ServerResponse> exit(ServerRequest request) {
+    public Mono<ServerResponse> delete(ServerRequest request) {
         return chatService.exitRoom(request.pathVariable("roomId"), request.headers().firstHeader("nickname"))
                 .flatMap(success ->
                         success

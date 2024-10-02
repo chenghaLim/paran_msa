@@ -8,32 +8,32 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/groups/grouppost")
+@RequestMapping("/api/groups/posts")
 @RequiredArgsConstructor
 public class GroupPostController {
     private final GroupPostServiceImpl groupPostService;
 
     //#67 게시글 등록
-    @PostMapping("/addboard")
-    public ResponseEntity<?> add(@RequestBody GroupPostModel groupPostModel) {
+    @PostMapping
+    public ResponseEntity<?> insert(@RequestBody GroupPostModel groupPostModel) {
         return ResponseEntity.ok(groupPostService.savePost(groupPostModel));
     }
 
     //#68. 게시글 수정
-    @PutMapping("/updateboard")
+    @PutMapping
     public ResponseEntity<?> update(@RequestBody GroupPostModel groupPostModel) {
         return ResponseEntity.ok(groupPostService.updatePost(groupPostModel));
     }
 
     //#69.게시글 삭제
-    @DeleteMapping("/{boardId}")
-    public ResponseEntity<?> deletePost(@PathVariable Long boardId) {
-        return ResponseEntity.ok(groupPostService.deletePost(boardId));
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<?> delete(@PathVariable Long postId) {
+        return ResponseEntity.ok(groupPostService.deletePost(postId));
     }
 
     //#70 - 내가 속한 group의 게시물 목록
     @GetMapping("/{groupId}")
-    public ResponseEntity<?> getAllByGroupId(@PathVariable Long groupId, @RequestParam int page, @RequestParam int size, @RequestParam String postCategory) {
+    public ResponseEntity<?> findByGroupId(@PathVariable Long groupId, @RequestParam int page, @RequestParam int size, @RequestParam String postCategory) {
         return ResponseEntity.ok(groupPostService.findByGroupId(groupId, PageRequest.of(page, size), postCategory));
     }
 

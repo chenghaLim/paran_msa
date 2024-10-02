@@ -25,7 +25,7 @@ public class ChatRoomHandler {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     // #3
-    public Mono<ServerResponse> createRoom(ServerRequest request) {
+    public Mono<ServerResponse> insert(ServerRequest request) {
 
         return request.bodyToMono(ChatRoomNameModel.class)
                 .doOnNext(roomModel -> {
@@ -46,7 +46,7 @@ public class ChatRoomHandler {
     }
 
     // #7
-    public Mono<ServerResponse> findChatList(ServerRequest request) {
+    public Mono<ServerResponse> findList(ServerRequest request) {
         return Mono.justOrEmpty(request.headers().firstHeader("nickname"))
                 .flatMap(nickname ->
                         chatService.getChatListByNickname(nickname)
@@ -110,7 +110,7 @@ public class ChatRoomHandler {
     }
 
     // # 99
-    public Mono<ServerResponse> deleteRoom(ServerRequest request) {
+    public Mono<ServerResponse> delete(ServerRequest request) {
         return chatService.deleteChatRoom(request.pathVariable("roomId"))
                 .flatMap(success ->
                         success
@@ -120,7 +120,7 @@ public class ChatRoomHandler {
     }
 
     // # 109
-    public Mono<ServerResponse> saveLastReadMessageTime(ServerRequest request) {
+    public Mono<ServerResponse> insertLastReadMessageTime(ServerRequest request) {
         return chatService.insertReadLastTime(request.pathVariable("roomId"), request.headers().firstHeader("nickname"))
                 .flatMap(success ->
                         success

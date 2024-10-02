@@ -22,7 +22,7 @@ public class RoomController {
 
     private final RoomServiceImpl roomService;
 
-    @PostMapping("/add")
+    @PostMapping("")
     @Operation(summary = "공간 등록", description = "공간정보를 db에 저장합니다.", tags = {"01. Room",})
     public ResponseEntity<?> insert(@Valid @RequestBody RoomModel model, BindingResult result)
             throws BindException {
@@ -32,7 +32,7 @@ public class RoomController {
         return ResponseEntity.ok(roomService.save(model));
     }
 
-    @PutMapping("/update")
+    @PutMapping("")
     @Operation(summary="공간 수정", description = "공간정보를 수정합니다.")
     public ResponseEntity<?> update(@Valid @RequestBody RoomUpdateModel model, BindingResult result)
             throws BindException {
@@ -42,47 +42,34 @@ public class RoomController {
         return ResponseEntity.ok(roomService.update(model));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @Operation(summary = "공간 삭제", description = "id 값에 해당하는 공간정보를 삭제합니다.")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         return ResponseEntity.ok(roomService.delete(id));
     }
 
-    @GetMapping("/list/{nickname}")
+    @GetMapping("/user")
     @Operation(summary = "등록자의 공간 조회", description = "nickname인 유저가 등록한 모든 공간정보를 조회합니다.")
-    public ResponseEntity<?> findByUser(@PathVariable("nickname") String nickname, Pageable pageable) {
+    public ResponseEntity<?> findByUser(@RequestParam String nickname, Pageable pageable) {
         return ResponseEntity.ok(roomService.findByNickname(nickname, pageable));
-
     }
 
-    @GetMapping("/list")
+    @GetMapping("")
     @Operation(summary = "공간 조회", description = "등록된 모든 공간정보를 조회합니다.")
     public ResponseEntity<?> findAll(Pageable pageable) {
         return ResponseEntity.ok(roomService.findAll(pageable));
     }
 
-    @GetMapping("/list/Enabled")
+    @GetMapping("/Enabled")
     @Operation(summary = "승인된 공간 조회", description = "승인된 모든 공간정보를 조회합니다. ver.pagination")
     public ResponseEntity<?> findAllEnabled(Pageable pageable) {
         return ResponseEntity.ok(roomService.findAllEnabled(pageable));
     }
 
-    @GetMapping("/one/{id}")
-    @Operation(summary = "단일 공간 조회", description = "id 값에 해당하는 1건의 공간정보를 조회합니다.")
-    public ResponseEntity<?> findOne(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(roomService.findByIdWithTime(id));
-    }
-
-    @PutMapping("/adminAnswer/{id}")
+    @PutMapping("/confirm/{id}")
     @Operation(summary = "공간 승인", description = "공간 등록이 승인되어 정보가 수정됩니다.")
     public ResponseEntity<?> confirm(@PathVariable() Long id) {
         return ResponseEntity.ok(roomService.enable(id));
-    }
-
-    @DeleteMapping("/adminAnswer/{id}")
-    @Operation(summary = "공간 거절", description = "공간이 거절되어 정보가 삭제됩니다.")
-    public ResponseEntity<?> reject(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(roomService.delete(id));
     }
 
 }

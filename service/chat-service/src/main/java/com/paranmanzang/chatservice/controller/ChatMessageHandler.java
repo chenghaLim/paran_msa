@@ -23,7 +23,7 @@ public class ChatMessageHandler {
     private final ChatServiceImpl chatService;
 
     // SSE 메시지 구독 # 108
-    public Mono<ServerResponse> getMessageList(ServerRequest request) {
+    public Mono<ServerResponse> findList(ServerRequest request) {
         return request.queryParam("nickname")
                 .map(nickname ->
                         ServerResponse.ok()
@@ -50,7 +50,7 @@ public class ChatMessageHandler {
     }
 
     // # 6
-    public Mono<ServerResponse> insertMessage(ServerRequest request) {
+    public Mono<ServerResponse> insert(ServerRequest request) {
         return request.bodyToMono(RequestChatMessageModel.class)
                 .flatMap(messageModel -> {
 
@@ -65,7 +65,7 @@ public class ChatMessageHandler {
     }
 
     // # 109
-    public Mono<ServerResponse> unReadTotalMessageCount(ServerRequest request) {
+    public Mono<ServerResponse> findUnReadTotalCount(ServerRequest request) {
 
         return chatService.totalUnReadMessageCount(request.headers().firstHeader("nickname"))
                 .flatMap(totalCount -> ServerResponse.ok().bodyValue(totalCount));
