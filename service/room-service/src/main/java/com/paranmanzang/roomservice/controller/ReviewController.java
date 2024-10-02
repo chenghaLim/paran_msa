@@ -21,9 +21,9 @@ public class ReviewController {
     private final ReviewServiceImpl reviewService;
     @PostMapping("")
     @Operation(summary = "리뷰 등록", description = "리뷰를 db에 저장합니다.", tags = {"04. Review",})
-    public ResponseEntity<?> save(@Valid  @RequestBody ReviewModel reviewModel, BindingResult result) throws BindException {
+    public ResponseEntity<?> insert(@Valid  @RequestBody ReviewModel reviewModel, BindingResult result) throws BindException {
         if (result.hasErrors()) throw new BindException(result);
-        return ResponseEntity.ok(reviewService.save(reviewModel));
+        return ResponseEntity.ok(reviewService.insert(reviewModel));
     }
 
     @PutMapping("")
@@ -41,18 +41,18 @@ public class ReviewController {
 
     @GetMapping("")
     @Operation(summary = "리뷰 조회", description = "존재하는 모든 리뷰정보를 조회합니다.")
-    public ResponseEntity<?> getList(Pageable pageable){
+    public ResponseEntity<?> findAll(Pageable pageable){
         return ResponseEntity.ok(reviewService.findAll(pageable));
     }
 
     @GetMapping("/room/{roomId}")
     @Operation(summary = "공간 기준 조회", description = "roomId에 해당하는 모든 리뷰정보를 조회합니다.")
-    public ResponseEntity<?> getListByRoom(@PathVariable("roomId") Long roomId, Pageable pageable){
+    public ResponseEntity<?> findByByRoom(@PathVariable("roomId") Long roomId, Pageable pageable){
         return ResponseEntity.ok(reviewService.findByRoom(roomId, pageable));
     }
     @GetMapping("/user/{roomId}")
     @Operation(summary = "공간 기준 조회", description = "roomId에 해당하는 모든 리뷰정보를 조회합니다.")
-    public ResponseEntity<?> getListByUser(@RequestParam String nickname, Pageable pageable){
+    public ResponseEntity<?> findByUser(@RequestParam String nickname, Pageable pageable){
         return ResponseEntity.ok(reviewService.findByUser(nickname, pageable));
     }
 }

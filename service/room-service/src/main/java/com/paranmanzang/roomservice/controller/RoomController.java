@@ -29,7 +29,7 @@ public class RoomController {
         if (result.hasErrors()) {
             throw new BindException(result);
         }
-        return ResponseEntity.ok(roomService.save(model));
+        return ResponseEntity.ok(roomService.insert(model));
     }
 
     @PutMapping("")
@@ -62,14 +62,14 @@ public class RoomController {
 
     @GetMapping("/Enabled")
     @Operation(summary = "승인된 공간 조회", description = "승인된 모든 공간정보를 조회합니다. ver.pagination")
-    public ResponseEntity<?> findAllEnabled(Pageable pageable) {
-        return ResponseEntity.ok(roomService.findAllEnabled(pageable));
+    public ResponseEntity<?> findByEnabled(Pageable pageable) {
+        return ResponseEntity.ok(roomService.findByEnabled(pageable));
     }
 
     @PutMapping("/confirm/{id}")
     @Operation(summary = "공간 승인", description = "공간 등록이 승인되어 정보가 수정됩니다.")
     public ResponseEntity<?> confirm(@PathVariable() Long id) {
-        return ResponseEntity.ok(roomService.enable(id));
+        return ResponseEntity.ok(roomService.confirm(id));
     }
 
 }

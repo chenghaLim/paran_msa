@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface AddressService {
     String search(String query);
-    AddressModel save(AddressModel model);
+    AddressModel insert(AddressModel model);
 
     AddressModel update(AddressUpdateModel model);
 
@@ -17,5 +17,5 @@ public interface AddressService {
 
     List<?> findAll();
 
-    List<?> find(String query);
+    List<?> findByQuery(String query);
 }

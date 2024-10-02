@@ -208,5 +208,15 @@ public class UserServiceImpl implements UserService {
                     return Mono.error(new IllegalArgumentException(e.getMessage(), e));
                 });
     }
+
+    public Mono<Role> checkRole(String nickname){
+        return userRepository.findByNickname(nickname)
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("사용자가 존재하지 않습니다."))) // 사용자 존재 여부 확인
+                .map(user -> user.getRole()) // 사용자의 ROLE을 반환
+                .onErrorResume(IllegalArgumentException.class, e -> {
+                    return Mono.error(new IllegalArgumentException(e.getMessage(), e));
+                });
+    }
+
 }
 

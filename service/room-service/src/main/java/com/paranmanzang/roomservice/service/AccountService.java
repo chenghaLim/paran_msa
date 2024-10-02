@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface AccountService {
-    Boolean requestPayment(AccountResultModel model);
+    Boolean insert(AccountResultModel model);
 
     String findByOrderId(String orderId);
 

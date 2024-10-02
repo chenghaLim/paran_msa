@@ -1,6 +1,7 @@
 package com.paranmanzang.userservice.service;
 
 import com.paranmanzang.userservice.model.domain.FriendModel;
+import com.paranmanzang.userservice.model.entity.Friends;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

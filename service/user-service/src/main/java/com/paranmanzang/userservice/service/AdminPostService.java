@@ -5,6 +5,8 @@ import com.paranmanzang.userservice.model.entity.AdminPosts;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Optional;
+
 public interface AdminPostService {
     //게시글 작성
     Object createAPost(AdminPostModel adminPostModel);

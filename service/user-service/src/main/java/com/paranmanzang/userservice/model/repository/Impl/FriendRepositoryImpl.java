@@ -2,7 +2,10 @@ package com.paranmanzang.userservice.model.repository.Impl;
 
 
 import com.paranmanzang.userservice.model.domain.FriendModel;
+import com.paranmanzang.userservice.model.domain.LikePostModel;
+import com.paranmanzang.userservice.model.entity.Friends;
 import com.paranmanzang.userservice.model.entity.QFriends;
+import com.paranmanzang.userservice.model.entity.QLikePosts;
 import com.paranmanzang.userservice.model.repository.custom.FriendRepositoryCustom;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;

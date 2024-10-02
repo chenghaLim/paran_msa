@@ -25,7 +25,7 @@ public class RoomServiceImpl implements RoomService {
     private final Converter converter;
 
     @Override
-    public RoomModel save(RoomModel model) {
+    public RoomModel insert(RoomModel model) {
         return converter.convertToRoomModel(roomRepository.save(Room.builder()
                 .name(model.getName())
                 .price(model.getPrice())
@@ -62,7 +62,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public RoomModel enable(Long id) {
+    public RoomModel confirm(Long id) {
         return roomRepository.findById(id)
                 .filter(room -> !room.isEnabled())
                 .map(room -> {
@@ -87,7 +87,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Page<RoomModel> findAllEnabled(Pageable pageable) {
+    public Page<RoomModel> findByEnabled(Pageable pageable) {
         return roomRepository.findByPagination(pageable);
     }
 

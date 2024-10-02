@@ -1,12 +1,7 @@
 package com.paranmanzang.fileservice.service.impl;
 
 import com.amazonaws.SdkClientException;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
@@ -22,8 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -44,7 +37,7 @@ public class FileServiceImpl implements FileService {
     private String s3bucket;
     private final AmazonS3 amazonS3;
 
-    public FileModel uploadFile(MultipartFile file, String type, Long refId) {
+    public FileModel insert(MultipartFile file, String type, Long refId) {
         String folderName = type + "s/";
         String fileName = file.getOriginalFilename();
         String uploadName = folderName + UUID.randomUUID() + Objects.requireNonNull(fileName).substring(fileName.lastIndexOf("."));
@@ -89,7 +82,7 @@ public class FileServiceImpl implements FileService {
 
 
     @Override
-    public List<FileModel> getPathList(Long refId, String type) {
+    public List<FileModel> findByRefId(Long refId, String type) {
         return fileRepository.findByRefId(refId, FileType.fromType(type).getCode())
                 .map(this::convertToFileModel)
                 .collectList().block();
@@ -101,8 +94,8 @@ public class FileServiceImpl implements FileService {
                 .getObject(s3bucket, path)
                 .getObjectContent());
     }
-    public byte[] getFileByRefId(Long refId, String type) throws IOException {
-        return IOUtils.toByteArray(amazonS3.getObject(s3bucket, getPathList(refId, type).get(0).getPath()).getObjectContent());
+    public byte[] findFileByRefId(Long refId, String type) throws IOException {
+        return IOUtils.toByteArray(amazonS3.getObject(s3bucket, findByRefId(refId, type).get(0).getPath()).getObjectContent());
     }
     @Override
     public Boolean delete(FileDeleteModel model) {

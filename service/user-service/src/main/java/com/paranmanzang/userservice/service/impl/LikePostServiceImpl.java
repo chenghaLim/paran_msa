@@ -2,6 +2,7 @@ package com.paranmanzang.userservice.service.impl;
 
 
 import com.paranmanzang.userservice.model.domain.LikePostModel;
+import com.paranmanzang.userservice.model.domain.LikeRoomModel;
 import com.paranmanzang.userservice.model.entity.LikePosts;
 import com.paranmanzang.userservice.model.repository.LikePostRepository;
 import com.paranmanzang.userservice.service.LikePostService;
@@ -10,6 +11,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LikePostServiceImpl implements LikePostService {

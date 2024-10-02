@@ -4,7 +4,7 @@ uri:
   chatServiceUri: http://localhost:8081
   commentServiceUri: http://localhost:8084
   groupServiceUri: http://localhost:8085
-  fileServiceUri: http://localhost:9002
+  fileServiceUri: http://localhost:8090
   roomServiceUri: http://localhost:8083
   userServiceUri: http://localhost:8082
 

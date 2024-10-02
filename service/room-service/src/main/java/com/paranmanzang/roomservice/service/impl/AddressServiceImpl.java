@@ -50,7 +50,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public AddressModel save(AddressModel model) {
+    public AddressModel insert(AddressModel model) {
         return converter.convertTonAddressModel(
                 addressRepository.save(Address.builder()
                         .address(model.getAddress())
@@ -94,7 +94,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<?> find(String query) {
+    public List<?> findByQuery(String query) {
         return addressRepository.findQuery(query, roomService.getIdAllEnabled()).stream()
                 .map(converter::convertTonAddressModel).toList();
     }

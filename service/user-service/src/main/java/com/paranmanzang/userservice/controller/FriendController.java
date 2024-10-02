@@ -2,11 +2,14 @@ package com.paranmanzang.userservice.controller;
 
 
 import com.paranmanzang.userservice.model.domain.FriendModel;
+import com.paranmanzang.userservice.model.entity.Friends;
 import com.paranmanzang.userservice.service.impl.FriendServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Tag(name = "03. Friend")

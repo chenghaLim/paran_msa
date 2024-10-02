@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ReviewService {
-    ReviewModel save(ReviewModel model);
+    ReviewModel insert(ReviewModel model);
 
     ReviewModel update(ReviewUpdateModel model);
 

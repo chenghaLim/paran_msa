@@ -22,7 +22,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final BookingRepository bookingRepository;
 private final Converter converter;
     @Override
-    public ReviewModel save(ReviewModel model) {
+    public ReviewModel insert(ReviewModel model) {
         return converter.convertToReviewModel(reviewRepository.save(Review.builder()
                 .content(model.getContent())
                 .rating(model.getRating())

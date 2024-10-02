@@ -34,7 +34,6 @@ public class JwtTokenServiceImpl {
         //redis에서 JWT 조회
         return redisTemplate.opsForValue().get(token);
     }
-
     public void blacklistToken(String token, long expirationTime){
         //블랙리스트에 토큰 추가 => 해당 토큰은 접속이 차단 됨
         redisTemplate.opsForValue().set(token, "blacklist",expirationTime, TimeUnit.MILLISECONDS);
@@ -59,4 +58,12 @@ public class JwtTokenServiceImpl {
         // Redis에서 키가 존재하는지 비동기로 확인
         return Mono.fromCallable(() -> redisTemplate.hasKey(token));
     }
+    /*//로그아웃 시간 찍기
+    public void updateLogoutTime(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            user.setLogoutAt(LocalDateTime.now());
+            userRepository.save(user);
+        }
+    }*/
 }

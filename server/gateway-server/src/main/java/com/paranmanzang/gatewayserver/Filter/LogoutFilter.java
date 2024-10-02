@@ -17,11 +17,9 @@ import reactor.core.publisher.Mono;
 @Component
 public class LogoutFilter implements WebFilter {
 
-    private final JwtTokenServiceImpl jwtTokenService; // JWT 토큰 서비스를 주입받습니다.
-    // 생성자 주입
-    public LogoutFilter(JwtTokenServiceImpl jwtTokenService) {
-        this.jwtTokenService = jwtTokenService;
-    }
+    @Autowired
+    private JwtTokenServiceImpl jwtTokenService; // JWT 토큰 서비스를 주입받습니다.
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         // 로그아웃 요청인지 확인
@@ -30,12 +28,12 @@ public class LogoutFilter implements WebFilter {
             String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
             String refreshToken = null; // refreshToken 변수를 초기화합니다.
 
-
             if (exchange.getRequest().getCookies().get("refresh").toString() != null) { // "refresh" 쿠키가 존재하는지 확인합니다.
-                refreshToken = exchange.getRequest().getCookies().getFirst("refresh").getValue();
+                refreshToken = exchange.getRequest().getCookies().get("refresh").toString();
+                refreshToken = refreshToken.substring(9, refreshToken.length() - 1);
                 log.info("Refresh token 값 입력: {}", refreshToken);
                 jwtTokenService.deleteToken(refreshToken);
-                //exchange.getResponse().getHeaders().add(HttpHeaders.SET_COOKIE, "refresh=; Path=/; HttpOnly; Max-Age=0");
+                exchange.getResponse().getHeaders().add(HttpHeaders.SET_COOKIE, "refresh=; Path=/; HttpOnly; Max-Age=0");
                 exchange.getResponse().addCookie(createCookie("refresh", null));
             }
             log.info("Refresh token 값 입력: {}", refreshToken);

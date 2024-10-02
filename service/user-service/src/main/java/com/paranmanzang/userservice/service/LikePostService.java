@@ -2,6 +2,7 @@ package com.paranmanzang.userservice.service;
 
 
 import com.paranmanzang.userservice.model.domain.LikePostModel;
+import com.paranmanzang.userservice.model.domain.LikeRoomModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

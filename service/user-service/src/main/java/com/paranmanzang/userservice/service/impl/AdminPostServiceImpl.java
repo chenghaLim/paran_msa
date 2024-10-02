@@ -15,6 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
+import static com.paranmanzang.userservice.model.entity.QAdminPosts.adminPosts;
+
 @Service
 @Transactional
 public class AdminPostServiceImpl implements AdminPostService {

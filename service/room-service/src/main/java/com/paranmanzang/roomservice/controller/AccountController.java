@@ -21,8 +21,8 @@ public class AccountController {
 
     @PostMapping("")
     @Operation(summary = "결제 등록", description = "완료된 결제 정보를 db에 저장합니다.", tags = {"03. Account",})
-    public ResponseEntity<?> savePayment(@RequestBody AccountResultModel model) {
-        return ResponseEntity.ok(accountService.requestPayment(model));
+    public ResponseEntity<?> insert(@RequestBody AccountResultModel model) {
+        return ResponseEntity.ok(accountService.insert(model));
     }
 
     @GetMapping("")
@@ -34,7 +34,7 @@ public class AccountController {
 
     @PutMapping("")
     @Operation(summary = "결제 취소", description = "결제 취소 정보를 업데이트 합니다.")
-    public ResponseEntity<?> cancelPayment(@RequestBody AccountCancelModel model){
+    public ResponseEntity<?> update(@RequestBody AccountCancelModel model){
         return ResponseEntity.ok(accountService.cancel(model));
     }
 

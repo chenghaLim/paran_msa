@@ -8,6 +8,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.ServerAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -45,6 +46,9 @@ public class CustomSuccessHandler implements ServerAuthenticationSuccessHandler 
         response.addCookie(createCookie("refresh", refresh));
         jwtTokenService.storeToken(refresh, nickname, 86400000L);
         response.setStatusCode(HttpStatus.OK);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         return response.setComplete();
     }
 

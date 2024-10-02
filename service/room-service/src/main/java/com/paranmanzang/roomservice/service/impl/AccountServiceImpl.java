@@ -19,7 +19,7 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public Boolean requestPayment(AccountResultModel model) {
+    public Boolean insert(AccountResultModel model) {
 
         return accountRepository.save(Account.builder()
                 .orderId(model.getOrderId())

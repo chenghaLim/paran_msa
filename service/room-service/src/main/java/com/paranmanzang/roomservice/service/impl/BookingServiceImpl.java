@@ -3,7 +3,6 @@ package com.paranmanzang.roomservice.service.impl;
 import com.paranmanzang.roomservice.model.domain.BookingModel;
 import com.paranmanzang.roomservice.model.entity.Booking;
 import com.paranmanzang.roomservice.model.entity.Time;
-import com.paranmanzang.roomservice.model.repository.AccountRepository;
 import com.paranmanzang.roomservice.model.repository.BookingRepository;
 import com.paranmanzang.roomservice.model.repository.RoomRepository;
 import com.paranmanzang.roomservice.service.BookingService;
@@ -26,7 +25,7 @@ public class BookingServiceImpl implements BookingService {
     private final Converter converter;
 
     @Override
-    public BookingModel save(BookingModel model) {
+    public BookingModel insert(BookingModel model) {
         return Optional.of(bookingRepository.save(Booking.builder()
                         .date(model.getDate())
                         .groupId(model.getGroupId())

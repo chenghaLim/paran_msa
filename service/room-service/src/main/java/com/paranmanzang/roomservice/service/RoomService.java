@@ -9,15 +9,15 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface RoomService {
-    RoomModel save(RoomModel model);
+    RoomModel insert(RoomModel model);
 
     RoomModel update(RoomUpdateModel model);
 
     Boolean delete(Long id);
 
-    RoomModel enable(Long id);
+    RoomModel confirm(Long id);
     Page<?> findAll(Pageable pageable);
-    Page<?> findAllEnabled(Pageable pageable);
+    Page<?> findByEnabled(Pageable pageable);
     List<?> getIdAllEnabled();
     Page<?> findByNickname(String nickname, Pageable pageable);
 
