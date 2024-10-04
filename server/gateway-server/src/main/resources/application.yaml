@@ -32,12 +32,6 @@ spring:
   application:
     name: api
 
-  security:
-    default-filter-chain: true     # Spring Security 기본 필터 체인 사용
-    user:
-      name: a              # 기본 사용자 이름
-      password: a
-
     oauth2:
       client:
         registration:
@@ -45,7 +39,7 @@ spring:
             client-name: naver
             client-id: p73aeOZEmmQhVd6bQB5Q
             client-secret: OTxAoYQZ69
-            redirect-uri: http://localhost:8000/login/oauth2/code/naver
+            redirect-uri: http://gateway:8000/login/oauth2/code/naver
             authorization-grant-type: authorization_code
             scope: name,email
 

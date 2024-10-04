@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 8084
 
 spring:
   application:
@@ -28,4 +28,4 @@ eureka:
 
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-    hostname: localhost
+    hostname: eureka

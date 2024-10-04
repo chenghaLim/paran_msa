@@ -29,3 +29,7 @@ spring:
   data:
     mongodb:
       uri: mongodb://root:1234@mongo:27017/parandb?authSource=admin
+
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    hostname: eureka

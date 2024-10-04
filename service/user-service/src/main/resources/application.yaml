@@ -41,7 +41,7 @@ spring:
 
   data:
     redis:
-      host: localhost   # Redis 서버 호스트
+      host: redis   # Redis 서버 호스트
       port: 6379        # Redis 서버 포트
       username: root      # Redis 서버 사용자 이름 (필요한 경우)
       password: password    # Redis 서버 비밀번호
@@ -71,3 +71,6 @@ spring:
           security: DEBUG
           web: DEBUG
 
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    hostname: eureka

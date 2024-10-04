@@ -106,6 +106,7 @@ public class SecurityConfig {
 
                 // 권한 설정
                 .authorizeExchange(auth -> auth
+                        .pathMatchers("/login", "/oauth2/**", "/api/users", "/api/users/checkPassword", "/api/users/checkNickname", "/api/users/checkRole", "/api/users/updateDeclaration", "/api/users/updateLogoutUserTime").permitAll()  // /login과 /oauth2/** 경로는 인증 없이 접근 가능
                         .pathMatchers("/api/comments/{postId}").permitAll()
 
                         .pathMatchers(HttpMethod.GET, "/api/files/*").permitAll()
@@ -144,7 +145,6 @@ public class SecurityConfig {
 
                         .pathMatchers("/api/rooms/times/{roomId}").permitAll()
 
-                        .pathMatchers("/login", "/oauth2/**", "/api/users", "/api/users/checkPassword", "/api/users/checkNickname", "/api/users/checkRole", "/api/users/updateDeclaration", "/api/users/updateLogoutUserTime").permitAll()  // /login과 /oauth2/** 경로는 인증 없이 접근 가능
                         .pathMatchers(HttpMethod.GET, "/api/users/aboard", "/api/users/aboard/viewCounts/{id}", "/api/users/aboard/details/{id}").permitAll()
                         .pathMatchers(HttpMethod.DELETE, "/api/users/aboard/{id}", "/api/users/depost/{id}").hasRole(Role.ROLE_ADMIN.getCode())  // ROLE_ADMIN만 가능
                         .pathMatchers(HttpMethod.PUT, "/api/users/aboard/{id}", "/api/users/updateRole").hasRole(Role.ROLE_ADMIN.getCode())
@@ -152,16 +152,6 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET, "/api/users/aboard/{nickname}", "/api/users/depost", "/api/users/findAllByNickname").hasRole(Role.ROLE_ADMIN.getCode())
                         .anyExchange().authenticated() // 그 외 모든 경로는 인증 필요
                 );
-
-        http.authorizeExchange(auth -> auth
-                .pathMatchers("/login", "/oauth2/**", "/api/users", "/api/users/checkPassword", "/api/users/checkNickname", "/api/users/checkRole", "/api/users/updateDeclaration", "/api/users/updateLogoutUserTime").permitAll()  // /login과 /oauth2/** 경로는 인증 없이 접근 가능
-                .pathMatchers(HttpMethod.GET, "/api/users/aboard", "/api/users/aboard/viewCounts/{id}", "/api/users/aboard/details/{id}").permitAll()
-                .pathMatchers(HttpMethod.DELETE, "/api/users/aboard/{id}", "/api/users/depost/{id}").hasRole(Role.ROLE_ADMIN.getCode())  // ROLE_ADMIN만 가능
-                .pathMatchers(HttpMethod.PUT, "/api/users/aboard/{id}", "/api/users/updateRole").hasRole(Role.ROLE_ADMIN.getCode())
-                .pathMatchers(HttpMethod.POST, "/api/users/aboard").hasRole(Role.ROLE_ADMIN.getCode())
-                .pathMatchers(HttpMethod.GET, "/api/users/aboard/{nickname}", "/api/users/depost", "/api/users/findAllByNickname").hasRole(Role.ROLE_ADMIN.getCode())
-                .anyExchange().authenticated() // 그 외 모든 경로는 인증 필요
-        );
         return http.build();
     }
 
