@@ -1,7 +1,7 @@
 services:
   eureka:
     build:
-      context: server/eureka-server
+      context: ./server/eureka-server
       dockerfile: Dockerfile
     image: paranmanzang/eureka:latest
     container_name: eureka
@@ -13,7 +13,7 @@ services:
 
   gateway:
     build:
-      context: server/gateway-server
+      context: ./server/gateway-server
       dockerfile: Dockerfile
     image: paranmanzang/gateway:latest
     container_name: gateway
@@ -27,7 +27,7 @@ services:
 
   config:
     build:
-      context: server/config-server
+      context: ./server/config-server
       dockerfile: Dockerfile
     image: paranmanzang/config:latest
     container_name: config
@@ -41,7 +41,7 @@ services:
 
   chat:
     build:
-      context: service/chat-service
+      context: ./service/chat-service
       dockerfile: Dockerfile
     image: paranmanzang/chat:latest
     container_name: chat
@@ -55,7 +55,7 @@ services:
 
   comment:
     build:
-      context: service/comment-service
+      context: ./service/comment-service
       dockerfile: Dockerfile
     image: paranmanzang/comment:latest
     container_name: comment
@@ -69,7 +69,7 @@ services:
 
   file:
     build:
-      context: service/file-service
+      context: ./service/file-service
       dockerfile: Dockerfile
     image: paranmanzang/file:latest
     container_name: file
@@ -83,7 +83,7 @@ services:
 
   group:
     build:
-      context: service/group-service
+      context: ./service/group-service
       dockerfile: Dockerfile
     image: paranmanzang/group:latest
     container_name: group
@@ -97,7 +97,7 @@ services:
 
   room:
     build:
-      context: service/room-service
+      context: ./service/room-service
       dockerfile: Dockerfile
     image: paranmanzang/room:latest
     container_name: room
@@ -111,7 +111,7 @@ services:
 
   user:
     build:
-      context: service/user-service
+      context: ./service/user-service
       dockerfile: Dockerfile
     image: paranmanzang/user:latest
     container_name: user
@@ -122,6 +122,38 @@ services:
     depends_on:
       - eureka
     hostname: user
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: parandb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    networks:
+      - paran-net
+
+  mongodb:
+    image: mongo
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 1234
+    ports:
+      - "27017:27017"
+    networks:
+      - paran-net
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - paran-net
 
 networks:
   paran-net:
