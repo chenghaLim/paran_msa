@@ -42,6 +42,7 @@ public class CustomSuccessHandler implements ServerAuthenticationSuccessHandler 
         String access = jwtUtil.createAccessJwt(username, role, nickname, 3600000L);
         String refresh = jwtUtil.createRefreshJwt(username, role, nickname, 86400000L);
         response.getHeaders().set("Authorization", "Bearer " + access);
+        response.getHeaders().set("nickname", nickname);
         response.addCookie(createCookie("refresh", refresh));
         jwtTokenService.storeToken(refresh, nickname, 86400000L);
         response.setStatusCode(HttpStatus.OK);
