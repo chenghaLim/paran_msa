@@ -9,14 +9,14 @@ spring:
         encrypt:
           enabled: false
         git:
-          uri: git@github.com:chenghaLim/paranmanzang-secret.git
+          uri: git@github.com:paranmanzang/paran_secret_server.git
           default-label: main
           ignoreLocalSshSettings: true
           strictHostKeyChecking: false
           #          hostKey: # ssh-keyscan ???? ??
           hostKeyAlgorithm: # ssh-keyscan ???? ??
-          privateKey: |
-           
+          privateKey:
+        
 
 management:
   endpoints:

@@ -2,7 +2,7 @@ spring:
   application:
     name: eureka
   config:
-    import: optional:configserver:http://config:8888
+    import: optional:configserver:http://211.188.50.31:8888
 
 server:
   port: 8761
@@ -12,5 +12,4 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
     serviceUrl:
-      defaultZone: http://eureka:8761/eureka
-
+      defaultZone: http://211.188.50.31:8761/eureka
