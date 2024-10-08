@@ -41,4 +41,4 @@ out/
 **/*.yml
 
 # 하위 모듈의 src/main/resources의 yml 파일 제외
-**/src/main/resources/*.yml
+**/*/**/*/src/main/resources/*.yml
