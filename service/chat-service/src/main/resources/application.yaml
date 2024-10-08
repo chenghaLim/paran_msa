@@ -2,24 +2,6 @@ spring:
   application:
     name: chat-service
   profiles:
-    active: local
-    config:
-      import: optional:configserver:http://211.188.50.31:8888
-
-  web:
-    resources:
-      add-mappings: false
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://211.188.50.31:8761/eureka
-    register-with-eureka: true
-    fetch-registry: true
-
-  instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-    hostname: localhost
-
-server:
-  port: 8081
+    active: prod
+  config:
+    import: optional:configserver:http://211.188.50.31:8888

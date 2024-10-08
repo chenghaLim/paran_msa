@@ -1,26 +1,7 @@
-server:
-  port: 8090
-
-eureka:
-  client:
-    service-url:
-      default-zone: http://211.188.50.31:8761/eureka/
-
-cloud:
-  s3:
-    bucket: com.paranmanzang.chat
-    access-key: AKIAQXPZDAMK3DSXSQTL
-    access-secret-key: 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
-
 spring:
   application:
     name: file-service
   profiles:
-    active: local
-    config:
-      import: optional:configserver:http://211.188.50.31:8888
-  management:
-    endpoints:
-      web:
-        exposure:
-          include: health,info
+    active: prod
+  config:
+    import: optional:configserver:http://211.188.50.31:8888

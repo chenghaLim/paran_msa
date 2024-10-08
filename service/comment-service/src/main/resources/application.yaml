@@ -1,27 +1,7 @@
-server:
-  port: 8091
-
 spring:
   application:
     name: comment-service
   profiles:
-    active: local
-    config:
-      import: optional:configserver:http://211.188.50.31:8888
-
-  datasource:
-    url: jdbc:mysql://211.188.50.31:3306/parandb
-    username: root
-    password: 1234
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    serviceUrl:
-      defaultZone: http://211.188.50.31:8761/eureka
-
-  instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-    hostname: localhost
+    active: prod
+  config:
+    import: optional:configserver:http://211.188.50.31:8888
