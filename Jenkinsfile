@@ -8,13 +8,10 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Git에서 서브모듈을 포함하여 체크아웃
-                checkout([$class: 'GitSCM',
-                          branches: [[name: '*/master']],
-                          userRemoteConfigs: [[url: 'https://github.com/paranmanzang/paran_msa.git', credentialsId: 'ssh-key']],
-                          doGenerateSubmoduleConfigurations: false,
-                          submoduleCfg: [],
-                          extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true, trackingSubmodules: true]]])
+              checkout scmGit(
+                    branches: [[name: 'main']],
+                    extensions: [submodule(parentCredentials: true, trackingSubmodules: true)],
+                    userRemoteConfigs: [[credentialsId: 'ssh-key', url: 'https://github.com/paranmanzang/paran_msa.git']]
             }
         }
 
