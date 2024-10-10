@@ -60,52 +60,72 @@ pipeline {
         }
         stage('Build Docker Images') {
             steps {
-                script {
-                    def modules = ["config", "eureka", "user", "group", "chat", "file", "room", "comment", "gateway"]
+               script {
+                           def modulePaths = [
+                               "config": "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
+                               "eureka": "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
+                               "user": "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
+                               "group": "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
+                               "chat": "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
+                               "file": "/var/lib/jenkins/workspace/paranmanzang/service/file-service",
+                               "room": "/var/lib/jenkins/workspace/paranmanzang/service/room-service",
+                               "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service",
+                               "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server"
+                           ]
 
-                    for (module in modules) {
-                        def modulePath = "./path/to/${module}"
-                        sh """
-                        echo "Building Docker image for ${module}"
-                        docker build -t ${repository}/${module}:latest ${modulePath}
-                        """
-                    }
-                }
+                           for (module in modulePaths.keySet()) {
+                               echo "Building Docker image for ${module}"
+                               sh """
+                               docker build -t ${repository}/${module}:latest ${modulePaths[module]}
+                               """
+                           }
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    def modules = ["config", "eureka", "user", "group", "chat", "file", "room", "comment", "gateway"]
+                    def modulePaths = [
+                        "config": "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
+                        "eureka": "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
+                        "user": "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
+                        "group": "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
+                        "chat": "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
+                        "file": "/var/lib/jenkins/workspace/paranmanzang/service/file-service",
+                        "room": "/var/lib/jenkins/workspace/paranmanzang/service/room-service",
+                        "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service",
+                        "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server"
+                    ]
 
-                    for (module in modules) {
+                    for (module in modulePaths.keySet()) {
                         def imageTag = "${repository}/${module}:${env.BUILD_ID}"
-
-                        // 태그 추가 및 Docker Hub에 푸시
-                        sh '''
+                        echo "Tagging and pushing Docker image for ${module}"
+                        sh """
                         docker tag ${repository}/${module}:latest ${imageTag}
                         docker push ${imageTag}
-                        '''
+                        """
                     }
                 }
             }
         }
 
-        stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    def modules = ["gateway", "config", "eureka", "user", "group", "chat", "file", "room", "comment"]
 
-                    for (module in modules) {
-                        def imageTag = "${repository}/${module}:${env.BUILD_ID}"
-                        sh '''
-                        kubectl set image deployment/${module} ${module}=${imageTag}
-                        '''
-                    }
-                }
-            }
-        }
+       stage('Deploy to Kubernetes') {
+           steps {
+               script {
+                   def modules = ["gateway", "config", "eureka", "user", "group", "chat", "file", "room", "comment"]
+
+                   for (module in modules) {
+                       def imageTag = "${repository}/${module}:${env.BUILD_ID}"
+                       echo "Updating Kubernetes deployment for ${module}"
+                       sh """
+                       kubectl set image deployment/${module} ${module}=${imageTag}
+                       """
+                   }
+               }
+           }
+       }
+
     }
 
     post {
