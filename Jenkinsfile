@@ -11,7 +11,7 @@ pipeline {
               checkout([$class: 'GitSCM',
                     branches: [[name: '*/master']],
                     extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true, trackingSubmodules: true]],
-                    userRemoteConfigs: [[credentialsId: 'ssh-key', url: 'https://github.com/paranmanzang/paran_msa.git']]
+                    userRemoteConfigs: [[credentialsId: 'ssh-key', url: 'git@github.com:paranmanzang/paran_msa.git']]
               ])
             }
         }
