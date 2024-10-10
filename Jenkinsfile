@@ -99,7 +99,7 @@ pipeline {
                     ]
 
                     for (module in modulePaths.keySet()) {
-                        def imageTag = "${repository}/${module}:${env.BUILD_ID}"
+                        def imageTag = "${repository}/${module}-${env.BUILD_ID}"  // 이미지 태그 형식 변경
                         echo "Tagging and pushing Docker image for ${module}"
                         sh """
                         docker tag ${repository}/${module}:latest ${imageTag}
