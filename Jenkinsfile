@@ -1,20 +1,18 @@
 pipeline {
     environment {
         JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64/'
-        repository = "cheonghalim/paranmanzang"  //docker hub id와 repository 이름
+        repository = "cheonghalim/paranmanzang"  // docker hub id와 repository 이름
         DOCKERHUB_CREDENTIALS = credentials('docker-hub') // jenkins에 등록해 놓은 docker hub credentials 이름
     }
     agent any
     stages {
         stage('Checkout') {
             steps {
-                // Git에서 서브모듈을 포함하여 체크아웃
-                checkout([$class: 'GitSCM',
-                          branches: [[name: '*/master']],
-                          userRemoteConfigs: [[url: 'https://github.com/paranmanzang/paran_msa.git', credentialsId: 'ssh-key']],
-                          doGenerateSubmoduleConfigurations: false,
-                          submoduleCfg: [],
-                          extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true, trackingSubmodules: true]]])
+              checkout([$class: 'GitSCM',
+                    branches: [[name: '*/master']],
+                    extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true, trackingSubmodules: true]],
+                    userRemoteConfigs: [[credentialsId: 'ssh-key', url: 'https://github.com/paranmanzang/paran_msa.git']]
+              ])
             }
         }
 
