@@ -5,6 +5,11 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('docker-hub') // jenkins에 등록해 놓은 docker hub credentials 이름
     }
     agent any
+    stage('Cleanup') {
+        steps {
+            cleanWs()
+        }
+    }
     stages {
         stage('Checkout') {
             steps {
