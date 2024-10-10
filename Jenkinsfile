@@ -5,16 +5,16 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('docker-hub') // jenkins에 등록해 놓은 docker hub credentials 이름
     }
     agent any
-    stage('Cleanup') {
-        steps {
-            cleanWs()
-        }
-    }
     stages {
+        stage('Cleanup') {
+            steps {
+                cleanWs()
+            }
+        }
         stage('Checkout') {
             steps {
               checkout([$class: 'GitSCM',
-                  branches: [[name: '*/main']],
+                  branches: [[name: '*/master']],
                   userRemoteConfigs: [[
                       url: 'git@github.com:paranmanzang/paran_msa.git',
                       credentialsId: 'ssh-key'
