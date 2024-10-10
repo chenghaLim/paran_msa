@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
 import java.util.Collection;
 
 @Component
@@ -45,7 +46,16 @@ public class CustomSuccessHandler implements ServerAuthenticationSuccessHandler 
         response.getHeaders().set("nickname", nickname);
         response.addCookie(createCookie("refresh", refresh));
         jwtTokenService.storeToken(refresh, nickname, 86400000L);
-        response.setStatusCode(HttpStatus.OK);
+
+        String returnUrl = serverWebExchange.getRequest().getQueryParams().getFirst("return_url");
+        if (returnUrl != null) {
+            response.getHeaders().setLocation(URI.create(returnUrl));
+        } else {
+            response.getHeaders().setLocation(URI.create("http://localhost:3000")); // 기본값
+        }
+
+        response.setStatusCode(HttpStatus.FOUND); // 302 Found로 변경
+        //response.setStatusCode(HttpStatus.OK);
         return response.setComplete();
     }
 
