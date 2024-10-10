@@ -11,6 +11,7 @@ pipeline {
                 cleanWs()
             }
         }
+
         stage('Checkout') {
             steps {
               checkout([$class: 'GitSCM',
@@ -63,9 +64,11 @@ pipeline {
                     def modules = ["config", "eureka", "user", "group", "chat", "file", "room", "comment", "gateway"]
 
                     for (module in modules) {
-                        sh '''
-                        docker build -t ${repository}/${module}:latest ./path/to/${module}
-                        '''
+                        def modulePath = "./path/to/${module}"
+                        sh """
+                        echo "Building Docker image for ${module}"
+                        docker build -t ${repository}/${module}:latest ${modulePath}
+                        """
                     }
                 }
             }
