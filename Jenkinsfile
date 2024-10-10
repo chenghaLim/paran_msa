@@ -22,6 +22,8 @@ pipeline {
                     set -e
                     export JAVA_HOME="$JAVA_HOME"
 
+                    chmod +x ./gradlew
+
                     all_modules=("server:gateway-server" "server:config-server" "server:eureka-server"
                                  "service:user-service" "service:group-service" "service:chat-service"
                                  "service:file-service" "service:room-service" "service:comment-service")
@@ -32,7 +34,7 @@ pipeline {
                     for module in "${all_modules[@]}"
                     do
                       echo "Building BootJar for $module"
-                      ./gradlew :$module:bootJar
+                      ./gradlew :$module:bootJar --warning-mode all
                     done
                     '''
                 }
