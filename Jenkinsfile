@@ -9,6 +9,9 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'master', credentialsId: 'ssh-key', url: 'https://github.com/paranmanzang/paran_msa.git'
+
+                sh 'git submodule init'
+                sh 'git submodule update'
             }
         }
 
