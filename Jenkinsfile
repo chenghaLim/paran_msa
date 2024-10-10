@@ -60,7 +60,7 @@ pipeline {
         }
         stage('Build Docker Images') {
             steps {
-               script {
+                script {
                            def modulePaths = [
                                "config": "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
                                "eureka": "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
@@ -79,6 +79,7 @@ pipeline {
                                docker build -t ${repository}/${module}:latest ${modulePaths[module]}
                                """
                            }
+               }
             }
         }
 
