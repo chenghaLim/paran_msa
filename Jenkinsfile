@@ -9,10 +9,14 @@ pipeline {
         stage('Checkout') {
             steps {
               checkout([$class: 'GitSCM',
-                    branches: [[name: '*/master']],
-                    extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true, trackingSubmodules: true]],
-                    userRemoteConfigs: [[credentialsId: 'ssh-key', url: 'git@github.com:paranmanzang/paran_msa.git']]
+                  branches: [[name: '*/main']],
+                  userRemoteConfigs: [[
+                      url: 'git@github.com:paranmanzang/paran_msa.git',
+                      credentialsId: 'ssh-key'
+                  ]],
+                  extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]]
               ])
+
             }
         }
 
