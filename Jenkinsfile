@@ -14,7 +14,7 @@ pipeline {
                       url: 'git@github.com:paranmanzang/paran_msa.git',
                       credentialsId: 'ssh-key'
                   ]],
-                  extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true]]
+                  extensions: [[$class: 'SubmoduleOption', recursiveSubmodules: true, parentCredentials: true]]
               ])
 
             }
