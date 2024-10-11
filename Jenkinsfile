@@ -77,7 +77,7 @@ pipeline {
                            for (module in modulePaths.keySet()) {
                                echo "Building Docker image for ${module}"
                                sh """
-                               docker build -t ${repository}:${module}-latest ${modulePaths[module]}
+                               docker build -t ${repository}:${module} ${modulePaths[module]}
                                """
                            }
                }
@@ -101,10 +101,10 @@ pipeline {
 
                     // 각 모듈에 대해 Docker 이미지 태그 및 푸시
                     for (module in modulePaths.keySet()) {
-                        def imageTag = "${repository}:${module}-${env.BUILD_ID}"  // BUILD_ID로 고유한 태그 설정
+                        def imageTag = "${repository}:${module}"  // BUILD_ID로 고유한 태그 설정
                         echo "Tagging and pushing Docker image for ${module} with tag ${env.BUILD_ID}"
                         sh """
-                        docker tag ${repository}:${module}-latest ${imageTag}
+                        docker tag ${repository}:${module} ${imageTag}
                         docker push ${imageTag}
                         """
                     }
