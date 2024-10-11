@@ -117,9 +117,9 @@ pipeline {
            steps {
                script {
                    def modulePaths = [
-                       "gateway": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/gateway-service/gateway.yaml",
-                       "config": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/config-service/config.yaml",
-                       "eureka": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/eureka-service/eureka.yaml",
+                       "gateway": "/var/lib/jenkins/workspace/paranmanzang/back-end/server/gateway-server/gateway.yaml",
+                       "config": "/var/lib/jenkins/workspace/paranmanzang/back-end/server/config-server/config.yaml",
+                       "eureka": "/var/lib/jenkins/workspace/paranmanzang/back-end/server/eureka-server/eureka.yaml",
                        "user": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/user-service/user.yaml",
                        "group": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/group-service/group.yaml",
                        "chat": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/chat-service/chat.yaml",
