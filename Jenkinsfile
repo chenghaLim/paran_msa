@@ -117,15 +117,15 @@ pipeline {
            steps {
                script {
                    def modulePaths = [
-                       "gateway": "/var/lib/jenkins/workspace/paranmanzang/back-end/server/gateway-server/gateway.yaml",
-                       "config": "/var/lib/jenkins/workspace/paranmanzang/back-end/server/config-server/config.yaml",
-                       "eureka": "/var/lib/jenkins/workspace/paranmanzang/back-end/server/eureka-server/eureka.yaml",
-                       "user": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/user-service/user.yaml",
-                       "group": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/group-service/group.yaml",
-                       "chat": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/chat-service/chat.yaml",
-                       "file": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/file-service/file.yaml",
-                       "room": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/room-service/room.yaml",
-                       "comment": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/comment-service/comment.yaml"
+                       "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server/gateway.yaml",
+                       "config": "/var/lib/jenkins/workspace/paranmanzang/server/config-server/config.yaml",
+                       "eureka": "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server/eureka.yaml",
+                       "user": "/var/lib/jenkins/workspace/paranmanzang/service/user-service/user.yaml",
+                       "group": "/var/lib/jenkins/workspace/paranmanzang/service/group-service/group.yaml",
+                       "chat": "/var/lib/jenkins/workspace/paranmanzang/service/chat-service/chat.yaml",
+                       "file": "/var/lib/jenkins/workspace/paranmanzang/service/file-service/file.yaml",
+                       "room": "/var/lib/jenkins/workspace/paranmanzang/service/room-service/room.yaml",
+                       "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service/comment.yaml"
                    ]
 
                    for (module in modulePaths.keySet()) {
