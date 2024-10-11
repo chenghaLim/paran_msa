@@ -3,6 +3,7 @@ pipeline {
         JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64/'
         repository = "cheonghalim/paranmanzang"  // docker hub id와 repository 이름
         DOCKERHUB_CREDENTIALS = credentials('docker-hub') // jenkins에 등록해 놓은 docker hub credentials 이름
+        KUBECONFIG = "/var/lib/jenkins/.kube/config"
     }
     agent any
     stages {
@@ -118,10 +119,12 @@ pipeline {
                    def modules = ["gateway", "config", "eureka", "user", "group", "chat", "file", "room", "comment"]
 
                    for (module in modules) {
-                       def imageTag = "${repository}/${module}:${env.BUILD_ID}"
-                       echo "Updating Kubernetes deployment for ${module}"
+                       def deploymentName = module
+                       def imageTag = "${repository}:${module}-${env.BUILD_ID}"
+                       echo "Updating Kubernetes deployment for ${module} with image ${imageTag}"
                        sh """
-                       kubectl set image deployment/${module} ${module}=${imageTag}
+                        kubectl set image deployment/${deploymentName} ${deploymentName}=${imageTag} --record
+                         kubectl rollout status deployment/${deploymentName}
                        """
                    }
                }
