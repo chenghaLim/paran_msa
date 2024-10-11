@@ -77,7 +77,7 @@ pipeline {
                            for (module in modulePaths.keySet()) {
                                echo "Building Docker image for ${module}"
                                sh """
-                               docker build -t ${repository}:${module}-latest ${modulePaths[module]}
+                               docker build -t ${repository}:${module} ${modulePaths[module]}
                                """
                            }
                }
@@ -86,29 +86,29 @@ pipeline {
 
         stage('Push to Docker Hub') {
             steps {
-                script {
-                    def modulePaths = [
-                        "config": "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
-                        "eureka": "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
-                        "user": "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
-                        "group": "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
-                        "chat": "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
-                        "file": "/var/lib/jenkins/workspace/paranmanzang/service/file-service",
-                        "room": "/var/lib/jenkins/workspace/paranmanzang/service/room-service",
-                        "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service",
-                        "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server"
-                    ]
+            script {
+                                def modulePaths = [
+                                    "config": "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
+                                    "eureka": "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
+                                    "user": "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
+                                    "group": "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
+                                    "chat": "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
+                                    "file": "/var/lib/jenkins/workspace/paranmanzang/service/file-service",
+                                    "room": "/var/lib/jenkins/workspace/paranmanzang/service/room-service",
+                                    "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service",
+                                    "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server"
+                                ]
 
-                    // 각 모듈에 대해 Docker 이미지 태그 및 푸시
-                    for (module in modulePaths.keySet()) {
-                        def imageTag = "${repository}:${module}-${env.BUILD_ID}"  // BUILD_ID로 고유한 태그 설정
-                        echo "Tagging and pushing Docker image for ${module} with tag ${env.BUILD_ID}"
-                        sh """
-                        docker tag ${repository}:${module}-latest ${imageTag}
-                        docker push ${imageTag}
-                        """
-                    }
-                }
+                                // 각 모듈에 대해 Docker 이미지 태그 및 푸시
+                                for (module in modulePaths.keySet()) {
+                                    def imageTag = "${repository}:${module}"  // BUILD_ID로 고유한 태그 설정
+                                    echo "Tagging and pushing Docker image for ${module} with tag ${env.BUILD_ID}"
+                                    sh """
+                                    docker tag ${repository}:${module} ${imageTag}
+                                    docker push ${imageTag}
+                                    """
+                                }
+                            }
             }
         }
 
@@ -116,20 +116,41 @@ pipeline {
        stage('Deploy to Kubernetes') {
            steps {
                script {
-                   def modules = ["gateway", "config", "eureka", "user", "group", "chat", "file", "room", "comment"]
+                   def modulePaths = [
+                       "gateway": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/gateway-service/gateway.yaml",
+                       "config": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/config-service/config.yaml",
+                       "eureka": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/eureka-service/eureka.yaml",
+                       "user": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/user-service/user.yaml",
+                       "group": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/group-service/group.yaml",
+                       "chat": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/chat-service/chat.yaml",
+                       "file": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/file-service/file.yaml",
+                       "room": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/room-service/room.yaml",
+                       "comment": "/var/lib/jenkins/workspace/paranmanzang/back-end/service/comment-service/comment.yaml"
+                   ]
 
-                   for (module in modules) {
-                       def deploymentName = module
-                       def imageTag = "${repository}:${module}-${env.BUILD_ID}"
-                       echo "Updating Kubernetes deployment for ${module} with image ${imageTag}"
+                   for (module in modulePaths.keySet()) {
+                       def yamlPath = modulePaths[module]
+                       echo "Applying Kubernetes deployment for ${module} using YAML file: ${yamlPath}"
+
+                       // YAML 파일을 사용하여 배포 적용
                        sh """
-                        kubectl set image deployment/${deploymentName} ${deploymentName}=${imageTag} --record
-                         kubectl rollout status deployment/${deploymentName}
+                       kubectl apply -f ${yamlPath}
+                       """
+
+                       // YAML 파일에서 정의된 실제 배포 이름을 사용하여 롤아웃 상태 확인
+                       // 예: 배포 이름이 module 이름과 동일하다고 가정
+                       def deploymentName = module
+                       echo "Checking rollout status for deployment ${deploymentName}"
+
+                       // 배포 롤아웃 상태 확인
+                       sh """
+                       kubectl rollout status deployment/${deploymentName}
                        """
                    }
                }
            }
        }
+
 
     }
 
