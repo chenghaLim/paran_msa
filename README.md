@@ -26019,8 +26019,11 @@
 
 <h2>개발기간</h2></br>
 <h2>프로젝트 산출물</h2>
-### [api 명세서](https://www.notion.so/invite/1db6363a431618104ed33a8bd1729c63ac51f4ff)</br>
-[erd]()</br>
-[발표자료]</br>
-[발표영상]</br>
+
+<ul style="list-style-type:circle;">
+ <li>[api 명세서](https://www.notion.so/invite/1db6363a431618104ed33a8bd1729c63ac51f4ff)</li>
+ <li>[erd]()</li>
+ <li>[발표자료]</li>
+ <li>[발표영상]</li>
+</ul>
 
