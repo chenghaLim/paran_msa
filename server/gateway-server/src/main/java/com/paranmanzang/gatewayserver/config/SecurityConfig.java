@@ -56,7 +56,7 @@ public class SecurityConfig {
                             configuration.setAllowCredentials(true);
                             configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "nickname"));
                             configuration.setMaxAge(3600L); // 1 hour
-                            configuration.setExposedHeaders(Arrays.asList("Set-Cookie", "Authorization"));
+                            configuration.setExposedHeaders(Arrays.asList("Set-Cookie", "Authorization","nickname"));
                             return configuration;
                         }))
                 // 기본 보안 설정 비활성화
