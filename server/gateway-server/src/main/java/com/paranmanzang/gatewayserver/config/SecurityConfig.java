@@ -127,6 +127,7 @@ public class SecurityConfig {
 
                         .pathMatchers(HttpMethod.POST, "/api/rooms/addresses").hasAuthority(Role.ROLE_SELLER.getCode())
                         .pathMatchers(HttpMethod.PUT, "/api/rooms/addresses").hasAuthority(Role.ROLE_SELLER.getCode())
+                        .pathMatchers(HttpMethod.GET, "/api/rooms/addresses").permitAll()
                         .pathMatchers("/api/rooms/addresses/{id}").hasAuthority(Role.ROLE_SELLER.getCode())
                         .pathMatchers("/api/rooms/addresses/search").permitAll()
 
