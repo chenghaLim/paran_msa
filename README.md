@@ -6,7 +6,7 @@
 <h2>팀 소개</h2>
 
 |이미지추가|이미지추가  |이미지추가  |이미지추가  |
-|[임청하👑<br/>(BackEnd)](https://github.com/chenghaLim) |[강은석<br/>(BackEnd)](https://github.com/MeteoRiver) |[김주영<br/>(FrontEnd)](https://github.com/Jyservice781) |[송지현<br/>(BackEnd)](https://github.com/Songj2)|
+|[임청하👑<br/>(BackEnd)](https://github.com/chenghaLim)|[강은석<br/>(BackEnd)](https://github.com/MeteoRiver) |[김주영<br/>(FrontEnd)](https://github.com/Jyservice781) |[송지현<br/>(BackEnd)](https://github.com/Songj2)|
 
 <h2>프로젝트 구조</h2>
 <details><summary>FE</summary>
@@ -26010,8 +26010,10 @@
 
 
 <h2>개발환경 표 VS 뱃지</h2>
+
 |:-------:|:-------:|:-------:|:-------:|:-------:|
 |FRONT|BACK|DB|CI/CD|OTHER|
+
 
 
 <h2>시스템 아키텍처</h2>
@@ -26021,9 +26023,18 @@
 <h2>프로젝트 산출물</h2>
 
 <ul style="list-style-type:circle;">
- <li>[api 명세서](https://www.notion.so/invite/1db6363a431618104ed33a8bd1729c63ac51f4ff)</li>
- <li>[erd]()</li>
- <li>[발표자료]</li>
- <li>[발표영상]</li>
+ <li>
+  
+  [api 명세서](https://www.notion.so/invite/1db6363a431618104ed33a8bd1729c63ac51f4ff)
+ </li>
+ <li>
+  
+  [erd]()</li>
+ <li>
+  
+  [발표자료]</li>
+ <li>
+  
+  [발표영상]</li>
 </ul>
 
