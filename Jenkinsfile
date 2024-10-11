@@ -98,9 +98,10 @@ pipeline {
                         "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server"
                     ]
 
+                    // 각 모듈에 대해 Docker 이미지 태그 및 푸시
                     for (module in modulePaths.keySet()) {
-                        def imageTag = "${repository}/${module}-${env.BUILD_ID}"  // 이미지 태그 형식 변경
-                        echo "Tagging and pushing Docker image for ${module}"
+                        def imageTag = "${repository}/${module}:${env.BUILD_ID}"  // BUILD_ID로 고유한 태그 설정
+                        echo "Tagging and pushing Docker image for ${module} with tag ${env.BUILD_ID}"
                         sh """
                         docker tag ${repository}/${module}:latest ${imageTag}
                         docker push ${imageTag}
