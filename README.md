@@ -520,7 +520,7 @@
 <img src="https://img.shields.io/badge/postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white"></br>
 
 <h2>📚시스템 아키텍처</h2>
-![시스템 아키텍처](https://github.com/user-attachments/assets/865f10a1-0939-47c0-995e-340a113e99f0)
+![아키텍쳐 도식화](https://github.com/user-attachments/assets/9ca73704-1723-41a7-82b7-f26e8d907905)
 
 <h2>📚개발기간</h2>
 2024.08.21.~2024.10.
