@@ -26017,10 +26017,10 @@
 <h2>시스템 아키텍처</h2>
 추가 예정
 
-<h2>개발기간</h2>
-#프로젝트 산출물(api 명세서, erd, 발표자료, 발표영상)
-[api 명세서](https://www.notion.so/invite/1db6363a431618104ed33a8bd1729c63ac51f4ff)
-[erd]()
-[발표자료]
-[발표영상]
+<h2>개발기간</h2></br>
+<h2>프로젝트 산출물</h2>
+### [api 명세서](https://www.notion.so/invite/1db6363a431618104ed33a8bd1729c63ac51f4ff)</br>
+[erd]()</br>
+[발표자료]</br>
+[발표영상]</br>
 
