@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .cors(corsCustomizer -> corsCustomizer
                         .configurationSource(request -> {
                             CorsConfiguration configuration = new CorsConfiguration();
-                            configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                            configuration.setAllowedOriginPatterns(Collections.singletonList("http://localhost:3000"));
                             configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                             configuration.setAllowCredentials(true);
                             configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "nickname"));
@@ -65,43 +65,20 @@ public class SecurityConfig {
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
 
                 // JWT 필터 추가
-                .addFilterBefore((exchange, chain) -> {
-                    String jwtToken = resolveToken(exchange);
-
-                    if (jwtToken != null && !jwtUtil.isExpired(jwtToken)) {
-                        String nickname = jwtUtil.getNickNameFromToken(jwtToken);
-                        UsernamePasswordAuthenticationToken authentication =
-                                new UsernamePasswordAuthenticationToken(nickname, null, null);
-
-                        // ReactiveSecurityContextHolder에 인증 정보 설정
-                        return chain.filter(exchange)
-                                .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication))
-                                .then(Mono.defer(() -> exchange.getResponse().setComplete()))
-                                .doOnSuccess(unused -> {
-                                    log.info("User '{}' has been authenticated and JWT tokens returned", nickname);
-                                })
-                                .doOnError(error -> {
-                                    log.error("Failed to authenticate user '{}': {}", nickname, error.getMessage());
-                                });
-                    }
-
-                    // JWT 토큰이 없거나 유효하지 않은 경우 필터 체인 계속 진행
-                    return chain.filter(exchange);
-                }, SecurityWebFiltersOrder.AUTHENTICATION)
-
-
-                // 로그인 필터 추가
-                .addFilterAt(new LoginFilter(customReactiveAuthenticationManager, successHandler, failureHandler), SecurityWebFiltersOrder.AUTHENTICATION)
-
-                // 로그아웃 필터 추가
-                .addFilterBefore(new LogoutFilter(jwtTokenService), SecurityWebFiltersOrder.AUTHENTICATION)
-
+                .addFilterBefore(new JwtFilter(jwtUtil), SecurityWebFiltersOrder.AUTHENTICATION)
                 // OAuth2 설정
                 .oauth2Login(oauth2 -> oauth2
                         .authenticationSuccessHandler(customSuccessHandler)
                 )
-                //reissue 필터
-                .addFilterBefore(new ReissueFilter(jwtUtil, jwtTokenService), SecurityWebFiltersOrder.AUTHORIZATION)
+                // 로그아웃 필터 추가
+                .addFilterBefore(new LogoutFilter(jwtTokenService), SecurityWebFiltersOrder.AUTHENTICATION)
+                // 로그인 필터 추가
+                .addFilterAt(new LoginFilter(customReactiveAuthenticationManager, successHandler, failureHandler), SecurityWebFiltersOrder.AUTHENTICATION)
+                // 닉네임 필터 추가 (JWT 필터 후에 실행)
+                .addFilterAfter(new nicknameFilter(jwtUtil), SecurityWebFiltersOrder.AUTHENTICATION)
+                // Reissue 필터 추가
+                .addFilterAfter(new ReissueFilter(jwtUtil, jwtTokenService), SecurityWebFiltersOrder.AUTHORIZATION)
+
 
 
                 // 권한 설정
