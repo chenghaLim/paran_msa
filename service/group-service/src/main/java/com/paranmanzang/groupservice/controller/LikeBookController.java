@@ -28,9 +28,7 @@ public class LikeBookController {
 
     //좋아요 마이페이지 확인
     @GetMapping("/list/{nickname}")
-    public ResponseEntity<?> findByNickname(@PathVariable String nickname, BindingResult bindingResult)
-            throws BindException {
-        if (bindingResult.hasErrors()) throw new BindException(bindingResult);
+    public ResponseEntity<?> findByNickname(@PathVariable String nickname){
         return ResponseEntity.ok(likeBookService.findAllByNickname(nickname));
     }
 }
