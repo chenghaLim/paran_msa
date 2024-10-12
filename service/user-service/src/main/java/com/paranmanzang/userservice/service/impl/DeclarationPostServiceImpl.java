@@ -27,7 +27,7 @@ public class DeclarationPostServiceImpl implements DeclarationPostService {
     public Object insert(DeclarationPostModel declarationPostModel) {
         try {
             if(declarationPostModel.getDeclarer().equals(declarationPostModel.getTarget())){
-                throw new IllegalArgumentException("신고자와 대상이 동일합니다.");
+                return false;
             }
             DeclarationPosts createPost = declarationPostRepository.save(DeclarationPosts.builder()
                     .title(declarationPostModel.getTitle())
@@ -37,7 +37,6 @@ public class DeclarationPostServiceImpl implements DeclarationPostService {
                     .build());
 
             return DeclarationPostModel.fromEntity(createPost);
-
         } catch (DataAccessException e) {
             System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
             return false;
@@ -50,9 +49,9 @@ public class DeclarationPostServiceImpl implements DeclarationPostService {
                 declarationPostRepository.deleteById(id);
                 return !declarationPostRepository.existsById(id);
             }
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글이 존재하지 않습니다.");
+            return false;
         }catch (EmptyResultDataAccessException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글이 존재하지 않습니다.", e);
+            return false;
         }
     }
 
@@ -80,13 +79,15 @@ public class DeclarationPostServiceImpl implements DeclarationPostService {
     @Override
     public Object findByPostId(Long postId) {
         try {
-            DeclarationPosts post = declarationPostRepository.findById(postId)
-                    .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+            DeclarationPosts post = declarationPostRepository.findById(postId).orElse(null);
+            if (post == null) {
+                return false;
+            }
             return post;
         } catch (DataAccessException e) {
             // 데이터 접근 예외 처리
             System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
-            throw new RuntimeException("게시글 상세 조회 중 오류 발생", e);
+            return false;
         }
     }
 

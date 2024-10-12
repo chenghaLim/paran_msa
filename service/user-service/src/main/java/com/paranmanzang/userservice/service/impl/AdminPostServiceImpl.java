@@ -62,9 +62,9 @@ public class AdminPostServiceImpl implements AdminPostService {
                 adminPostRepository.deleteById(id);
                 return !adminPostRepository.existsById(id);
             }
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글이 존재하지 않습니다.");
+            return false;
         } catch (EmptyResultDataAccessException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글이 존재하지 않습니다.", e);
+            return false;
         }
     }
 
@@ -92,7 +92,7 @@ public class AdminPostServiceImpl implements AdminPostService {
             return post;
         }
         else{
-            throw new ResourceNotFoundException("게시물이 존재하지 않습니다."); // 사용자 정의 예외
+            return null;
         }
     }
 
@@ -101,6 +101,6 @@ public class AdminPostServiceImpl implements AdminPostService {
     public Long findViewCountById(Long id) {
         return adminPostRepository.findById(id)
                 .map(AdminPosts::getViewCount)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글이 존재하지 않습니다."));
+                .orElse(null);
     }
 }
