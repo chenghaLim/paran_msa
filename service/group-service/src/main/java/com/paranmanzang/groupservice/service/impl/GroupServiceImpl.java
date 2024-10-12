@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,8 +26,8 @@ public class GroupServiceImpl implements GroupService {
         return groupRepository.findGroup(pageable);
     }
 
-    public Page<GroupResponseModel> groupsByUserNickname(String nickname, Pageable pageable) {
-        return groupRepository.findByNickname(nickname, pageable);
+    public List<GroupResponseModel> groupsByUserNickname(String nickname) {
+        return groupRepository.findByNickname(nickname);
     }
 
     public Boolean duplicatename(String groupName) {

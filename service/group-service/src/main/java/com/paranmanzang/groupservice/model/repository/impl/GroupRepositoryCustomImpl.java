@@ -40,7 +40,7 @@ public class GroupRepositoryCustomImpl implements GroupRepositoryCustom {
                                 group.detail,
                                 group.nickname,
                                 group.chatRoomId
-                                ))
+                        ))
                         .from(group)
                         .where(group.id.in(ids))
                         .fetch();
@@ -49,16 +49,14 @@ public class GroupRepositoryCustomImpl implements GroupRepositoryCustom {
     }
 
     @Override
-    public Page<GroupResponseModel> findByNickname(String nickname, Pageable pageable) {
+    public List<GroupResponseModel> findByNickname(String nickname) {
         var ids = queryFactory
                 .select(group.id)
                 .from(group)
                 .where(group.nickname.eq(nickname))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .fetch();
 
-        List<GroupResponseModel> books = ids.isEmpty() ? List.of() :
+        return ids.isEmpty() ? List.of() :
                 queryFactory
                         .select(Projections.constructor(
                                 GroupResponseModel.class,
@@ -75,7 +73,6 @@ public class GroupRepositoryCustomImpl implements GroupRepositoryCustom {
                         .where(group.id.in(ids))
                         .fetch();
 
-        return new PageImpl<>(books, pageable, ids.size());
     }
 
     @Override
