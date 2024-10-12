@@ -1,6 +1,5 @@
 package com.paranmanzang.groupservice.model.domain;
 
-import com.paranmanzang.groupservice.enums.GroupPostCategory;
 import com.paranmanzang.groupservice.model.entity.Group;
 import com.paranmanzang.groupservice.model.entity.GroupPost;
 import lombok.AllArgsConstructor;
@@ -17,12 +16,13 @@ public class GroupPostModel {
     private String title;
     private String content;
     private Long userGroupId;
-    private GroupPostCategory postCategory;
+    private String postCategory;
 
     public GroupPost toEntity() {
         return GroupPost.builder()
                 .content(title)
                 .title(content)
+                .postCategory(postCategory)
                 .group(new Group(userGroupId))
                 .build();
     }

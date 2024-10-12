@@ -1,6 +1,5 @@
 package com.paranmanzang.groupservice.model.repository.impl;
 
-import com.paranmanzang.groupservice.enums.GroupPostCategory;
 import com.paranmanzang.groupservice.model.domain.GroupPostResponseModel;
 import com.paranmanzang.groupservice.model.repository.GroupPostRepositoryCustom;
 import com.querydsl.core.types.Projections;
@@ -27,7 +26,7 @@ public class GroupPostRepositoryCustomImpl implements GroupPostRepositoryCustom 
                 .select(groupPost.id)
                 .from(groupPost)
                 .where(groupPost.group.id.eq(groupId)
-                        .and(groupPost.postCategory.eq(GroupPostCategory.fromCode(postCategory))))
+                        .and(groupPost.postCategory.eq(postCategory)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
