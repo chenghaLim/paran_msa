@@ -2,7 +2,12 @@
 <h2>📚로고 사진</h2>
 추가 예정
 <h2>📚프로젝트 소개</h2>
-추가 예정
+
+최근 독서 소모임과 같은 소규모 모임이 증가하면서, 해당 모임을 위한 공간 확보에 대한 수요도 함께 증가하고 있습니다.</br>
+많은 사람들이 자신들의 소모임을 운영하기 위해 카페나 도서관을 찾지만, 이런 공간들은 자주 예약이 차거나 대화가 제한되는 문제점이 있습니다. 반면, 상업용으로 운영되는 공간들은 소모임을 위한 최적화된 예약 시스템이 부족한 경우가 많아 사용자들에게 불편을 주고 있습니다.</br>
+이런 상황에서 독서 소모임 공간 대여 서비스 Paranmanzang은 소모임 주최자와 공간 대여 판매자를 연결하여 사용자가 간편하게 공간을 찾고 예약할 수 있는 플랫폼을 제공합니다. 또한, 소모임 구성원들이 채팅 기능을 통해 소통함으로써 모임 준비와 진행이 더욱 원활하게 이루어집니다.</br>
+
+
 <h2>📚팀 소개</h2>
 
 <div align="center">
@@ -520,8 +525,9 @@
 <img src="https://img.shields.io/badge/postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white"></br>
 
 <h2>📚시스템 아키텍처</h2>
-<img width="863" alt="image" src="https://user-images.githubusercontent.com/60145951/162572357-a22b3d6f-9100-4dd5-8e68-4a2267de1e49.png](https://github.com/user-attachments/assets/9ca73704-1723-41a7-82b7-f26e8d907905">
 
+![paran-아키텍처](https://github.com/user-attachments/assets/aa7551f0-ef0d-4a5d-a8ae-70d19a54e9c7)
+<!--나중에 지피티로 돌려서 좀 예쁘게 수정....-->
 <h2>📚개발기간</h2>
 2024.08.21.~2024.10.
 
