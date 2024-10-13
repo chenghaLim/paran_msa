@@ -541,7 +541,7 @@
  </li>
  <li>
   
-  [erd]()</li>
+  [erd](https://www.notion.so/ERD-11e4a940b4848071a262d0581befa07f)</li>
  <li>
   
   [개발환경]()</li>
