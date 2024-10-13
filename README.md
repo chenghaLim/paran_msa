@@ -1,6 +1,9 @@
 <h1>📚독서 소모임 공간 대여 서비스 Paranmanzang입니다.📚</h1>
 
-<img src="https://github.com/user-attachments/assets/2b740bf6-e09b-4e56-8c3b-1dcc223dd33f" width="300"/>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/2b740bf6-e09b-4e56-8c3b-1dcc223dd33f" width="500"/>
+</div>
+
 
 <h2>📚프로젝트 소개</h2>
 
