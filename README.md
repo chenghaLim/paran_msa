@@ -1,12 +1,16 @@
 <h1>📚독서 소모임 공간 대여 서비스 Paranmanzang입니다.📚</h1>
-<h2>📚로고 사진</h2>
-추가 예정
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/2b740bf6-e09b-4e56-8c3b-1dcc223dd33f" width="500"/>
+</div>
+
+
 <h2>📚프로젝트 소개</h2>
 
 최근 독서 소모임과 같은 소규모 모임이 증가하면서, 해당 모임을 위한 공간 확보에 대한 수요도 함께 증가하고 있습니다.</br>
 많은 사람들이 자신들의 소모임을 운영하기 위해 카페나 도서관을 찾지만, 이런 공간들은 자주 예약이 차거나 대화가 제한되는 문제점이 있습니다. 반면, 상업용으로 운영되는 공간들은 소모임을 위한 최적화된 예약 시스템이 부족한 경우가 많아 사용자들에게 불편을 주고 있습니다.</br>
 이런 상황에서 독서 소모임 공간 대여 서비스 Paranmanzang은 소모임 주최자와 공간 대여 판매자를 연결하여 사용자가 간편하게 공간을 찾고 예약할 수 있는 플랫폼을 제공합니다. 또한, 소모임 구성원들이 채팅 기능을 통해 소통함으로써 모임 준비와 진행이 더욱 원활하게 이루어집니다.</br>
-
+[www.paranmanzang.com](http://www.paranmanzang.com)</br>
 
 <h2>📚팀 소개</h2>
 
@@ -526,7 +530,8 @@
 
 <h2>📚시스템 아키텍처</h2>
 
-![paran-아키텍처](https://github.com/user-attachments/assets/aa7551f0-ef0d-4a5d-a8ae-70d19a54e9c7)
+![파란만장 아키텍쳐](https://github.com/user-attachments/assets/c4ed55a7-f752-4dbe-9c69-cae1bbc30a6f)
+
 <!--나중에 지피티로 돌려서 좀 예쁘게 수정....-->
 <h2>📚개발기간</h2>
 2024.08.21.~2024.10.
@@ -536,19 +541,19 @@
 <ul style="list-style-type:circle;">
  <li>
   
-  [api 명세서](https://www.notion.so/invite/1db6363a431618104ed33a8bd1729c63ac51f4ff)
+  [api 명세서](https://www.notion.so/REST-API-11e4a940b48480d5ac99ef3f726bc0c3)
  </li>
  <li>
   
-  [erd]()</li>
+  [erd](https://www.notion.so/ERD-11e4a940b4848071a262d0581befa07f)</li>
  <li>
   
-  [개발환경]()</li>
+  [개발환경](https://www.notion.so/11e4a940b48480688ac3fcce8025d49b)</li>
  <li>
      
-  [발표자료]()</li>
+  [발표자료](https://github.com/paranmanzang/paran_msa/blob/master/paranmanzang%20final_rev1.pptx)</li>
  <li>
   
-  [발표영상]()</li>
+  [발표영상](https://www.youtube.com/)</li>
 </ul>
 
