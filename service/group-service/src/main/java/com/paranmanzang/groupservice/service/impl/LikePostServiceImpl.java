@@ -1,21 +1,28 @@
-package com.paranmanzang.userservice.service.impl;
+package com.paranmanzang.groupservice.service.impl;
 
 
+import com.paranmanzang.groupservice.model.domain.GroupPostResponseModel;
+import com.paranmanzang.groupservice.model.domain.LikePostModel;
+import com.paranmanzang.groupservice.model.entity.LikePosts;
+import com.paranmanzang.groupservice.model.repository.GroupPostRepository;
+import com.paranmanzang.groupservice.model.repository.LikePostRepository;
+import com.paranmanzang.groupservice.service.LikePostService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class LikePostServiceImpl implements LikePostService {
     private final LikePostRepository likePostRepository;
+    private final GroupPostRepository groupPostRepository;
 
-    public LikePostServiceImpl(LikePostRepository likePostRepository) {
-        this.likePostRepository = likePostRepository;
-    }
+
     @Override
-    public List<LikePostModel> findAllByNickname(String userNickname) {
+    public List<GroupPostResponseModel> findAllByNickname(String userNickname) {
         return likePostRepository.findLikePostByNickname(userNickname);
     }
     @Override
@@ -31,7 +38,8 @@ public class LikePostServiceImpl implements LikePostService {
             LikePosts likePosts = new LikePosts();
             likePosts.setPostId(postId);
             likePosts.setNickname(nickname);
-            return LikePostModel.fromEntity(likePostRepository.save(likePosts));
+            likePostRepository.save(likePosts);
+            return groupPostRepository.findByPostId(postId);
         } catch (DataAccessException e) {
             // 데이터베이스 접근 예외 처리
             System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
@@ -59,37 +67,4 @@ public class LikePostServiceImpl implements LikePostService {
             return false;
         }
     }
-
-/*    @Override
-    public boolean removeLikeById(Long id) {
-        try {
-            if (!likePostRepository.existsById(id)) {
-                throw new IllegalArgumentException("해당 좋아요 정보가 존재하지 않습니다.");
-            }
-            likePostRepository.deleteById(id);
-            return !likePostRepository.existsById(id);
-        } catch (DataAccessException e) {
-            // 데이터베이스 접근 예외 처리
-            System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
-            return false;
-        } catch (IllegalArgumentException e) {
-            // 비즈니스 로직 예외 처리
-            System.err.println("비즈니스 로직 오류 발생: " + e.getMessage());
-            return false;
-        }
-    }
-    @Override
-    public LikePostModel existsByNicknameAndPostId(String nickname, Long postId) {
-        try {
-            LikePosts likePosts = likePostRepository.findByUserNicknameAndPostId(nickname, postId);
-            if (likePosts != null) {
-                return new LikePostModel(likePosts.getId(), likePosts.getPostId(), likePosts.getUser().getId());
-            }
-            return null;
-        } catch (DataAccessException e) {
-            // 데이터베이스 접근 예외 처리
-            System.err.println("데이터베이스 접근 중 오류 발생: " + e.getMessage());
-            return null;
-        }
-    }*/
 }
