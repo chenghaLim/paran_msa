@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 import static com.paranmanzang.groupservice.model.entity.QGroup.group;
+import static com.paranmanzang.groupservice.model.entity.QJoining.joining;
 
 
 @RequiredArgsConstructor
@@ -53,7 +54,8 @@ public class GroupRepositoryCustomImpl implements GroupRepositoryCustom {
         var ids = queryFactory
                 .select(group.id)
                 .from(group)
-                .where(group.nickname.eq(nickname))
+                .join(group.joinings, joining)
+                .where(joining.nickname.eq(nickname).and(joining.enabled.eq(true)))
                 .fetch();
 
         return ids.isEmpty() ? List.of() :
