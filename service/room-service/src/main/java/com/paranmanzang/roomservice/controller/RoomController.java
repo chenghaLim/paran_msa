@@ -66,6 +66,12 @@ public class RoomController {
         return ResponseEntity.ok(roomService.findByEnabled(pageable));
     }
 
+    @GetMapping("/like/{nickname}")
+    @Operation(summary = "좋아요한 공간 조회", description = "nickname인 유저가 좋아요한 공간정보를 조회합니다.")
+    public ResponseEntity<?> findByLikeRoom(@PathVariable String nickname){
+        return ResponseEntity.ok(roomService.findByLikeRoom(nickname));
+    }
+
     @PutMapping("/confirm/{id}")
     @Operation(summary = "공간 승인", description = "공간 등록이 승인되어 정보가 수정됩니다.")
     public ResponseEntity<?> confirm(@PathVariable() Long id) {
