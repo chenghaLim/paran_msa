@@ -115,7 +115,8 @@ public class SecurityConfig {
                         .pathMatchers("/api/rooms/{id}").hasAuthority(Role.ROLE_SELLER.getCode())
                         .pathMatchers("/api/rooms/user").hasAuthority(Role.ROLE_SELLER.getCode())
                         .pathMatchers("/api/rooms/confirm/{id}").hasAuthority(Role.ROLE_ADMIN.getCode())
-                        .pathMatchers("/api/rooms/enabled").permitAll()
+                        .pathMatchers("/api/rooms/enabled", "/api/rooms/enabled-all").permitAll()
+
 
                         .pathMatchers("/api/rooms/reviews/room/{roomId}").permitAll()
 

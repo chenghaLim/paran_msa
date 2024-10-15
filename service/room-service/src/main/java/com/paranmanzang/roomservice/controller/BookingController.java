@@ -12,6 +12,8 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "02. Booking")
@@ -41,6 +43,11 @@ public class BookingController {
         return ResponseEntity.ok(bookingService.delete(id));
     }
 
+    @GetMapping("/group")
+    @Operation(summary = "소모임 예약 조회", description = "해당 소모임에 대한 모든 예약정보를 조회합니다")
+    public ResponseEntity<?> findByGroups(@RequestParam("groupIds") List<Long> groupIds, Pageable pageable) {
+        return ResponseEntity.ok(bookingService.findByGroups(groupIds, pageable));
+    }
     @GetMapping("/group/{groupId}")
     @Operation(summary = "소모임 예약 조회", description = "해당 소모임에 대한 모든 예약정보를 조회합니다")
     public ResponseEntity<?> findByGroup(@PathVariable("groupId") long groupId, Pageable pageable) {
