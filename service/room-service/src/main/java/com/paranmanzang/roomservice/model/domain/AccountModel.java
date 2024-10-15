@@ -21,7 +21,7 @@ public class AccountModel {
     private int usePoint;
     private boolean canceled;
     private String reason;
-    private LocalDateTime createdAt;
+    private LocalDateTime createAt;
 
     private Long groupId;
     private Long roomId;

@@ -46,7 +46,7 @@ public class AccountRepositoryImpl implements AccountCustomRepository {
                                 account.usePoint.as("usePoint"),
                                 account.canceled.as("canceled"),
                                 account.reason.as("reason"),
-                                account.createAt.as("createdAt"),
+                                account.createAt.as("createAt"),
                                 account.groupId.as("groupId"),
                                 account.roomId.as("roomId"),
                                 account.bookingId.as("bookingId")
@@ -78,7 +78,7 @@ public class AccountRepositoryImpl implements AccountCustomRepository {
                                 account.usePoint.as("usePoint"),
                                 account.canceled.as("canceled"),
                                 account.reason.as("reason"),
-                                account.createAt.as("createdAt"),
+                                account.createAt.as("createAt"),
                                 account.groupId.as("groupId"),
                                 account.roomId.as("roomId"),
                                 account.bookingId.as("bookingId")
