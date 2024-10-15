@@ -9,10 +9,12 @@ import com.paranmanzang.roomservice.service.BookingService;
 import com.paranmanzang.roomservice.util.Converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -52,12 +54,20 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Page<?> findByGroup(long groupId, Pageable pageable) {
-        return bookingRepository.findByGroupId(groupId, pageable);
+        Page<Booking> bookings = bookingRepository.findByGroupId(groupId, pageable);
+
+        return new PageImpl<>(bookings.stream()
+                .map(converter::convertToBookingModel)
+                .toList(), pageable, bookings.getTotalElements());
     }
+
 
     @Override
     public Page<?> findByRoom(long roomId, Pageable pageable) {
-        return bookingRepository.findByRoomId(roomId, pageable);
+        Page<Booking> bookings = bookingRepository.findByRoomId(roomId, pageable);
+        return new PageImpl<>(bookings.stream()
+                .map(converter::convertToBookingModel)
+                .toList(), pageable, bookings.getTotalElements());
     }
 
     @Override
@@ -65,6 +75,12 @@ public class BookingServiceImpl implements BookingService {
         return bookingRepository.findById(id).map(booking ->
                 new BookingModel(booking.getId(), booking.isEnabled(), booking.getDate(), booking.getTimes().stream().map(Time::getTime).toList(), booking.getRoom().getId(), booking.getGroupId())
         ).orElse(null);
+    }
+
+    @Override
+    public Page<?> findByGroups(List<Long> groupIds, Pageable pageable) {
+        Page<Booking> bookings = bookingRepository.findByGroupIds(groupIds, pageable);
+        return new PageImpl<>(bookings.stream().map(converter::convertToBookingModel).toList(), pageable, bookings.getTotalElements());
     }
 
 

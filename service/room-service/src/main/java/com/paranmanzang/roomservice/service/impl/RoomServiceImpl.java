@@ -124,6 +124,11 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public List<?> findAllByEnabled() {
+        return roomRepository.findAll().stream().filter(Room::isEnabled).map(converter::convertToRoomModel).toList();
+    }
+
+    @Override
     public RoomModel findById(Long id) {
         return roomRepository.findById(id).map(converter::convertToRoomModel).orElse(null);
     }
