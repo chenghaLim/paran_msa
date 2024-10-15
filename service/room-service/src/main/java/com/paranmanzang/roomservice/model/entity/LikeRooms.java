@@ -1,4 +1,4 @@
-package com.paranmanzang.userservice.model.entity;
+package com.paranmanzang.roomservice.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

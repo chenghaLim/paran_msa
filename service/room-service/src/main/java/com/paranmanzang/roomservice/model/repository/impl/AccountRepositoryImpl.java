@@ -44,10 +44,13 @@ public class AccountRepositoryImpl implements AccountCustomRepository {
                                 account.amount.as("amount"),
                                 account.amountTaxFree.as("amountTaxFree"),
                                 account.usePoint.as("usePoint"),
+                                account.canceled.as("canceled"),
                                 account.reason.as("reason"),
+                                account.createAt.as("createdAt"),
                                 account.groupId.as("groupId"),
                                 account.roomId.as("roomId"),
                                 account.bookingId.as("bookingId")
+
                         )
                 )
                 .from(account)
@@ -73,7 +76,9 @@ public class AccountRepositoryImpl implements AccountCustomRepository {
                                 account.amount.as("amount"),
                                 account.amountTaxFree.as("amountTaxFree"),
                                 account.usePoint.as("usePoint"),
+                                account.canceled.as("canceled"),
                                 account.reason.as("reason"),
+                                account.createAt.as("createdAt"),
                                 account.groupId.as("groupId"),
                                 account.roomId.as("roomId"),
                                 account.bookingId.as("bookingId")
