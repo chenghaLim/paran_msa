@@ -25,4 +25,6 @@ public interface RoomService {
     RoomWTimeModel findByIdWithTime(Long id);
 
     List<?> findByLikeRoom(String nickname);
+
+    List<?> findAllByEnabled();
 }
