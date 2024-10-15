@@ -35,7 +35,7 @@ public class LikeBooksRepositoryCustomImpl implements LikeBooksRepositoryCustom 
                                 book.like_books.size().as("likeBookCount")
                         ))
                         .from(book)
-                        .leftJoin(likeBooks.book, book)
+                        .leftJoin(book.like_books, likeBooks)
                         .where(book.id.in(ids))
                         .fetch();
     }
