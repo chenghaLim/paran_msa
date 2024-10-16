@@ -28,17 +28,20 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingModel insert(BookingModel model) {
-        return Optional.of(bookingRepository.save(Booking.builder()
+       return Optional.of(bookingRepository.save(Booking.builder()
                         .date(model.getDate())
                         .groupId(model.getGroupId())
+                        .createAt(LocalDateTime.now())
                         .room(roomRepository.findById(model.getRoomId()).get())
                         .build()))
-                .map(saveBooking -> {
-                    model.setId(saveBooking.getId());
+                .map(booking -> {
+                    model.setId(booking.getId());
                     timeService.saveBooking(model);
-                    return saveBooking;
-                }).map(converter::convertToBookingModel).get();
-
+                    return booking;
+                }).map(converter::convertToBookingModel).map(bookingModel -> {
+                   if(bookingModel.getUsingTime().isEmpty()) bookingModel.setUsingTime(timeService.findByBooking(bookingModel.getId()));
+                   return bookingModel;
+               }).get();
     }
 
     @Override
