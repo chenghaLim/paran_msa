@@ -102,10 +102,10 @@ public class SecurityConfig {
 
                         .pathMatchers(HttpMethod.POST, "/api/rooms/addresses").hasAuthority(Role.ROLE_SELLER.getCode())
                         .pathMatchers(HttpMethod.PUT, "/api/rooms/addresses").hasAuthority(Role.ROLE_SELLER.getCode())
-                        .pathMatchers(HttpMethod.GET, "/api/rooms/addresses").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/api/rooms/addresses", "/api/rooms/addresses/{query}").permitAll()
                         .pathMatchers("/api/rooms/addresses/{id}").hasAuthority(Role.ROLE_SELLER.getCode())
                         .pathMatchers("/api/rooms/addresses/search").permitAll()
-
+                        .pathMatchers("/api/rooms/bookings").hasAuthority(Role.ROLE_USER.getCode())
                         .pathMatchers(HttpMethod.PUT, "/api/rooms/bookings/{id}").hasAuthority(Role.ROLE_SELLER.getCode())
                         .pathMatchers(HttpMethod.DELETE, "/api/rooms/bookings/{id}").hasAuthority(Role.ROLE_SELLER.getCode())
                         .pathMatchers("/api/rooms/bookings/room/{roomId}").hasAuthority(Role.ROLE_SELLER.getCode())
