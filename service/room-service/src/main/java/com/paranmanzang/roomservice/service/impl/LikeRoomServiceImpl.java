@@ -32,6 +32,7 @@ public class LikeRoomServiceImpl implements LikeRoomService {
     public Object insert(LikeRoomModel likeRoomModel) {
         String nickname = likeRoomModel.getNickname();
         Long roomId = likeRoomModel.getRoomId();
+        System.out.println("서비스");
 
         try {
             if (likeRoomRepository.existsByNicknameAndRoomId(nickname, roomId)) {

@@ -86,6 +86,13 @@ public class BookingServiceImpl implements BookingService {
         return new PageImpl<>(bookings.stream().map(converter::convertToBookingModel).toList(), pageable, bookings.getTotalElements());
     }
 
+    @Override
+    public Page<?> findByRooms(String nickname, Pageable pageable) {
+        Page<Booking> bookings= bookingRepository.findByRoomIds(roomRepository.findAllByNickname(nickname), pageable);
+
+        return new PageImpl<>(bookings.stream().map(converter::convertToBookingModel).toList(), pageable, bookings.getTotalElements());
+    }
+
 
     @Override
     public BookingModel updateState(Long id) {

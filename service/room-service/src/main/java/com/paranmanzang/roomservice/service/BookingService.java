@@ -18,4 +18,6 @@ public interface BookingService {
     BookingModel findOne(long id);
 
     Page<?> findByGroups(List<Long> groupIds, Pageable pageable);
+
+    Page<?> findByRooms(String nickname, Pageable pageable);
 }

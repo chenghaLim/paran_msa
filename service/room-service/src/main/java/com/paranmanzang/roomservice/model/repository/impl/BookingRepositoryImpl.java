@@ -51,7 +51,21 @@ public class BookingRepositoryImpl implements BookingCustomRepository {
                 .where(booking.id.in(
                         jpaQueryFactory.select(booking.id)
                                 .from(booking)
-                                .where(booking.room.id.in(groupIds))
+                                .where(booking.groupId.in(groupIds))
+                                .limit(pageable.getPageSize())
+                                .offset(pageable.getOffset())
+                                .fetch()
+                )).fetch();
+        return new PageImpl<>( result, pageable, result.size());
+    }
+
+    @Override
+    public Page<Booking> findByRoomIds(List<Long> roomIds, Pageable pageable) {
+        var result= jpaQueryFactory.selectFrom(booking)
+                .where(booking.id.in(
+                        jpaQueryFactory.select(booking.id)
+                                .from(booking)
+                                .where(booking.room.id.in(roomIds))
                                 .limit(pageable.getPageSize())
                                 .offset(pageable.getOffset())
                                 .fetch()
