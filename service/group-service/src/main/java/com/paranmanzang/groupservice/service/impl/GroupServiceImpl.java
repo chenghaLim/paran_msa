@@ -91,7 +91,7 @@ public class GroupServiceImpl implements GroupService {
         return groupRepository.findById(groupId)
                 .map(group -> {
                     group.setChatRoomId(roomId);
-                    return GroupResponseModel.fromEntity(groupRepository.save(groupRepository.save(group)));
+                    return GroupResponseModel.fromEntity(groupRepository.save(group));
                 });
     }
 
