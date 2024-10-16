@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class RoomRepositoryImpl implements RoomCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
@@ -70,7 +72,15 @@ public class RoomRepositoryImpl implements RoomCustomRepository {
                                 .offset(pageable.getOffset())
                                 .fetch()
                 ))
-                .fetch().stream().filter(RoomModel::isEnabled).toList();
+                .fetch().stream().toList();
         return new PageImpl<>( result, pageable, result.size());
+    }
+
+    @Override
+    public List<Long> findAllByNickname(String nickname) {
+        return jpaQueryFactory.select(room.id)
+                .from(room)
+                .where(room.nickname.eq(nickname))
+                .fetch();
     }
 }
