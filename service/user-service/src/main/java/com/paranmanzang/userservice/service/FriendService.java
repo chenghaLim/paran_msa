@@ -9,12 +9,22 @@ import java.util.List;
 @Service
 public interface FriendService {
 
+    //친구 요청 전송
+    Object insertRequest(FriendModel friend);
+
+    //친구 요청 수락 여부
+    boolean state(FriendModel friendmodel, Boolean state );
     //친구 추가
-    Object insert(FriendModel friendModel);
+    Object update(FriendModel friendModel);
 
     //친구 삭제
     boolean remove(Long id);
 
     //친구 리스트 조회
     List<FriendModel> findAllByNickname(String nickname) ;
+
+    //친구 요청 리스트 조회
+    List<FriendModel> findAllRequestByNickname(String nickname);
+
+
 }
