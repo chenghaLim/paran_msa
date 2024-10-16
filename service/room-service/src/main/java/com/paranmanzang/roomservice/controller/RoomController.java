@@ -48,8 +48,13 @@ public class RoomController {
         return ResponseEntity.ok(roomService.delete(id));
     }
 
+    @GetMapping("/user/{nickname}")
+    @Operation(summary = "등록자의 모든 공간 조회", description = "nickname인 유저가 등록한 모든 공간정보를 조회합니다.")
+    public ResponseEntity<?> findAllByUser(@PathVariable("nickname") String nickname) {
+        return ResponseEntity.ok(roomService.findAllByNickname(nickname));
+    }
     @GetMapping("/user")
-    @Operation(summary = "등록자의 공간 조회", description = "nickname인 유저가 등록한 모든 공간정보를 조회합니다.")
+    @Operation(summary = "등록자의 공간 조회", description = "nickname인 유저가 등록한  공간정보를 조회합니다. pagination")
     public ResponseEntity<?> findByUser(@RequestParam String nickname, Pageable pageable) {
         return ResponseEntity.ok(roomService.findByNickname(nickname, pageable));
     }

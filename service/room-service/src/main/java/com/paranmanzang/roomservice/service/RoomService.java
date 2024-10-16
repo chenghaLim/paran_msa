@@ -27,4 +27,6 @@ public interface RoomService {
     List<?> findByLikeRoom(String nickname);
 
     List<?> findAllByEnabled();
+
+    List<?> findAllByNickname(String nickname);
 }
