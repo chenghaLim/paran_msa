@@ -96,7 +96,7 @@ public class SecurityConfig {
                         // 관리자 권한이 필요한 경로
                         .pathMatchers("/api/groups/groups/able", "/api/groups/groups/enable", "/api/groups/groups/enable-list").hasAuthority(Role.ROLE_ADMIN.getCode())
                         .pathMatchers("/api/rooms/confirm/{id}").hasAnyAuthority(Role.ROLE_ADMIN.getCode(), Role.ROLE_SELLER.getCode())
-                        .pathMatchers(HttpMethod.DELETE, "/api/users/aboard/{id}", "/api/users/depost/{id}").hasAuthority(Role.ROLE_ADMIN.getCode())
+                        .pathMatchers(HttpMethod.DELETE, "/api/users/aboard/{id}").hasAuthority(Role.ROLE_ADMIN.getCode())
                         .pathMatchers(HttpMethod.PUT, "/api/users/aboard/{id}", "/api/users/updateRole").hasAuthority(Role.ROLE_ADMIN.getCode())
                         .pathMatchers(HttpMethod.POST, "/api/users/aboard").hasAuthority(Role.ROLE_ADMIN.getCode())
                         .pathMatchers(HttpMethod.GET, "/api/users/aboard/{nickname}", "/api/users/depost", "/api/users/findAllByNickname").hasAuthority(Role.ROLE_ADMIN.getCode())
