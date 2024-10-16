@@ -29,7 +29,6 @@ public class FriendRepositoryImpl implements FriendRepositoryCustom {
                 .from(friends)
                 .where(friends.requestUser.eq(nickname)
                         .or(friends.responseUser.eq(nickname))
-                        .and(friends.response_at.isNotNull())
                 )
                 .fetch();
 
@@ -55,7 +54,6 @@ public class FriendRepositoryImpl implements FriendRepositoryCustom {
                 .from(friends)
                 .where(friends.requestUser.eq(nickname)
                         .or(friends.responseUser.eq(nickname))
-                        .and(friends.response_at.isNull())
                 )
                 .fetch();
 
