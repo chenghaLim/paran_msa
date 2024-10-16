@@ -37,7 +37,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     public Object addGroup(GroupModel groupModel) {
         return Optional.ofNullable(groupModel)
-                .filter(group -> !duplicatename(group.getGroupname()))
+                .filter(group -> !duplicatename(group.getName()))
                 .map(group -> {
                     var savedGroup = groupRepository.save(group.toEntity());
 
