@@ -11,4 +11,6 @@ public interface BookingCustomRepository {
     Page<Booking> findByRoomId( Long id, Pageable pageable);
 
     Page<Booking> findByGroupIds(List<Long> groupIds, Pageable pageable);
+
+    Page<Booking> findByRoomIds(List<Long> roomIds, Pageable pageable);
 }

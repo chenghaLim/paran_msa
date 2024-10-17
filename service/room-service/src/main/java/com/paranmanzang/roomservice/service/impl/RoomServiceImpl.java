@@ -129,6 +129,11 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public List<?> findAllByNickname(String nickname) {
+        return roomRepository.findAllByNickname(nickname).stream().map(converter::convertToRoomModel).toList();
+    }
+
+    @Override
     public RoomModel findById(Long id) {
         return roomRepository.findById(id).map(converter::convertToRoomModel).orElse(null);
     }

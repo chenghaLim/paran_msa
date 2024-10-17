@@ -2,6 +2,7 @@ package com.paranmanzang.roomservice.service.impl;
 
 import com.paranmanzang.roomservice.model.domain.BookingModel;
 import com.paranmanzang.roomservice.model.entity.Booking;
+import com.paranmanzang.roomservice.model.entity.Room;
 import com.paranmanzang.roomservice.model.entity.Time;
 import com.paranmanzang.roomservice.model.repository.BookingRepository;
 import com.paranmanzang.roomservice.model.repository.RoomRepository;
@@ -83,6 +84,13 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Page<?> findByGroups(List<Long> groupIds, Pageable pageable) {
         Page<Booking> bookings = bookingRepository.findByGroupIds(groupIds, pageable);
+        return new PageImpl<>(bookings.stream().map(converter::convertToBookingModel).toList(), pageable, bookings.getTotalElements());
+    }
+
+    @Override
+    public Page<?> findByRooms(String nickname, Pageable pageable) {
+        Page<Booking> bookings= bookingRepository.findByRoomIds(roomRepository.findAllByNickname(nickname).stream().map(Room::getId).toList(), pageable);
+
         return new PageImpl<>(bookings.stream().map(converter::convertToBookingModel).toList(), pageable, bookings.getTotalElements());
     }
 

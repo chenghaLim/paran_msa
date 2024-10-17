@@ -40,7 +40,8 @@ dependencies {
 
 	//  Eureka 클라이언트
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	// MongoDB Reactive 및 WebFlux
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'

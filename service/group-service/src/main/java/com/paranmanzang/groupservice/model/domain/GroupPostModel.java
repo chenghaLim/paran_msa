@@ -17,6 +17,7 @@ public class GroupPostModel {
     private String content;
     private Long userGroupId;
     private String postCategory;
+    private String nickname;
 
     public GroupPost toEntity() {
         return GroupPost.builder()
@@ -24,6 +25,7 @@ public class GroupPostModel {
                 .title(content)
                 .postCategory(postCategory)
                 .group(new Group(userGroupId))
+                .nickname(nickname)
                 .build();
     }
 }

@@ -54,6 +54,11 @@ public class BookingController {
         return ResponseEntity.ok(bookingService.findByGroup(groupId, pageable));
     }
 
+    @GetMapping("/room")
+    @Operation(summary = "공간 예약 조회", description = "해당 공간에 대한 모든 예약정보를 조회합니다.")
+    public ResponseEntity<?> findByRoom(@RequestParam("nickname") String nickname, Pageable pageable) {
+        return ResponseEntity.ok(bookingService.findByRooms(nickname, pageable));
+    }
     @GetMapping("/room/{roomId}")
     @Operation(summary = "공간 예약 조회", description = "해당 공간에 대한 모든 예약정보를 조회합니다.")
     public ResponseEntity<?> findByRoom(@PathVariable("roomId") long roomId, Pageable pageable) {

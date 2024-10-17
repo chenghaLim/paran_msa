@@ -37,8 +37,8 @@ public class FriendRepositoryImpl implements FriendRepositoryCustom {
                         .select(Projections.constructor(
                                 FriendModel.class,
                                 friends.id,
-                                friends.requestUser,
                                 friends.responseUser,
+                                friends.requestUser,
                                 friends.request_at,
                                 friends.response_at))
                         .from(friends)
@@ -62,8 +62,8 @@ public class FriendRepositoryImpl implements FriendRepositoryCustom {
                         .select(Projections.constructor(
                                 FriendModel.class,
                                 friends.id,
-                                friends.requestUser,
                                 friends.responseUser,
+                                friends.requestUser,
                                 friends.request_at,
                                 friends.response_at))
                         .from(friends)
