@@ -24,21 +24,36 @@ public class UserController {
     public Mono<ServerResponse> insert(ServerRequest request) {
         return request.bodyToMono(RegisterModel.class)
                 .doOnNext(userModel -> {
+                    // 수신한 모델 로그
+                    System.out.println("Received RegisterModel: " + userModel);
+
                     var errors = new BeanPropertyBindingResult(userModel, RegisterModel.class.getName());
                     validator.validate(userModel, errors);
 
                     if (errors.hasErrors()) {
-                        throw new IllegalArgumentException(errors.getAllErrors().get(0).getDefaultMessage());
+                        String errorMessage = errors.getAllErrors().get(0).getDefaultMessage();
+                        System.out.println("Validation error: " + errorMessage); // 검증 오류 로그
+                        throw new IllegalArgumentException(errorMessage);
                     }
                 })
-                .flatMap(model -> userService.insert(model)
-                        .flatMap(result -> ServerResponse.ok().bodyValue(true)))
-                .onErrorResume(IllegalArgumentException.class, e ->
-                        ServerResponse.ok().bodyValue(false))
-                .onErrorResume(e ->
-                        ServerResponse.ok().bodyValue(false));
-
+                .flatMap(model -> {
+                    System.out.println("Inserting user: " + model); // 사용자 삽입 로그
+                    return userService.insert(model)
+                            .then(Mono.defer(() -> {
+                                System.out.println("User inserted successfully."); // 성공 로그
+                                return ServerResponse.ok().bodyValue(true);
+                            }));
+                })
+                .onErrorResume(IllegalArgumentException.class, e -> {
+                    System.out.println("Error during insertion: " + e.getMessage()); // 오류 로그
+                    return ServerResponse.ok().bodyValue(false);
+                })
+                .onErrorResume(e -> {
+                    System.out.println("Unexpected error: " + e.getMessage()); // 예기치 않은 오류 로그
+                    return ServerResponse.ok().bodyValue(false);
+                });
     }
+
     public Mono<ServerResponse> remove(ServerRequest request) {
         String nickname = request.queryParam("nickname")
                 .orElseThrow(() -> new IllegalArgumentException("닉네임이 필요합니다"));
@@ -173,6 +188,7 @@ public class UserController {
                         ServerResponse.ok().bodyValue(false));
     }
 
+    //닉네임 필요합니다.
     public Mono<ServerResponse> updateRole(ServerRequest request) {
         String nickname = request.queryParam("nickname")
                 .orElseThrow(() -> new IllegalArgumentException("닉네임이 필요합니다"));
