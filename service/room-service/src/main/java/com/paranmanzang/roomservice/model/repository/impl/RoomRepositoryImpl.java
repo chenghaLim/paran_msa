@@ -2,6 +2,7 @@ package com.paranmanzang.roomservice.model.repository.impl;
 
 import com.paranmanzang.roomservice.model.domain.RoomModel;
 import com.paranmanzang.roomservice.model.entity.QRoom;
+import com.paranmanzang.roomservice.model.entity.Room;
 import com.paranmanzang.roomservice.model.repository.RoomCustomRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -77,9 +78,8 @@ public class RoomRepositoryImpl implements RoomCustomRepository {
     }
 
     @Override
-    public List<Long> findAllByNickname(String nickname) {
-        return jpaQueryFactory.select(room.id)
-                .from(room)
+    public List<Room> findAllByNickname(String nickname) {
+        return jpaQueryFactory.selectFrom(room)
                 .where(room.nickname.eq(nickname))
                 .fetch();
     }
