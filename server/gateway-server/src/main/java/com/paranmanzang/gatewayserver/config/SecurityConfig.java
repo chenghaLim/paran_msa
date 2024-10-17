@@ -9,15 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -63,7 +60,7 @@ public class SecurityConfig {
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
 
                 // JWT 필터 추가
-                .addFilterBefore(new JwtFilter(jwtUtil), SecurityWebFiltersOrder.AUTHENTICATION)
+                .addFilterBefore(new JwtFilter(jwtUtil, jwtTokenService), SecurityWebFiltersOrder.AUTHENTICATION)
                 // OAuth2 설정
                 .oauth2Login(oauth2 -> oauth2
                         .authenticationSuccessHandler(customSuccessHandler)
@@ -81,7 +78,7 @@ public class SecurityConfig {
                 // 권한 설정
                 .authorizeExchange(auth -> auth
                         // 인증이 필요 없는 경로 (모든 사용자 접근 가능)
-                        .pathMatchers("/login", "/oauth2/**", "/api/users", "/api/users/checkPassword", "/api/users/checkNickname", "/api/users/checkRole", "/api/users/updateDeclaration", "/api/users/updateLogoutUserTime").permitAll()
+                        .pathMatchers("/login", "/oauth2/**", "/api/users", "/api/users/checkPassword", "/api/users/checkNickname", "/api/users/checkRole", "/api/users/updateDeclaration", "/api/users/updateLogoutUserTime", "/reissue", "/logout").permitAll()  // /login과 /oauth2/** 경로는 인증 없이 접근 가능
                         .pathMatchers("/api/comments/{postId}").permitAll()
                         .pathMatchers("/api/rooms/enabled", "/api/rooms/enabled-all").permitAll()
                         .pathMatchers(HttpMethod.GET, "/api/files/*").permitAll()
@@ -95,12 +92,13 @@ public class SecurityConfig {
                         .pathMatchers("/api/rooms/reviews/room/{roomId}").permitAll()
                         .pathMatchers("/api/rooms/times/{roomId}").permitAll()
                         .pathMatchers(HttpMethod.GET, "/api/users/aboard", "/api/users/aboard/viewCounts/{id}", "/api/users/aboard/details/{id}").permitAll()
+                        .pathMatchers("/api/users/updateRole").permitAll()
 
                         // 관리자 권한이 필요한 경로
                         .pathMatchers("/api/groups/groups/able", "/api/groups/groups/enable", "/api/groups/groups/enable-list").hasAuthority(Role.ROLE_ADMIN.getCode())
-                        .pathMatchers("/api/rooms/confirm/{id}").hasAnyAuthority(Role.ROLE_ADMIN.getCode(), Role.ROLE_SELLER.getCode())
+                        .pathMatchers("/api/rooms/confirm/{id}", "/api/rooms/enabled","/api/rooms/disabled" ).hasAuthority(Role.ROLE_ADMIN.getCode())
                         .pathMatchers(HttpMethod.DELETE, "/api/users/aboard/{id}").hasAuthority(Role.ROLE_ADMIN.getCode())
-                        .pathMatchers(HttpMethod.PUT, "/api/users/aboard/{id}", "/api/users/updateRole").hasAuthority(Role.ROLE_ADMIN.getCode())
+                        .pathMatchers(HttpMethod.PUT, "/api/users/aboard/{id}").hasAuthority(Role.ROLE_ADMIN.getCode())
                         .pathMatchers(HttpMethod.POST, "/api/users/aboard").hasAuthority(Role.ROLE_ADMIN.getCode())
                         .pathMatchers(HttpMethod.GET, "/api/users/aboard/{nickname}", "/api/users/depost", "/api/users/findAllByNickname").hasAuthority(Role.ROLE_ADMIN.getCode())
 
@@ -110,11 +108,11 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.PUT, "/api/rooms/addresses").hasAuthority(Role.ROLE_SELLER.getCode())
                         .pathMatchers("/api/rooms/addresses/{id}").hasAuthority(Role.ROLE_SELLER.getCode())
                         .pathMatchers(HttpMethod.PUT, "/api/rooms/bookings/{id}").hasAuthority(Role.ROLE_SELLER.getCode())
-                        .pathMatchers("/api/rooms/bookings/room/{roomId}").hasAuthority(Role.ROLE_SELLER.getCode())
+                        .pathMatchers("/api/rooms/bookings/room/*" ).hasAuthority(Role.ROLE_SELLER.getCode())
                         .pathMatchers(HttpMethod.POST, "/api/rooms").hasAuthority(Role.ROLE_SELLER.getCode())
                         .pathMatchers(HttpMethod.PUT, "/api/rooms").hasAuthority(Role.ROLE_SELLER.getCode())
-                        .pathMatchers("/api/rooms/{id}").hasAuthority(Role.ROLE_SELLER.getCode())
-                        .pathMatchers("/api/rooms/user").hasAuthority(Role.ROLE_SELLER.getCode())
+                        .pathMatchers(HttpMethod.DELETE, "/api/rooms/{id}").hasAnyAuthority(Role.ROLE_SELLER.getCode(), Role.ROLE_ADMIN.getCode())
+                        .pathMatchers("/api/rooms/user/**").hasAuthority(Role.ROLE_SELLER.getCode())
 
                         // 그 외 모든 경로는 인증 필요
                         .anyExchange().authenticated()

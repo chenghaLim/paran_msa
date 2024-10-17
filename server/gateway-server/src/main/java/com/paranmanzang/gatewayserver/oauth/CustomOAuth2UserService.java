@@ -82,7 +82,7 @@ public class CustomOAuth2UserService extends DefaultReactiveOAuth2UserService {
     }
 
     public Mono<String> createRandomNickname() {
-        String randomNickname = "paran " + RandomStringUtils.randomAlphanumeric(10);
+        String randomNickname = "paran-" + RandomStringUtils.randomAlphanumeric(10);
 
         return userRepository.existsByNickname(randomNickname)
                 .flatMap(exists -> {
