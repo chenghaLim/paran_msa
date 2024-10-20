@@ -29,6 +29,7 @@ public class GroupPostRepositoryCustomImpl implements GroupPostRepositoryCustom 
                         groupPost.group.id.eq(groupId)
                                 .and(groupPost.postCategory.eq(postCategory))
                 )
+                .orderBy(groupPost.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

@@ -50,7 +50,7 @@ public class ReissueFilter implements WebFilter {
                         DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(("Token reissue error: " + e.getMessage()).getBytes());
                         exchange.getResponse().writeWith(Mono.just(buffer)).subscribe(); // 오류 메시지 전송
                     })
-                    .then(chain.filter(exchange)); // 다음 필터로 넘어감
+                    .then(exchange.getResponse().setComplete()); //끝
         }
         return chain.filter(exchange);
     }
@@ -72,24 +72,24 @@ public class ReissueFilter implements WebFilter {
                         log.info("userRoleFromR : {}", userRoleFromR);
                         log.info("nicknameFromR : {}", nicknameFromR);
 
-                        jwtTokenService.deleteToken(refreshToken);
+                        //jwtTokenService.deleteToken(refreshToken);
 
                         // 새로운 Access/Refresh 토큰 생성
                         String newAccessToken = jwtUtil.createAccessJwt(usernameFromR, userRoleFromR, nicknameFromR, 600000L);
-                        String newRefreshToken = jwtUtil.createRefreshJwt(usernameFromR, userRoleFromR, nicknameFromR, 86400000L);
+                        //String newRefreshToken = jwtUtil.createRefreshJwt(usernameFromR, userRoleFromR, nicknameFromR, 86400000L);
 
                         log.info("newAccessToken : {}", newAccessToken);
-                        log.info("newRefreshToken : {}", newRefreshToken);
+                        //log.info("newRefreshToken : {}", newRefreshToken);
 
-                        exchange.getResponse().getHeaders().add(HttpHeaders.AUTHORIZATION, "Bearer " + newAccessToken);
-                        exchange.getResponse().addCookie(createCookie("refresh", newRefreshToken));
+                        exchange.getResponse().getHeaders().set(HttpHeaders.AUTHORIZATION, "Bearer " + newAccessToken);
+                        //exchange.getResponse().addCookie(createCookie("refresh", newRefreshToken));
+                        exchange.getResponse().getHeaders().add("nickname", nicknameFromR);
 
-                        // 새로운 Refresh 토큰 저장
+                        // 새로운 Access 토큰 저장
                         return jwtUtil.getAuthentication(newAccessToken)
                                 .flatMap(authentication -> {
                                     // Authentication 객체를 활용하여 추가 로직을 수행합니다.
-                                    return jwtTokenService.storeTokenM(newRefreshToken, nicknameFromR, 86400000L)
-                                            .then(Mono.just(ResponseEntity.ok("Token reissued successfully")))
+                                    return Mono.just(ResponseEntity.ok("Access token reissued successfully"))
                                             .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
                                 })
                                 .switchIfEmpty(Mono.error(new RuntimeException("유효한 사용자 정보가 없습니다.")));
@@ -99,11 +99,11 @@ public class ReissueFilter implements WebFilter {
                 });
     }
 
-    private ResponseCookie createCookie(String key, String value) {
+/*    private ResponseCookie createCookie(String key, String value) {
         return ResponseCookie.from(key, value)
                 .maxAge(86400)
                 .path("/")
                 .httpOnly(false)
                 .build();
-    }
+    }*/
 }
