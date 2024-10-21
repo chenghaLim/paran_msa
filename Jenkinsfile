@@ -100,22 +100,12 @@ pipeline {
                     ]
 
                     // 각 모듈에 대해 Docker 이미지 태그 및 푸시
-                    for (module in modulePaths.keySet()) {
-                        def imageTag = "${repository}:${module}"  // 고유한 태그 설정
-
-                        // 기존 이미지 삭제
-                        echo "Removing existing Docker image for ${module} with tag ${imageTag}"
-                        sh """
-                                             docker rmi ${imageTag} || true
-                                             """
-
-                        // Docker 이미지 태그 및 푸시
-                        echo "Tagging and pushing Docker image for ${module} with tag ${env.BUILD_ID}"
-                        sh """
-                                             docker tag ${repository}:${module} ${imageTag}
-                                             docker push ${imageTag}
-                                             """
-                    }
+                   for (module in modulePaths.keySet()) {
+                                           echo "Building Docker image for ${module}"
+                                           sh """
+                                               docker build --no-cache -t ${REPOSITORY}:${module}-${env.BUILD_ID} ${modulePaths[module]}
+                                           """
+                                       }
                 }
             }
         }
