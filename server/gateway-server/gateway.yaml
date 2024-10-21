@@ -19,6 +19,15 @@ spec:
           image: cheonghalim/paranmanzang:gateway
           ports:
             - containerPort: 8000
+          env:
+            - name: REDIS_HOST
+              value: "223.130.133.234"  # Redis 서버 IP
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_PASSWORD
+              value: "password"
+            - name: MONGO_URI
+              value: "mongodb://root:1234@223.130.141.189:27017/parandb?authSource=admin"
 ---
 apiVersion: v1
 kind: Service
