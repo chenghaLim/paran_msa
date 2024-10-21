@@ -112,14 +112,13 @@ pipeline {
             }
         }
 
-
        stage('Deploy to Kubernetes') {
            steps {
                script {
                    def modulePaths = [
-                       "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server/gateway.yaml",
                        "config": "/var/lib/jenkins/workspace/paranmanzang/server/config-server/config.yaml",
                        "eureka": "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server/eureka.yaml",
+                       "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server/gateway.yaml",
                        "user": "/var/lib/jenkins/workspace/paranmanzang/service/user-service/user.yaml",
                        "group": "/var/lib/jenkins/workspace/paranmanzang/service/group-service/group.yaml",
                        "chat": "/var/lib/jenkins/workspace/paranmanzang/service/chat-service/chat.yaml",
@@ -128,28 +127,50 @@ pipeline {
                        "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service/comment.yaml"
                    ]
 
+                   // Config Server 배포
+                   stage('Deploy Config Server') {
+                       def yamlPath = modulePaths["config"]
+                       echo "Applying Kubernetes deployment for Config Server using YAML file: ${yamlPath}"
+                       sh "kubectl apply -f ${yamlPath}"
+                       echo "Checking rollout status for deployment config"
+                       sh "kubectl rollout status deployment/config"
+                   }
+
+                   // Eureka Server 배포
+                   stage('Deploy Eureka Server') {
+                       def yamlPath = modulePaths["eureka"]
+                       echo "Applying Kubernetes deployment for Eureka Server using YAML file: ${yamlPath}"
+                       sh "kubectl apply -f ${yamlPath}"
+                       echo "Checking rollout status for deployment eureka"
+                       sh "kubectl rollout status deployment/eureka"
+                   }
+
+                   // Gateway Server 배포
+                   stage('Deploy Gateway Server') {
+                       def yamlPath = modulePaths["gateway"]
+                       echo "Applying Kubernetes deployment for Gateway Server using YAML file: ${yamlPath}"
+                       sh "kubectl apply -f ${yamlPath}"
+                       echo "Checking rollout status for deployment gateway"
+                       sh "kubectl rollout status deployment/gateway"
+                   }
+
+                   // 나머지 서비스 배포
                    for (module in modulePaths.keySet()) {
-                       def yamlPath = modulePaths[module]
-                       echo "Applying Kubernetes deployment for ${module} using YAML file: ${yamlPath}"
+                       if (module != "config" && module != "eureka" && module != "gateway") {
+                           stage("Deploy ${module.capitalize()} Service") {
+                               def yamlPath = modulePaths[module]
+                               echo "Applying Kubernetes deployment for ${module} using YAML file: ${yamlPath}"
+                               sh "kubectl apply -f ${yamlPath}"
 
-                       // YAML 파일을 사용하여 배포 적용
-                       sh """
-                       kubectl apply -f ${yamlPath}
-                       """
-
-                       // YAML 파일에서 정의된 실제 배포 이름을 사용하여 롤아웃 상태 확인
-                       // 예: 배포 이름이 module 이름과 동일하다고 가정
-                       def deploymentName = module
-                       echo "Checking rollout status for deployment ${deploymentName}"
-
-                       // 배포 롤아웃 상태 확인
-                       sh """
-                       kubectl rollout status deployment/${deploymentName}
-                       """
+                               echo "Checking rollout status for deployment ${module}"
+                               sh "kubectl rollout status deployment/${module}"
+                           }
+                       }
                    }
                }
            }
        }
+
 
 
     }
