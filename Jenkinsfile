@@ -106,7 +106,7 @@ pipeline {
                         // 기존 이미지 삭제
                         echo "Removing existing Docker image for ${module} with tag ${imageTag}"
                         sh """
-                                             docker rmi ${imageTag}
+                                             docker rmi ${imageTag} || true
                                              """
 
                         // Docker 이미지 태그 및 푸시
