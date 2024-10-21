@@ -103,7 +103,7 @@ pipeline {
                    for (module in modulePaths.keySet()) {
                                            echo "Building Docker image for ${module}"
                                            sh """
-                                               docker build --no-cache -t ${REPOSITORY}:${module}-${env.BUILD_ID} ${modulePaths[module]}
+                                               docker build --no-cache -t ${REPOSITORY}:${module} ${modulePaths[module]}
                                            """
                                        }
                 }
