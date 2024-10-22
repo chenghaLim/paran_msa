@@ -103,7 +103,7 @@ pipeline {
                    for (module in modulePaths.keySet()) {
                                            echo "Building Docker image for ${module}"
                                            sh """
-                                               docker build --no-cache -t ${REPOSITORY}:${module} ${modulePaths[module]}
+                                               docker push ${REPOSITORY}:${module} ${modulePaths[module]}
                                            """
                                        }
                 }
@@ -117,9 +117,9 @@ pipeline {
 //                             "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server/config.yaml",
                             "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server/eureka.yaml",
                             "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server/gateway.yaml",
+                            "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service/chat.yaml",
                             "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service/user.yaml",
                             "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service/group.yaml",
-                            "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service/chat.yaml",
                             "file"   : "/var/lib/jenkins/workspace/paranmanzang/service/file-service/file.yaml",
                             "room"   : "/var/lib/jenkins/workspace/paranmanzang/service/room-service/room.yaml",
                             "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service/comment.yaml"
