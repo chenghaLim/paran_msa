@@ -63,13 +63,14 @@ pipeline {
             steps {
                 script {
                     def modulePaths = [
+                     "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
                             "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
                             "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
-                            "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
-                            "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
-                            "file"   : "/var/lib/jenkins/workspace/paranmanzang/service/file-service",
-                            "room"   : "/var/lib/jenkins/workspace/paranmanzang/service/room-service",
-                            "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service",
+//                             "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
+//                             "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
+//                             "file"   : "/var/lib/jenkins/workspace/paranmanzang/service/file-service",
+//                             "room"   : "/var/lib/jenkins/workspace/paranmanzang/service/room-service",
+//                             "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service",
                             "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server"
                     ]
 
@@ -87,13 +88,14 @@ pipeline {
             steps {
                 script {
                     def modulePaths = [
+                    "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
                             "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
                             "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
-                            "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
-                            "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
-                            "file"   : "/var/lib/jenkins/workspace/paranmanzang/service/file-service",
-                            "room"   : "/var/lib/jenkins/workspace/paranmanzang/service/room-service",
-                            "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service",
+//                             "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
+//                             "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
+//                             "file"   : "/var/lib/jenkins/workspace/paranmanzang/service/file-service",
+//                             "room"   : "/var/lib/jenkins/workspace/paranmanzang/service/room-service",
+//                             "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service",
                             "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server"
                     ]
 
@@ -110,15 +112,15 @@ pipeline {
             steps {
                 script {
                     def modulePaths = [
-//                             "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server/config.yaml",
+                            "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server/config.yaml",
 "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server/eureka.yaml",
 "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server/gateway.yaml",
-"chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service/chat.yaml",
+// "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service/chat.yaml",
 "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service/user.yaml",
-"group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service/group.yaml",
-"file"   : "/var/lib/jenkins/workspace/paranmanzang/service/file-service/file.yaml",
-"room"   : "/var/lib/jenkins/workspace/paranmanzang/service/room-service/room.yaml",
-"comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service/comment.yaml"
+// "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service/group.yaml",
+// "file"   : "/var/lib/jenkins/workspace/paranmanzang/service/file-service/file.yaml",
+// "room"   : "/var/lib/jenkins/workspace/paranmanzang/service/room-service/room.yaml",
+// "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service/comment.yaml"
                     ]
 
 //                     // Config Server 배포

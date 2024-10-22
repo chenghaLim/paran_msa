@@ -19,6 +19,13 @@ spec:
           image: cheonghalim/paranmanzang:gateway
           ports:
             - containerPort: 8000
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "default"
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: "http://223.130.128.187:8888"
+            - name: SPRING_APPLICATION_NAME
+              value: "gateway"
 ---
 apiVersion: v1
 kind: Service
