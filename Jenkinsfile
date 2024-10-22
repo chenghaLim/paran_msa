@@ -65,7 +65,7 @@ pipeline {
                     def modulePaths = [
                      "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
                             "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
-                            "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
+//                             "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
 //                             "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
 //                             "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
 //                             "file"   : "/var/lib/jenkins/workspace/paranmanzang/service/file-service",
@@ -90,7 +90,7 @@ pipeline {
                     def modulePaths = [
                     "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
                             "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
-                            "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
+//                             "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
 //                             "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
 //                             "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
 //                             "file"   : "/var/lib/jenkins/workspace/paranmanzang/service/file-service",
