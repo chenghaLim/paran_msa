@@ -63,7 +63,7 @@ pipeline {
             steps {
                 script {
                     def modulePaths = [
-                     "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
+//                      "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
                             "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
 //                             "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
 //                             "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
@@ -88,7 +88,7 @@ pipeline {
             steps {
                 script {
                     def modulePaths = [
-                    "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
+//                     "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
                             "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
 //                             "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
 //                             "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
@@ -112,11 +112,11 @@ pipeline {
             steps {
                 script {
                     def modulePaths = [
-                            "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server/config.yaml",
+//                             "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server/config.yaml",
 "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server/eureka.yaml",
 "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server/gateway.yaml",
 // "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service/chat.yaml",
-"user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service/user.yaml",
+// "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service/user.yaml",
 // "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service/group.yaml",
 // "file"   : "/var/lib/jenkins/workspace/paranmanzang/service/file-service/file.yaml",
 // "room"   : "/var/lib/jenkins/workspace/paranmanzang/service/room-service/room.yaml",
@@ -127,27 +127,21 @@ pipeline {
                     stage('Deploy Config Server') {
                         def yamlPath = modulePaths["config"]
                         echo "Applying Kubernetes deployment for Config Server using YAML file: ${yamlPath}"
-                        sh "kubectl apply -f ${yamlPath}"
-                        echo "Checking rollout status for deployment config"
-                        sh "kubectl rollout status deployment/config"
+                        sh "kubectl replace -f ${yamlPath}"
                     }
 
                     // Eureka Server 배포
                     stage('Deploy Eureka Server') {
                         def yamlPath = modulePaths["eureka"]
                         echo "Applying Kubernetes deployment for Eureka Server using YAML file: ${yamlPath}"
-                        sh "kubectl apply -f ${yamlPath}"
-                        echo "Checking rollout status for deployment eureka"
-                        sh "kubectl rollout status deployment/eureka"
+                        sh "kubectl replace -f ${yamlPath}"
                     }
 
                     // Gateway Server 배포
                     stage('Deploy Gateway Server') {
                         def yamlPath = modulePaths["gateway"]
                         echo "Applying Kubernetes deployment for Gateway Server using YAML file: ${yamlPath}"
-                        sh "kubectl apply -f ${yamlPath}"
-                        echo "Checking rollout status for deployment gateway"
-                        sh "kubectl rollout status deployment/gateway"
+                        sh "kubectl replace -f ${yamlPath}"
                     }
 
                     // 나머지 서비스 배포
@@ -156,10 +150,7 @@ pipeline {
 //                             stage("Deploy ${module.capitalize()} Service") {
 //                                 def yamlPath = modulePaths[module]
 //                                 echo "Applying Kubernetes deployment for ${module} using YAML file: ${yamlPath}"
-//                                 sh "kubectl apply -f ${yamlPath}"
-//
-//                                 echo "Checking rollout status for deployment ${module}"
-//                                 sh "kubectl rollout status deployment/${module}"
+//                                 sh "kubectl replace -f ${yamlPath}"
 //                             }
 //                         }
 //                     }
