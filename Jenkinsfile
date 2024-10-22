@@ -123,14 +123,14 @@ pipeline {
 // "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service/comment.yaml"
                     ]
 
-//                     // Config Server 배포
-//                     stage('Deploy Config Server') {
-//                         def yamlPath = modulePaths["config"]
-//                         echo "Applying Kubernetes deployment for Config Server using YAML file: ${yamlPath}"
-//                         sh "kubectl apply -f ${yamlPath}"
-//                         echo "Checking rollout status for deployment config"
-//                         sh "kubectl rollout status deployment/config"
-//                     }
+                    // Config Server 배포
+                    stage('Deploy Config Server') {
+                        def yamlPath = modulePaths["config"]
+                        echo "Applying Kubernetes deployment for Config Server using YAML file: ${yamlPath}"
+                        sh "kubectl apply -f ${yamlPath}"
+                        echo "Checking rollout status for deployment config"
+                        sh "kubectl rollout status deployment/config"
+                    }
 
                     // Eureka Server 배포
                     stage('Deploy Eureka Server') {
@@ -151,18 +151,18 @@ pipeline {
                     }
 
                     // 나머지 서비스 배포
-                    for (module in modulePaths.keySet()) {
-                        if (module != "config" && module != "eureka" && module != "gateway") {
-                            stage("Deploy ${module.capitalize()} Service") {
-                                def yamlPath = modulePaths[module]
-                                echo "Applying Kubernetes deployment for ${module} using YAML file: ${yamlPath}"
-                                sh "kubectl apply -f ${yamlPath}"
-
-                                echo "Checking rollout status for deployment ${module}"
-                                sh "kubectl rollout status deployment/${module}"
-                            }
-                        }
-                    }
+//                     for (module in modulePaths.keySet()) {
+//                         if (module != "config" && module != "eureka" && module != "gateway") {
+//                             stage("Deploy ${module.capitalize()} Service") {
+//                                 def yamlPath = modulePaths[module]
+//                                 echo "Applying Kubernetes deployment for ${module} using YAML file: ${yamlPath}"
+//                                 sh "kubectl apply -f ${yamlPath}"
+//
+//                                 echo "Checking rollout status for deployment ${module}"
+//                                 sh "kubectl rollout status deployment/${module}"
+//                             }
+//                         }
+//                     }
                 }
             }
         }
