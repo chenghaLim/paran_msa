@@ -59,56 +59,55 @@ pipeline {
                 '''
             }
         }
-        stage('Build Docker Images') {
-            steps {
-                script {
-                    def modulePaths = [
-//                             "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
-                            "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
-                            "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
-                            "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
-                            "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
-                            "file"   : "/var/lib/jenkins/workspace/paranmanzang/service/file-service",
-                            "room"   : "/var/lib/jenkins/workspace/paranmanzang/service/room-service",
-                            "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service",
-                            "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server"
-                    ]
+        stages {
+               stage('Build Docker Images') {
+                   steps {
+                       script {
+                           def modulePaths = [
+                               "eureka": "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
+                               "user"  : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
+                               "group" : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
+                               "chat"  : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
+                               "file"  : "/var/lib/jenkins/workspace/paranmanzang/service/file-service",
+                               "room"  : "/var/lib/jenkins/workspace/paranmanzang/service/room-service",
+                               "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service",
+                               "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server"
+                           ]
 
-                    for (module in modulePaths.keySet()) {
-                        echo "Building Docker image for ${module}"
-                        sh """
-                               docker build --no-cache -t ${repository}:${module} ${modulePaths[module]}
+                           for (module in modulePaths.keySet()) {
+                               echo "Building Docker image for ${module}"
+                               sh """
+                                   docker build --no-cache -t ${REPOSITORY}:${module} ${modulePaths[module]}
                                """
-                    }
-                }
-            }
-        }
+                           }
+                       }
+                   }
+               }
 
-        stage('Push to Docker Hub') {
-            steps {
-                script {
-                    def modulePaths = [
-//                             "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
-                            "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
-                            "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
-                            "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
-                            "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
-                            "file"   : "/var/lib/jenkins/workspace/paranmanzang/service/file-service",
-                            "room"   : "/var/lib/jenkins/workspace/paranmanzang/service/room-service",
-                            "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service",
-                            "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server"
-                    ]
+               stage('Push to Docker Hub') {
+                   steps {
+                       script {
+                           def modulePaths = [
+                               "eureka": "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
+                               "user"  : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
+                               "group" : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
+                               "chat"  : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
+                               "file"  : "/var/lib/jenkins/workspace/paranmanzang/service/file-service",
+                               "room"  : "/var/lib/jenkins/workspace/paranmanzang/service/room-service",
+                               "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service",
+                               "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server"
+                           ]
 
-                    // 각 모듈에 대해 Docker 이미지 태그 및 푸시
-                   for (module in modulePaths.keySet()) {
-                                           echo "Building Docker image for ${module}"
-                                           sh """
-                                               docker push ${REPOSITORY}:${module} ${modulePaths[module]}
-                                           """
-                                       }
-                }
-            }
-        }
+                           for (module in modulePaths.keySet()) {
+                               echo "Pushing Docker image for ${module} to Docker Hub"
+                               sh """
+                                   docker push ${REPOSITORY}:${module}
+                               """
+                           }
+                       }
+                   }
+               }
+           }
 
         stage('Deploy to Kubernetes') {
             steps {
