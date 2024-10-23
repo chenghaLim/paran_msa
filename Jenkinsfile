@@ -63,7 +63,7 @@ pipeline {
             steps {
                 script {
                     def modulePaths = [
-//                      "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
+                     "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
                             "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
 //                             "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
 //                             "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
@@ -88,7 +88,7 @@ pipeline {
             steps {
                 script {
                     def modulePaths = [
-//                     "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
+                    "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
                             "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
 //                             "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
 //                             "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
@@ -112,7 +112,7 @@ pipeline {
             steps {
                 script {
                     def modulePaths = [
-//                             "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server/config.yaml",
+                            "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server/config.yaml",
 "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server/eureka.yaml",
 "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server/gateway.yaml",
 // "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service/chat.yaml",
@@ -123,12 +123,12 @@ pipeline {
 // "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service/comment.yaml"
                     ]
 
-                    // Config Server 배포
-//                     stage('Deploy Config Server') {
-//                         def yamlPath = modulePaths["config"]
-//                         echo "Applying Kubernetes deployment for Config Server using YAML file: ${yamlPath}"
-//                         sh "kubectl replace -f ${yamlPath}"
-//                     }
+                    Config Server 배포
+                    stage('Deploy Config Server') {
+                        def yamlPath = modulePaths["config"]
+                        echo "Applying Kubernetes deployment for Config Server using YAML file: ${yamlPath}"
+                        sh "kubectl replace -f ${yamlPath}"
+                    }
 
                     // Eureka Server 배포
                     stage('Deploy Eureka Server') {
