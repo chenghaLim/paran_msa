@@ -63,8 +63,8 @@ pipeline {
             steps {
                 script {
                     def modulePaths = [
-                     "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
-                            "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
+//                      "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
+//                             "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
 //                             "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
 //                             "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
 //                             "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
@@ -88,8 +88,8 @@ pipeline {
             steps {
                 script {
                     def modulePaths = [
-                    "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
-                            "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
+//                     "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
+//                             "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
 //                             "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
 //                             "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
 //                             "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
@@ -112,8 +112,8 @@ pipeline {
             steps {
                 script {
                     def modulePaths = [
-                            "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server/config.yaml",
-"eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server/eureka.yaml",
+//                             "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server/config.yaml",
+// "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server/eureka.yaml",
 "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server/gateway.yaml",
 // "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service/chat.yaml",
 // "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service/user.yaml",
@@ -124,18 +124,18 @@ pipeline {
                     ]
 
 //                     Config Server 배포
-                    stage('Deploy Config Server') {
-                        def yamlPath = modulePaths["config"]
-                        echo "Applying Kubernetes deployment for Config Server using YAML file: ${yamlPath}"
-                        sh "kubectl replace -f ${yamlPath}"
-                    }
-
-                    // Eureka Server 배포
-                    stage('Deploy Eureka Server') {
-                        def yamlPath = modulePaths["eureka"]
-                        echo "Applying Kubernetes deployment for Eureka Server using YAML file: ${yamlPath}"
-                        sh "kubectl replace -f ${yamlPath}"
-                    }
+//                     stage('Deploy Config Server') {
+//                         def yamlPath = modulePaths["config"]
+//                         echo "Applying Kubernetes deployment for Config Server using YAML file: ${yamlPath}"
+//                         sh "kubectl replace -f ${yamlPath}"
+//                     }
+//
+//                     // Eureka Server 배포
+//                     stage('Deploy Eureka Server') {
+//                         def yamlPath = modulePaths["eureka"]
+//                         echo "Applying Kubernetes deployment for Eureka Server using YAML file: ${yamlPath}"
+//                         sh "kubectl replace -f ${yamlPath}"
+//                     }
 
 //                     Gateway Server 배포
                     stage('Deploy Gateway Server') {
@@ -157,6 +157,11 @@ pipeline {
                 }
             }
         }
+         stage('Cleanup') {
+                    steps {
+                        cleanWs()
+                    }
+                }
 
 
     }
