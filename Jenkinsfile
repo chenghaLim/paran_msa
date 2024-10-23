@@ -123,7 +123,7 @@ pipeline {
 // "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service/comment.yaml"
                     ]
 
-                    Config Server 배포
+//                     Config Server 배포
                     stage('Deploy Config Server') {
                         def yamlPath = modulePaths["config"]
                         echo "Applying Kubernetes deployment for Config Server using YAML file: ${yamlPath}"
@@ -134,7 +134,7 @@ pipeline {
                     stage('Deploy Eureka Server') {
                         def yamlPath = modulePaths["eureka"]
                         echo "Applying Kubernetes deployment for Eureka Server using YAML file: ${yamlPath}"
-                        sh "kubectl apply -f ${yamlPath}"
+                        sh "kubectl replace -f ${yamlPath}"
                     }
 
                     // Gateway Server 배포
