@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: eureka-server
   labels:
-    app: eureka
+    app: eureka-server
 spec:
   replicas: 1
   selector:
