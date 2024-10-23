@@ -22,6 +22,17 @@ spec:
               value: "prod"  # 활성화할 Spring 프로파일
             - name: SPRING_CLOUD_CONFIG_URI
               value: "http://config:8888"  # Config Server URL
+            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+              value: "true"
+            - name: EUREKA_CLIENT_FETCH_REGISTRY
+              value: "true"
+            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+              value: "http://eureka:8761/eureka"
+          command:
+            - "java"
+            - "-jar"
+            - "/app/gateway-server.jar"
+            - "--spring.config.import=configserver:http://config:8888"
           ports:
             - containerPort: 8000
 ---

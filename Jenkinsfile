@@ -114,7 +114,7 @@ pipeline {
                     def modulePaths = [
                             "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server/config.yaml",
 "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server/eureka.yaml",
-// "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server/gateway.yaml",
+"gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server/gateway.yaml",
 // "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service/chat.yaml",
 // "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service/user.yaml",
 // "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service/group.yaml",
@@ -137,12 +137,12 @@ pipeline {
                         sh "kubectl replace -f ${yamlPath}"
                     }
 
-                    // Gateway Server 배포
-//                     stage('Deploy Gateway Server') {
-//                         def yamlPath = modulePaths["gateway"]
-//                         echo "Applying Kubernetes deployment for Gateway Server using YAML file: ${yamlPath}"
-//                         sh "kubectl replace -f ${yamlPath}"
-//                     }
+//                     Gateway Server 배포
+                    stage('Deploy Gateway Server') {
+                        def yamlPath = modulePaths["gateway"]
+                        echo "Applying Kubernetes deployment for Gateway Server using YAML file: ${yamlPath}"
+                        sh "kubectl apply -f ${yamlPath}"
+                    }
 
                     // 나머지 서비스 배포
 //                     for (module in modulePaths.keySet()) {
