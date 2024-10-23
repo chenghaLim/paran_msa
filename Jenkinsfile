@@ -127,21 +127,21 @@ pipeline {
                     stage('Deploy Config Server') {
                         def yamlPath = modulePaths["config"]
                         echo "Applying Kubernetes deployment for Config Server using YAML file: ${yamlPath}"
-                        sh "kubectl replace -f ${yamlPath}"
+                        sh "kubectl apply -f ${yamlPath}"
                     }
 //
 //                     // Eureka Server 배포
                     stage('Deploy Eureka Server') {
                         def yamlPath = modulePaths["eureka"]
                         echo "Applying Kubernetes deployment for Eureka Server using YAML file: ${yamlPath}"
-                        sh "kubectl replace -f ${yamlPath}"
+                        sh "kubectl apply -f ${yamlPath}"
                     }
 
 //                     Gateway Server 배포
                     stage('Deploy Gateway Server') {
                         def yamlPath = modulePaths["gateway"]
                         echo "Applying Kubernetes deployment for Gateway Server using YAML file: ${yamlPath}"
-                        sh "kubectl replace -f ${yamlPath}"
+                        sh "kubectl apply -f ${yamlPath}"
                     }
 
                     // 나머지 서비스 배포
