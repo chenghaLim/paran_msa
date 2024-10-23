@@ -28,11 +28,6 @@ spec:
               value: "true"
             - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
               value: "http://eureka:8761/eureka"
-          command:
-            - "java"
-            - "-jar"
-            - "/app/gateway-server.jar"
-            - "--spring.config.import=configserver:http://config:8888"
           ports:
             - containerPort: 8000
 ---
