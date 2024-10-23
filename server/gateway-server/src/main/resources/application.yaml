@@ -5,5 +5,5 @@ spring:
     active: prod
   cloud:
     config:
-      uri: http://223.130.128.187:8888
+      uri: http://config:8888
       fail-fast: true
