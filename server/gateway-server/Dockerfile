@@ -8,4 +8,5 @@ COPY build/resources/main/application.yaml /config/application.yaml
 EXPOSE 8000
 
 # 애플리케이션 실행 명령
-ENTRYPOINT ["java", "-Dspring.config.location=/config/application.yaml", "-jar", "/app/gateway-server.jar"]
+ENTRYPOINT ["java", "-Dspring.config.import=configserver:http://config:8888", "-jar", "/app/gateway-server.jar"]
+
