@@ -141,7 +141,7 @@ pipeline {
                     stage('Deploy Gateway Server') {
                         def yamlPath = modulePaths["gateway"]
                         echo "Applying Kubernetes deployment for Gateway Server using YAML file: ${yamlPath}"
-                        sh "kubectl apply -f ${yamlPath}"
+                        sh "kubectl replace -f ${yamlPath}"
                     }
 
                     // 나머지 서비스 배포
@@ -157,11 +157,6 @@ pipeline {
                 }
             }
         }
-         stage('Cleanup') {
-                    steps {
-                        cleanWs()
-                    }
-                }
 
 
     }
