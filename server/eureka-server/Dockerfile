@@ -1,9 +1,11 @@
 FROM openjdk:17-slim
-VOLUME /tmp
-ARG JAR_FILE=build/libs/eureka-server.jar
-ARG CONFIG_PATH=src/main/resources/application.yml
 
-COPY ${JAR_FILE} /app/eureka-server.jar
-COPY ${CONFIG_PATH} /eureka/application.yml
+# JAR 및 YAML 파일 복사
+COPY build/libs/eureka-server-0.0.1-SNAPSHOT.jar /app/eureka-server.jar
+COPY build/resources/main/application.yaml /eureka/application.yaml
+
+# 포트 노출
 EXPOSE 8888
-ENTRYPOINT ["java", "-Dspring.config.location=/eureka/application.yml", "-jar", "/app/eureka-server.jar"]
+
+# 애플리케이션 실행 시 YAML 파일을 설정 경로로 사용
+ENTRYPOINT ["java", "-Dspring.eureka.location=/eureka/application.yaml", "-jar", "/app/eureka-server.jar"]
