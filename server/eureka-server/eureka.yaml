@@ -15,7 +15,7 @@ spec:
         app: eureka-server
     spec:
       containers:
-        - name: eureka
+        - name: eureka-server
           image: cheonghalim/paranmanzang:eureka
           ports:
             - containerPort: 8761
