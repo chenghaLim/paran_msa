@@ -13,9 +13,6 @@ java {
 	}
 }
 
-jar {
-	enabled = false
-}
 bootJar {
 	enabled = true
 }
@@ -25,7 +22,7 @@ repositories {
 }
 
 ext {
-	set('springCloudVersion', "2023.0.2")
+	set('springCloudVersion', "2023.0.2")  // Spring Cloud BOM 버전
 }
 
 dependencyManagement {
@@ -42,7 +39,7 @@ dependencies {
 
 	// Spring Cloud dependencies
 	implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
-	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-client'
+	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-client' // Kubernetes client
 	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j'
 	implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
 
@@ -51,21 +48,21 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 
-	// Actuator and monitoring
+	// Actuator and Prometheus monitoring
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'io.micrometer:micrometer-registry-prometheus:1.13.4'
 
-	// SpringDoc for API documentation
+	// API Documentation with SpringDoc
 	implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.6.0'
 
 	// Spring Cloud Config
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 
-	// Redis and MongoDB support
+	// Redis and MongoDB reactive support
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
 
-	// Lombok for boilerplate code reduction
+	// Lombok for code reduction
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
