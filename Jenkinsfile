@@ -64,7 +64,7 @@ pipeline {
                 script {
                     def modulePaths = [
 //                      "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
-//                             "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
+                            "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
 //                             "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
 //                             "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
 //                             "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
@@ -89,7 +89,7 @@ pipeline {
                 script {
                     def modulePaths = [
 //                     "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
-//                             "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
+                            "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
 //                             "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
 //                             "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
 //                             "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
@@ -113,7 +113,7 @@ pipeline {
                 script {
                     def modulePaths = [
 //                             "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server/config.yaml",
-// "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server/eureka.yaml",
+"eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server/eureka.yaml",
 "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server/gateway.yaml",
 // "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service/chat.yaml",
 // "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service/user.yaml",
@@ -131,11 +131,11 @@ pipeline {
 //                     }
 //
 //                     // Eureka Server 배포
-//                     stage('Deploy Eureka Server') {
-//                         def yamlPath = modulePaths["eureka"]
-//                         echo "Applying Kubernetes deployment for Eureka Server using YAML file: ${yamlPath}"
-//                         sh "kubectl replace -f ${yamlPath}"
-//                     }
+                    stage('Deploy Eureka Server') {
+                        def yamlPath = modulePaths["eureka"]
+                        echo "Applying Kubernetes deployment for Eureka Server using YAML file: ${yamlPath}"
+                        sh "kubectl apply -f ${yamlPath}"
+                    }
 
 //                     Gateway Server 배포
                     stage('Deploy Gateway Server') {
