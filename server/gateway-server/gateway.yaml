@@ -26,8 +26,6 @@ spec:
             value: "true"
           - name: EUREKA_CLIENT_FETCH_REGISTRY
             value: "true"
-          - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-            value: "http://default-eureka-server-6219b-100105199-770b06c1bd85.kr.lb.naverncp.com:87/eureka"  # 외부 Eureka 도메인
           ports:
             - containerPort: 8000
 ---
