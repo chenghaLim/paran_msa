@@ -19,19 +19,6 @@ spec:
           image: cheonghalim/paranmanzang:config
           ports:
             - containerPort: 8888
-          volumeMounts:
-            - name: ssh-key-volume
-              mountPath: /root/.ssh  # SSH 키 파일이 위치할 경로
-              readOnly: true
-      volumes:
-        - name: ssh-key-volume
-          secret:
-            secretName: ssh-key-secret
-            items:
-              - key: id_rsa
-                path: id_rsa
-              - key: id_rsa.pub
-                path: id_rsa.pub
 ---
 apiVersion: v1
 kind: Service
