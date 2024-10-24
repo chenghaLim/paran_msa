@@ -5,6 +5,13 @@ spring:
     active: prod
   config:
     import: http://config-server.default.svc.cluster.local:8888
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true  # 서비스 호출 실패 시 재시도 기능 활성화
+    discovery:
+      locator:
+        enabled: true  # Eureka와 연동된 서비스 자동 탐지
 
 eureka:
   client:
