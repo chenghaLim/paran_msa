@@ -24,7 +24,7 @@ repositories {
 	mavenCentral()
 }
 
-ext{
+ext {
 	set('springCloudVersion', "2023.0.2")
 }
 
@@ -35,47 +35,47 @@ dependencyManagement {
 }
 
 dependencies {
-	// spring boot
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '3.3.3'
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client', version: '3.3.3'
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '3.3.3'
-	// spring cloud
+	// Spring Boot dependencies
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	// Spring Cloud dependencies
 	implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
-//	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-client-discovery'
 	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j'
 	implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
-	// JWT
-	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.6'
-	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.6'
-	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.6'
-	// actuator
+
+	// JWT dependencies
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+	// Actuator and monitoring
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	// prometheus
-	implementation group: 'io.micrometer', name: 'micrometer-registry-prometheus', version: '1.13.4'
-	// spring doc
-	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webflux-ui', version: '2.6.0'
-	// config
+	implementation 'io.micrometer:micrometer-registry-prometheus:1.13.4'
+
+	// SpringDoc for API documentation
+	implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.6.0'
+
+	// Spring Cloud Config
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
-	// redis
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '3.3.3'
-	// mongo
+
+	// Redis and MongoDB support
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
-	// lombok
+
+	// Lombok for boilerplate code reduction
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-	//webflux
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
+	// Testing dependencies
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
-
