@@ -18,16 +18,16 @@ spec:
         - name: gateway
           image: cheonghalim/paranmanzang:gateway
           env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: "prod"  # 활성화할 Spring 프로파일
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: "http://config-server.default.svc.cluster.local:8888"  # Config Server URL
-            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-              value: "true"
-            - name: EUREKA_CLIENT_FETCH_REGISTRY
-              value: "true"
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: "http://eureka-server.default.svc.cluster.local:8761/eureka"
+          - name: SPRING_PROFILES_ACTIVE
+            value: "prod"  # 활성화할 Spring 프로파일
+          - name: SPRING_CLOUD_CONFIG_URI
+            value: "http://default-config-server-982e4-100105172-e09c371f9669.kr.lb.naverncp.com:88"  # 외부 Config Server 도메인
+          - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+            value: "true"
+          - name: EUREKA_CLIENT_FETCH_REGISTRY
+            value: "true"
+          - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+            value: "http://default-eureka-server-6219b-100105199-770b06c1bd85.kr.lb.naverncp.com:87/eureka"  # 외부 Eureka 도메인
           ports:
             - containerPort: 8000
 ---
