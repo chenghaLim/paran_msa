@@ -36,7 +36,7 @@ spec:
     app: eureka-server
   ports:
     - protocol: TCP
-      port: 87
+      port: 8761
       targetPort: 8761
   type: LoadBalancer
 
