@@ -128,7 +128,7 @@ pipeline {
 //                         def yamlPath = modulePaths["config"]
 //                         echo "Applying Kubernetes deployment for Config Server using YAML file: ${yamlPath}"
 //                         sh "kubectl apply -f ${yamlPath}"
-                    }
+//                     }
 // //
 // //                     // Eureka Server 배포
 //                     stage('Deploy Eureka Server') {
