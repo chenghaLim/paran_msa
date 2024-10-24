@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-server
+  labels:
+    app: config-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-server
+  template:
+    metadata:
+      labels:
+        app: config-server
+    spec:
+      containers:
+        - name: config
+          image: cheonghalim/paranmanzang:config
+          ports:
+            - containerPort: 8888
+          volumeMounts:
+            - name: ssh-key-volume
+              mountPath: /root/.ssh  # SSH 키 파일이 위치할 경로
+              readOnly: true
+      volumes:
+        - name: ssh-key-volume
+          secret:
+            secretName: ssh-key-secret
+            items:
+              - key: id_rsa
+                path: id_rsa
+              - key: id_rsa.pub
+                path: id_rsa.pub
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-server
+spec:
+  selector:
+    app: config-server
+  ports:
+    - protocol: TCP
+      port: 8888
+      targetPort: 8888
+  type: LoadBalancer

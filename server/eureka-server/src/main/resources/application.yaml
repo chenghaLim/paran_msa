@@ -1,6 +1,8 @@
 spring:
   application:
     name: eureka-server
+  config:
+    import: configserver:http://config-server.default.svc.cluster.local:8888
 
 server:
   port: 8761

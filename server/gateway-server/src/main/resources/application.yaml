@@ -3,14 +3,19 @@ spring:
     name: gateway-server
   profiles:
     active: prod
+  config:
+    import: configserver:http://config-server.default.svc.cluster.local:8888
   cloud:
-    config:
-      uri: http://config-server.default.svc.cluster.local:8888
     loadbalancer:
       retry:
         enabled: true
-    kubernetes:
-      discovery:
-        enabled: true
-        all-namespaces: true
 
+eureka:
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka-server.default.svc.cluster.local:8761/eureka
+  instance:
+    prefer-ip-address: true
