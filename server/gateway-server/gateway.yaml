@@ -21,11 +21,7 @@ spec:
           - name: SPRING_PROFILES_ACTIVE
             value: "prod"  # 활성화할 Spring 프로파일
           - name: SPRING_CLOUD_CONFIG_URI
-            value: "http://default-config-server-982e4-100105172-e09c371f9669.kr.lb.naverncp.com:88"  # 외부 Config Server 도메인
-          - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-            value: "true"
-          - name: EUREKA_CLIENT_FETCH_REGISTRY
-            value: "true"
+            value: "http://config-server.default.svc.cluster.local:8888"  # 외부 Config Server 도메인
           ports:
             - containerPort: 8000
 ---
