@@ -21,13 +21,13 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: "prod"  # 활성화할 Spring 프로파일
             - name: SPRING_CLOUD_CONFIG_URI
-              value: "configserver:http://config-server:8888"  # Config Server URL
+              value: "http://config-server.default.svc.cluster.local:8888"  # Config Server URL
             - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
               value: "true"
             - name: EUREKA_CLIENT_FETCH_REGISTRY
               value: "true"
             - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: "http://eureka-server:8761/eureka"
+              value: "http://eureka-server.default.svc.cluster.local:8761/eureka"
           ports:
             - containerPort: 8000
 ---
@@ -42,5 +42,5 @@ spec:
     - protocol: TCP
       port: 8000
       targetPort: 8000
-  type: ClusterIP
+  type: LoadBalancer
 

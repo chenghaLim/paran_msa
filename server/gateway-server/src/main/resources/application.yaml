@@ -4,7 +4,7 @@ spring:
   profiles:
     active: prod
   config:
-    import: configserver:http://config-server:8888
+    import: http://config-server.default.svc.cluster.local:8888
 
 eureka:
   client:
@@ -12,6 +12,6 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://eureka-server:8761/eureka
+      defaultZone: http://eureka-server.default.svc.cluster.local:8761/eureka
   instance:
     prefer-ip-address: true

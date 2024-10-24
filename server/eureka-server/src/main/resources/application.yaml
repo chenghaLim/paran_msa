@@ -10,4 +10,5 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
   instance:
-    hostname: eureka-server
+    hostname: eureka-server.default.svc.cluster.local
+    prefer-ip-address: false
