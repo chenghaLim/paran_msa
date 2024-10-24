@@ -46,7 +46,7 @@ pipeline {
                     for module in "${all_modules[@]}"
                     do
                       echo "Building BootJar for $module"
-                      ./gradlew :$module:bootJar -refresh-dependencies --warning-mode all
+                      ./gradlew :$module:bootJar --warning-mode all
                     done
                     '''
                 }
