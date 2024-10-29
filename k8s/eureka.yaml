@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: eureka-server
-  labels:
-    app: eureka-server
 spec:
   replicas: 1
   selector:
@@ -37,6 +35,5 @@ spec:
   ports:
     - protocol: TCP
       port: 8761
-      targetPort: 8761
   type: LoadBalancer
 
