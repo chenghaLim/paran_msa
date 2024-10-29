@@ -20,6 +20,14 @@ spec:
           env:
             - name: SPRING_CLOUD_KUBERNETES_ENABLED
               value: "true"
+          volumeMounts:
+            - mountPath: /home/paran/.ssh
+              name: ssh-key-volume
+              readOnly: true
+      volumes:
+        - name: ssh-key-volume
+          secret:
+            secretName: ssh-key
 ---
 apiVersion: v1
 kind: Service
