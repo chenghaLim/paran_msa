@@ -65,12 +65,12 @@ pipeline {
                     def modulePaths = [
                      "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
                             "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
-//                             "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
-//                             "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
-//                             "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
-//                             "file"   : "/var/lib/jenkins/workspace/paranmanzang/service/file-service",
-//                             "room"   : "/var/lib/jenkins/workspace/paranmanzang/service/room-service",
-//                             "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service",
+                            "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
+                            "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
+                            "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
+                            "file"   : "/var/lib/jenkins/workspace/paranmanzang/service/file-service",
+                            "room"   : "/var/lib/jenkins/workspace/paranmanzang/service/room-service",
+                            "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service",
                             "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server"
                     ]
 
@@ -84,81 +84,79 @@ pipeline {
             }
         }
 
-        stage('Push to Docker Hub') {
-            steps {
-                script {
-                    def modulePaths = [
-                    "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
-                            "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
+//         stage('Push to Docker Hub') {
+//             steps {
+//                 script {
+//                     def modulePaths = [
+//                     "config" : "/var/lib/jenkins/workspace/paranmanzang/server/config-server",
+//                             "eureka" : "/var/lib/jenkins/workspace/paranmanzang/server/eureka-server",
 //                             "user"   : "/var/lib/jenkins/workspace/paranmanzang/service/user-service",
 //                             "group"  : "/var/lib/jenkins/workspace/paranmanzang/service/group-service",
 //                             "chat"   : "/var/lib/jenkins/workspace/paranmanzang/service/chat-service",
 //                             "file"   : "/var/lib/jenkins/workspace/paranmanzang/service/file-service",
 //                             "room"   : "/var/lib/jenkins/workspace/paranmanzang/service/room-service",
 //                             "comment": "/var/lib/jenkins/workspace/paranmanzang/service/comment-service",
-                            "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server"
-                    ]
-
-                    for (module in modulePaths.keySet()) {
-                        echo "Pushing Docker image for ${module} to Docker Hub"
-                        sh """
-                            docker push ${REPOSITORY}:${module}
-                        """
-                    }
-                }
-            }
-        }
-        stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    def modulePaths = [
-                            "config" : "/var/lib/jenkins/workspace/paranmanzang/k8s/config.yaml",
-"eureka" : "/var/lib/jenkins/workspace/paranmanzang/k8s/eureka.yaml",
-"gateway": "/var/lib/jenkins/workspace/paranmanzang/k8s/gateway.yaml",
-// "chat"   : "/var/lib/jenkins/workspace/paranmanzang/k8s/chat.yaml",
-// "user"   : "/var/lib/jenkins/workspace/paranmanzang/k8s/user.yaml",
-// "group"  : "/var/lib/jenkins/workspace/paranmanzang/k8s/group.yaml",
-// "file"   : "/var/lib/jenkins/workspace/paranmanzang/k8s/file.yaml",
-// "room"   : "/var/lib/jenkins/workspace/paranmanzang/k8s/room.yaml",
-// "comment": "/var/lib/jenkins/workspace/paranmanzang/k8s/comment.yaml"
-                    ]
-
-//                     Config Server 배포
-                    stage('Deploy Config Server') {
-                        def yamlPath = modulePaths["config"]
-                        echo "Applying Kubernetes deployment for Config Server using YAML file: ${yamlPath}"
-                        sh "kubectl apply -f ${yamlPath}"
-                    }
-// //
-// //                     // Eureka Server 배포
-                    stage('Deploy Eureka Server') {
-                        def yamlPath = modulePaths["eureka"]
-                        echo "Applying Kubernetes deployment for Eureka Server using YAML file: ${yamlPath}"
-                        sh "kubectl apply -f ${yamlPath}"
-                    }
-
-//                     Gateway Server 배포
-                    stage('Deploy Gateway Server') {
-                        def yamlPath = modulePaths["gateway"]
-                        echo "Applying Kubernetes deployment for Gateway Server using YAML file: ${yamlPath}"
-                        sh "kubectl apply -f ${yamlPath}"
-                    }
-
-                    // 나머지 서비스 배포
+//                             "gateway": "/var/lib/jenkins/workspace/paranmanzang/server/gateway-server"
+//                     ]
+//
 //                     for (module in modulePaths.keySet()) {
-//                         if (module != "config" && module != "eureka" && module != "gateway") {
-//                             stage("Deploy ${module.capitalize()} Service") {
-//                                 def yamlPath = modulePaths[module]
-//                                 echo "Applying Kubernetes deployment for ${module} using YAML file: ${yamlPath}"
-//                                 sh "kubectl replace -f ${yamlPath}"
-//                             }
-//                         }
+//                         echo "Pushing Docker image for ${module} to Docker Hub"
+//                         sh """
+//                             docker push ${REPOSITORY}:${module}
+//                         """
 //                     }
-                }
-            }
-        }
-
-
+//                 }
+//             }
+//         }
+//         stage('Deploy to Kubernetes') {
+//             steps {
+//                 script {
+//                     def modulePaths = [
+//                             "config" : "/var/lib/jenkins/workspace/paranmanzang/k8s/config.yaml",
+// "eureka" : "/var/lib/jenkins/workspace/paranmanzang/k8s/eureka.yaml",
+// "gateway": "/var/lib/jenkins/workspace/paranmanzang/k8s/gateway.yaml",
+// // "chat"   : "/var/lib/jenkins/workspace/paranmanzang/k8s/chat.yaml",
+// // "user"   : "/var/lib/jenkins/workspace/paranmanzang/k8s/user.yaml",
+// // "group"  : "/var/lib/jenkins/workspace/paranmanzang/k8s/group.yaml",
+// // "file"   : "/var/lib/jenkins/workspace/paranmanzang/k8s/file.yaml",
+// // "room"   : "/var/lib/jenkins/workspace/paranmanzang/k8s/room.yaml",
+// // "comment": "/var/lib/jenkins/workspace/paranmanzang/k8s/comment.yaml"
+//                     ]
+//
+// //                     Config Server 배포
+//                     stage('Deploy Config Server') {
+//                         def yamlPath = modulePaths["config"]
+//                         echo "Applying Kubernetes deployment for Config Server using YAML file: ${yamlPath}"
+//                         sh "kubectl apply -f ${yamlPath}"
+//                     }
+// // //
+// // //                     // Eureka Server 배포
+//                     stage('Deploy Eureka Server') {
+//                         def yamlPath = modulePaths["eureka"]
+//                         echo "Applying Kubernetes deployment for Eureka Server using YAML file: ${yamlPath}"
+//                         sh "kubectl apply -f ${yamlPath}"
+//                     }
+//
+// //                     Gateway Server 배포
+//                     stage('Deploy Gateway Server') {
+//                         def yamlPath = modulePaths["gateway"]
+//                         echo "Applying Kubernetes deployment for Gateway Server using YAML file: ${yamlPath}"
+//                         sh "kubectl apply -f ${yamlPath}"
+//                     }
+//
+//                     // 나머지 서비스 배포
+// //                     for (module in modulePaths.keySet()) {
+// //                         if (module != "config" && module != "eureka" && module != "gateway") {
+// //                             stage("Deploy ${module.capitalize()} Service") {
+// //                                 def yamlPath = modulePaths[module]
+// //                                 echo "Applying Kubernetes deployment for ${module} using YAML file: ${yamlPath}"
+// //                                 sh "kubectl replace -f ${yamlPath}"
+// //                             }
+// //                         }
+// //                     }
+//                 }
+//             }
+//         }
     }
 
     post {
