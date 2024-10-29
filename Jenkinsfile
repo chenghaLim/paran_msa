@@ -13,19 +13,25 @@ pipeline {
             }
         }
 
-        stage('Checkout') {
-            steps {
-                checkout([$class           : 'GitSCM',
-                          branches         : [[name: '*/master']],
-                          userRemoteConfigs: [[
-                                                      url          : 'git@github.com:paranmanzang/paran_msa.git',
-                                                      credentialsId: 'ssh-key'
-                                              ]],
-                          extensions       : [[$class: 'SubmoduleOption', recursiveSubmodules: true, parentCredentials: true]]
-                ])
+stage('Checkout') {
+    steps {
+        script {
+            // Git 저장소 체크아웃
+            checkout([$class: 'GitSCM',
+                      branches: [[name: '*/master']],
+                      userRemoteConfigs: [[
+                          url: 'git@github.com:paranmanzang/paran_msa.git',
+                          credentialsId: 'ssh-key'
+                      ]]
+            ])
 
-            }
+            // 서브모듈 초기화 및 업데이트
+            sh 'git submodule init'
+            sh 'git submodule update --recursive'
         }
+    }
+}
+
 
         stage('Build') {
             steps {
