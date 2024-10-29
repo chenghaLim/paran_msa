@@ -22,12 +22,12 @@ stage('Checkout') {
                       userRemoteConfigs: [[
                           url: 'git@github.com:paranmanzang/paran_msa.git',
                           credentialsId: 'ssh-key'
-                      ]]
+                      ]],
+                      extensions: [
+                          [$class: 'SubmoduleOption', recursiveSubmodules: true, parentCredentials: true]
+                      ]
             ])
 
-            // 서브모듈 초기화 및 업데이트
-            sh 'git submodule init'
-            sh 'git submodule update --recursive'
         }
     }
 }
