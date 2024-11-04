@@ -532,24 +532,4 @@
 <h2>📚개발기간</h2>
 2024.08.21.~2024.10.
 
-<h2>📚프로젝트 산출물</h2>
-
-<ul style="list-style-type:circle;">
- <li>
-  
-  [api 명세서](https://www.notion.so/REST-API-11e4a940b48480d5ac99ef3f726bc0c3)
- </li>
- <li>
-  
-  [erd](https://www.notion.so/ERD-11e4a940b4848071a262d0581befa07f)</li>
- <li>
-  
-  [개발환경](https://www.notion.so/11e4a940b48480688ac3fcce8025d49b)</li>
- <li>
-     
-  [발표자료](https://github.com/paranmanzang/paran_msa/blob/master/paranmanzang%20final_rev1.pptx)</li>
- <li>
-  
-  [발표영상](https://www.youtube.com/)</li>
-</ul>
 
