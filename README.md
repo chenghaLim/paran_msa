@@ -17,10 +17,10 @@
 <div align="center">
     <table>
         <tr>
-            <td><img src="https://via.placeholder.com/100" alt="임청하👑"/><br/><a href="https://github.com/chenghaLim">임청하👑 (BackEnd)</a></td>
-            <td><img src="https://via.placeholder.com/100" alt="강은석"/><br/><a href="https://github.com/MeteoRiver">강은석 (BackEnd)</a></td>
-            <td><img src="https://via.placeholder.com/100" alt="김주영"/><br/><a href="https://github.com/Jyservice781">김주영 (FrontEnd)</a></td>
-            <td><img src="https://via.placeholder.com/100" alt="송지현"/><br/><a href="https://github.com/Songj2">송지현 (BackEnd)</a></td>
+            <td align="center"><img src="https://github.com/user-attachments/assets/adb74647-19ed-4942-83be-3d1d932aed2d" alt="임청하👑"/><br/><a href="https://github.com/chenghaLim">임청하👑 (BackEnd)</a></td>
+            <td align="center"><img src="https://github.com/user-attachments/assets/e773a829-d675-410f-a2fd-28d811b98240" alt="강은석"/><br/><a href="https://github.com/MeteoRiver">강은석 (BackEnd)</a></td>
+            <td align="center"><img src="https://github.com/user-attachments/assets/e887ac70-4c65-44d9-8a68-5aa9976238db" alt="김주영"/><br/><a href="https://github.com/Jyservice781">김주영 (FrontEnd)</a></td>
+            <td align="center"><img src="https://github.com/user-attachments/assets/ef374542-3d5f-4364-9355-e1f501e77eab" alt="송지현"/><br/><a href="https://github.com/Songj2">송지현 (BackEnd)</a></td>
         </tr>
     </table>
 </div>
@@ -28,474 +28,503 @@
 
 <h2>📚프로젝트 구조</h2>
 <details><summary>FE</summary>
-프론트 추가 예정
+📦paranmanzang-project<br/>
+ ┣ 📂app<br/>
+ ┃ ┣ 📂(page)<br/>
+ ┃ ┃ ┣ 📂List<br/>
+ ┃ ┃ ┃ ┗ 📜page.tsx<br/>
+ ┃ ┃ ┣ 📂aboard<br/>
+ ┃ ┃ ┃ ┣ 📂add<br/>
+ ┃ ┃ ┃ ┃ ┗ 📜page.tsx<br/>
+ ┃ ┃ ┃ ┣ 📂update<br/>
+ ┃ ┃ ┃ ┃ ┗ 📂[id]<br/>
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜page.tsx<br/>
+ ┃ ┃ ┃ ┗ 📜page.tsx<br/>
+ ┃ ┃ ┃   📜.....<br/>
+ ┃ ┣ 📂api<br/>
+ ┃ ┃ ┣ 📂generate<br/>
+ ┃ ┃ ┃ ┣ 📜friend.api.ts<br/>
+ ┃ ┃ ┃ ┣ 📜group.api.ts<br/>
+ ┃ ┃ ┃ ┣ 📜groupPost.api.ts<br/>
+ ┃ ┃ ┃ ┣ 📜likeBook.api.ts<br/>
+ ┃ ┃ ┃ ┣ 📜likePost.api.ts<br/>
+ ┃ ┃ ┃ ┣ 📜likeRoom.api.ts<br/>
+ ┃ ┃ ┃ ┣ 📜review.api.ts<br/>
+ ┃ ┃ ┃ ┣ 📜room.api.ts<br/>
+ ┃ ┃ ┃ ┣ 📜route.ts<br/>
+ ┃ ┃ ┃ ┗ 📜user.api.ts<br/>
+ ┃ ┃ ┃   📜 ..........<br/>
+ ┃ ┃ ┣ 📜authUtils.ts<br/>
+ ┃ ┃ ┣ 📜axios.ts<br/>
+ ┃ ┃ ┗ 📜requests.ts<br/>
+ ┃ ┣ 📂components<br/>
+ ┃ ┃ ┃ ┣ 📜Aboard.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜AccountButton.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜Alert.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜BellService.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜BookingList.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜BookingModal.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜Carousel.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜CategorySelect.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜Footer.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜GroupBoard.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜Header.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜Map.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜Nav.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜NaverMap.tsx<br/>
+ ┃ ┃ ┃ ┗ 📜NaverMapAdd.tsx<br/>
+ ┃ ┃ ┣ 📂crud<br/>
+ ┃ ┃ ┃ ┣ 📜GroupAdd.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜GroupPostAdd.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜PostEditor.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜RoomAdd.tsx<br/>
+ ┃ ┃ ┃ ┗ 📜RoomUpdate.tsx<br/>
+ ┃ ┃ ┣ 📂user<br/>
+ ┃ ┃ ┃ ┣ 📂admin<br/>
+ ┃ ┃ ┃ ┃ ┗ 📜RequestOne.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜ComLikeList.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜Register.tsx<br/>
+ ┃ ┃ ┃ ┣ 📜UserProfile.module.css<br/>
+ ┃ ┃ ┃ ┗ 📜UserProfile.tsx<br/>
+ ┃ ┃ ┗ 📜Modal.tsx<br/>
+ ┃ ┃  📜 ..........<br/>
+ ┃ ┣ 📂hooks<br/>
+ ┃ ┃ ┣ 📜useBookImage.ts<br/>
+ ┃ ┃ ┣ 📜useChatRoom.ts<br/>
+ ┃ ┃ ┗ 📜useUser.ts<br/>
+ ┃ ┣ 📂model<br/>
+ ┃ ┃ ┣ 📂chat<br/>
+ ┃ ┃ ┃ ┗ 📜chat.model.ts<br/>
+ ┃ ┃ ┣ 📂comment<br/>
+ ┃ ┃ ┃ ┗ 📜comment.model.ts<br/>
+ ┃ ┃ ┣ 📂common<br/>
+ ┃ ┃ ┃ ┗ 📜page.model.ts<br/>
+ ┃ ┃ ┣ 📂file<br/>
+ ┃ ┃ ┃ ┗ 📜file.model.ts<br/>
+ ┃ ┃ ┣ 📂group<br/>
+ ┃ ┃ ┃ ┣ 📜book.model.ts<br/>
+ ┃ ┃ ┃ ┣ 📜category.model.ts<br/>
+ ┃ ┃ ┃ ┗ 📜group.model.ts<br/>
+ ┃ ┃ ┣ 📂room<br/>
+ ┃ ┃ ┃ ┣ 📜account.model.ts<br/>
+ ┃ ┃ ┃ ┣ 📜address.model.ts<br/>
+ ┃ ┃ ┃ ┣ 📜bookings.model.ts<br/>
+ ┃ ┃ ┃ ┣ 📜review.model.ts<br/>
+ ┃ ┃ ┃ ┗ 📜room.model.ts<br/>
+ ┃ ┃ ┣ 📂user<br/>
+ ┃ ┃ ┃ ┣ 📜user.model.ts<br/>
+ ┃ ┃ ┃ ┗ 📜users.model.ts<br/>
+ ┃ ┃ ┣ 📜error.model.ts<br/>
+ ┃ ┃ ┗ 📜user.model.ts<br/>
+ ┃ ┣ 📂queries<br/>
+ ┃ ┃ ┣ 📜useBookQuery.ts<br/>
+ ┃ ┃ ┣ 📜useGroupQuery.ts<br/>
+ ┃ ┃ ┗ 📜useRoomQuery.ts<br/>
+ ┃ ┣ 📂service<br/>
+ ┃ ┃ ┣ 📂chat<br/>
+ ┃ ┃ ┃ ┣ 📜chatMessage.service.ts<br/>
+ ┃ ┃ ┃ ┣ 📜chatRoom.service.ts<br/>
+ ┃ ┃ ┃ ┗ 📜chatUser.service.ts<br/>
+ ┃ ┃ ┣ 📂comment<br/>
+ ┃ ┃ ┃ ┗ 📜comment.service.ts<br/>
+ ┃ ┃ ┣ 📂file<br/>
+ ┃ ┃ ┃ ┗ 📜file.service.ts<br/>
+ ┃ ┃ ┣ 📂group<br/>
+ ┃ ┃ ┃ ┣ 📜book.service.ts<br/>
+ ┃ ┃ ┃ ┣ 📜category.service.ts<br/>
+ ┃ ┃ ┃ ┣ 📜group.service.ts<br/>
+ ┃ ┃ ┃ ┣ 📜groupPost.service.ts<br/>
+ ┃ ┃ ┃ ┣ 📜likeBook.service.ts<br/>
+ ┃ ┃ ┃ ┗ 📜likePost.service.ts<br/>
+ ┃ ┃ ┣ 📂room<br/>
+ ┃ ┃ ┃ ┣ 📜account.service.ts<br/>
+ ┃ ┃ ┃ ┣ 📜address.service.ts<br/>
+ ┃ ┃ ┃ ┣ 📜booking.service.ts<br/>
+ ┃ ┃ ┃ ┣ 📜review.service.ts<br/>
+ ┃ ┃ ┃ ┣ 📜room.service.ts<br/>
+ ┃ ┃ ┃ ┗ 📜time.service.ts<br/>
+ ┃ ┃ ┣ 📂user<br/>
+ ┃ ┃ ┃ ┣ 📜login.service.ts<br/>
+ ┃ ┃ ┃ ┣ 📜logout.service.ts<br/>
+ ┃ ┃ ┃ ┗ 📜user.service.ts<br/>
+ ┃ ┃ ┗ 📂users<br/>
+ ┃ ┃ ┃ ┣ 📜adminPost.service.ts<br/>
+ ┃ ┃ ┃ ┣ 📜declarationPost.service.ts<br/>
+ ┃ ┃ ┃ ┣ 📜friend.service.ts<br/>
+ ┃ ┃ ┃ ┣ 📜likePost.service.ts<br/>
+ ┃ ┃ ┃ ┗ 📜likeRoom.service.ts<br/>
+ ┃ ┣ 📜QueryProvider.tsx<br/>
+ ┃ ┣ 📜StoreProvider.tsx<br/>
+ ┃ ┣ 📜globals.css<br/>
+ ┃ ┣ 📜layout.tsx<br/>
+ ┃ ┗ 📜page.tsx<br/>
+ ┣ 📂lib<br/>
+ ┃ ┣ 📂features<br/>
+ ┃ ┃ ┣ 📂chat<br/>
+ ┃ ┃ ┃ ┗ 📜chat.slice.ts<br/>
+ ┃ ┃ ┣ 📂comment<br/>
+ ┃ ┃ ┃ ┗ 📜comment.slice.ts<br/>
+ ┃ ┃ ┣ 📂file<br/>
+ ┃ ┃ ┃ ┗ 📜file.slice.ts<br/>
+ ┃ ┃ ┣ 📂group<br/>
+ ┃ ┃ ┃ ┣ 📜book.slice.ts<br/>
+ ┃ ┃ ┃ ┗ 📜group.slice.ts<br/>
+ ┃ ┃ ┣ 📂room<br/>
+ ┃ ┃ ┃ ┣ 📜account.slice.ts<br/>
+ ┃ ┃ ┃ ┣ 📜address.slice.ts<br/>
+ ┃ ┃ ┃ ┣ 📜booking.slice.ts<br/>
+ ┃ ┃ ┃ ┣ 📜review.slice.ts<br/>
+ ┃ ┃ ┃ ┗ 📜room.slice.ts<br/>
+ ┃ ┃ ┣ 📂users<br/>
+ ┃ ┃ ┃ ┣ 📜adminPost.slice.ts<br/>
+ ┃ ┃ ┃ ┣ 📜declarationPost.slice.ts<br/>
+ ┃ ┃ ┃ ┣ 📜friend.slice.ts<br/>
+ ┃ ┃ ┃ ┗ 📜user.slice.ts<br/>
+ ┃ ┃ ┣ 📜auth.slice.ts<br/>
+ ┃ ┃ ┣ 📜data.slice.ts<br/>
+ ┃ ┃ ┗ 📜error.slice.ts<br/>
+ ┃ ┗ 📜store.ts<br/>
+ ┣ 📂public<br/>
+ ┃ ┣ 📂assets<br/>
+ ┃ ┃ ┣ 📜btnG.png<br/>
+ ┃ ┃ ┣ 📜paran.png<br/>
+ ┃ ┃ ┣ 📜paranLogo.png<br/>
+ ┃ ┃ ┗ 📜paran_logo_favicon.png<br/>
+ ┃ ┣ 📜.DS_Store<br/>
+ ┃ ┗ 📜.gitkeep<br/>
+ ┣ 📜.DS_Store<br/>
+ ┣ 📜.env.local<br/>
+ ┣ 📜.eslintrc.json<br/>
+ ┣ 📜.gitignore<br/>
+ ┣ 📜LICENSE<br/>
+ ┣ 📜README.md<br/>
+ ┣ 📜naver.d.ts<br/>
+ ┣ 📜next-env.d.ts<br/>
+ ┣ 📜next.config.mjs<br/>
+ ┣ 📜package.json<br/>
+ ┣ 📜postcss.config.js<br/>
+ ┣ 📜prettier.config.js<br/>
+ ┣ 📜tailwind.config.ts<br/>
+ ┣ 📜tsconfig.json<br/>
+ ┣ 📜yarn 2.lock<br/>
+ ┗ 📜yarn.lock<br/>
 
 </details>
 
 <details><summary>BE</summary> 
-├── .gitignore</br>
-├── .gitmodules</br>
-├── Jenkinsfile</br>
-├── back_output.txt</br>
-├── build.gradle</br>
-├── database</br>
-│   └── docker-compose.yaml</br>
-├── docker-compose.yaml</br>
-├── file_source.json</br>
-├── gradle</br>
-│   └── wrapper</br>
-│       ├── gradle-wrapper.jar</br>
-│       └── gradle-wrapper.properties</br>
-├── gradlew</br>
-├── gradlew.bat</br>
-├── server</br>
-│   ├── config-server</br>
-│   ├── eureka-server</br>
-│   │   ├── .gitignore</br>
-│   │   ├── Dockerfile</br>
-│   │   ├── build.gradle</br>
-│   │   ├── eureka.yaml</br>
-│   │   └── src</br>
-│   │       └── eurekaserver</br>
-│   │           └── EurekaServerApplication.java</br>
-│   │   └── resources</br>
-│   │       └── application.yaml</br>
-│   ├── gateway-server</br>
-│   │   ├── .gitignore</br>
-│   │   ├── Dockerfile</br>
-│   │   ├── build.gradle</br>
-│   │   ├── gateway.yaml</br>
-│   │   └── src</br>
-│   │       └── gatewayserver</br>
-│   │           ├── Enum</br>
-│   │           │   ├── .DS_Store</br>
-│   │           │   ├── CodeEnum.java</br>
-│   │           │   ├── ExceptionStatus.java</br>
-│   │           │   └── Role.java</br>
-│   │           ├── Filter</br>
-│   │           │   ├── .DS_Store</br>
-│   │           │   ├── GatewayRouter.java</br>
-│   │           │   ├── LoginFilter.java</br>
-│   │           │   ├── LogoutFilter.java</br>
-│   │           │   └── ReissueFilter.java</br>
-│   │           ├── GatewayException.java</br>
-│   │           ├── GatewayServerApplication.java</br>
-│   │           ├── config</br>
-│   │           │   ├── .DS_Store</br>
-│   │           │   ├── MongoConfig.java</br>
-│   │           │   ├── RedisConfig.java</br>
-│   │           │   ├── SecurityConfig.java</br>
-│   │           │   ├── UriConfiguration.java</br>
-│   │           │   ├── UserRoute.java</br>
-│   │           │   └── WebClientConfig.java</br>
-│   │           ├── controller</br>
-│   │           │   └── UserController.java</br>
-│   │           ├── jwt</br>
-│   │           │   ├── CustomAuthenticationFailureHandler.java</br>
-│   │           │   ├── CustomAuthenticationSuccessHandler.java</br>
-│   │           │   ├── CustomReactiveAuthenticationManager.java</br>
-│   │           │   ├── JWTUtil.java</br>
-│   │           │   └── JwtTokenServiceImpl.java</br>
-│   │           ├── model</br>
-│   │           │   ├── .DS_Store</br>
-│   │           │   ├── Domain</br>
-│   │           │   │   ├── .DS_Store</br>
-│   │           │   │   ├── UserModel.java</br>
-│   │           │   │   └── oauth</br>
-│   │           │   │       ├── CustomOAuth2User.java</br>
-│   │           │   │       ├── CustomUserDetails.java</br>
-│   │           │   │       ├── NaverResponse.java</br>
-│   │           │   │       └── OAuth2Response.java</br>
-│   │           │   ├── LoginModel.java</br>
-│   │           │   ├── RegisterModel.java</br>
-│   │           │   ├── entity</br>
-│   │           │   │   └── User.java</br>
-│   │           │   └── repository</br>
-│   │           │       └── UserRepository.java</br>
-│   │           ├── oauth</br>
-│   │           │   ├── CustomOAuth2UserService.java</br>
-│   │           │   ├── CustomReactiveUserDetailsService.java</br>
-│   │           │   └── CustomSuccessHandler.java</br>
-│   │           └── service</br>
-│   │               ├── .DS_Store</br>
-│   │               ├── Impl</br>
-│   │               │   └── UserServiceImpl.java</br>
-│   │               └── UserService.java</br>
-│   └── secret-server</br>
-├── service</br>
-│   ├── chat-service</br>
-│   │   ├── .gitignore</br>
-│   │   ├── Dockerfile</br>
-│   │   ├── build.gradle</br>
-│   │   ├── chat.yaml</br>
-│   │   └── src</br>
-│   │       └── chatservice</br>
-│   │           ├── ChatServiceApplication.java</br>
-│   │           ├── config</br>
-│   │           │   ├── ChatMessageRoute.java</br>
-│   │           │   ├── ChatRoomRoute.java</br>
-│   │           │   ├── ChatUserRoute.java</br>
-│   │           │   ├── MongoConfig.java</br>
-│   │           │   └── RedisConfig.java</br>
-│   │           ├── controller</br>
-│   │           │   ├── ChatMessageHandler.java</br>
-│   │           │   ├── ChatRoomHandler.java</br>
-│   │           │   └── ChatUserHandler.java</br>
-│   │           ├── model</br>
-│   │           │   ├── domain</br>
-│   │           │   │   ├── ChatUnReadUserModel.java</br>
-│   │           │   │   ├── ChatUserModel.java</br>
-│   │           │   │   ├── message</br>
-│   │           │   │   │   ├── ChatMessageModel.java</br>
-│   │           │   │   │   └── RequestChatMessageModel.java</br>
-│   │           │   │   └── room</br>
-│   │           │   │       ├── ChatRoomModel.java</br>
-│   │           │   │       ├── ChatRoomNameModel.java</br>
-│   │           │   │       └── ChatRoomPasswordModel.java</br>
-│   │           │   ├── entity</br>
-│   │           │   │   ├── ChatMessage.java</br>
-│   │           │   │   ├── ChatRoom.java</br>
-│   │           │   │   ├── ChatUser.java</br>
-│   │           │   │   └── ChatUserTimeStamp.java</br>
-│   │           │   ├── enums</br>
-│   │           │   │   └── MessageType.java</br>
-│   │           │   └── repository</br>
-│   │           │       ├── ChatMessageRepository.java</br>
-│   │           │       ├── ChatRoomRepository.java</br>
-│   │           │       ├── ChatUserRepository.java</br>
-│   │           │       ├── ChatUserTimeStampRepository.java</br>
-│   │           │       ├── CustomChatMessageRepository.java</br>
-│   │           │       ├── CustomChatRoomRepository.java</br>
-│   │           │       ├── CustomChatUserRepository.java</br>
-│   │           │       ├── CustomChatUserTimeStampRepository.java</br>
-│   │           │       └── impl</br>
-│   │           │           ├── CustomChatMessageRepositoryImpl.java</br>
-│   │           │           ├── CustomChatRoomRepositoryImpl.java</br>
-│   │           │           ├── CustomChatUserRepositoryImpl.java</br>
-│   │           │           └── CustomChatUserTimeStampRepositoryImpl.java</br>
-│   │           ├── service</br>
-│   │           │   ├── ChatService.java</br>
-│   │           │   └── impl</br>
-│   │           │       └── ChatServiceImpl.java</br>
-│   │           └── util</br>
-│   │               └── ProfanityFilter.java</br>
-│   ├── comment-service</br>
-│   │   ├── .gitignore</br>
-│   │   ├── Dockerfile</br>
-│   │   ├── build.gradle</br>
-│   │   ├── comment.yaml</br>
-│   │   └── src</br>
-│   │       └── commentservice</br>
-│   │           ├── CommentServiceApplication.java</br>
-│   │           ├── config</br>
-│   │           │   └── QuerydslConfig.java</br>
-│   │           ├── controller</br>
-│   │           │   └── CommentController.java</br>
-│   │           ├── model</br>
-│   │           │   ├── domain</br>
-│   │           │   │   ├── CommentRequestModel.java</br>
-│   │           │   │   ├── CommentResponseModel.java</br>
-│   │           │   │   ├── ErrorField.java</br>
-│   │           │   │   └── ExceptionResponseModel.java</br>
-│   │           │   ├── entity</br>
-│   │           │   │   └── Comment.java</br>
-│   │           │   └── repository</br>
-│   │           │       ├── CommentRepository.java</br>
-│   │           │       ├── CustomCommentRepository.java</br>
-│   │           │       └── impl</br>
-│   │           │           └── CommentRepositoryImpl.java</br>
-│   │           ├── service</br>
-│   │           │   ├── CommentService.java</br>
-│   │           │   └── impl</br>
-│   │           │       └── CommentServiceImpl.java</br>
-│   │           └── util</br>
-│   │               └── GlobalExceptionHandler.java</br>
-│   ├── file-service</br>
-│   │   ├── .gitignore</br>
-│   │   ├── Dockerfile</br>
-│   │   ├── build.gradle</br>
-│   │   ├── file.yaml</br>
-│   │   └── src</br>
-│   │       └── fileservice</br>
-│   │           ├── FileServiceApplication.java</br>
-│   │           ├── config</br>
-│   │           │   ├── MongoConfig.java</br>
-│   │           │   ├── S3Config.java</br>
-│   │           │   └── SwaggerConfig.java</br>
-│   │           ├── controller</br>
-│   │           │   └── FileController.java</br>
-│   │           ├── model</br>
-│   │           │   ├── domain</br>
-│   │           │   │   ├── ErrorField.java</br>
-│   │           │   │   ├── ExceptionResponseModel.java</br>
-│   │           │   │   ├── FileDeleteModel.java</br>
-│   │           │   │   └── FileModel.java</br>
-│   │           │   ├── entity</br>
-│   │           │   │   └── File.java</br>
-│   │           │   ├── enums</br>
-│   │           │   │   └── FileType.java</br>
-│   │           │   └── repository</br>
-│   │           │       ├── FileRepository.java</br>
-│   │           │       ├── custom</br>
-│   │           │       │   └── FileCustomRepository.java</br>
-│   │           │       └── impl</br>
-│   │           │           └── FileCustomRepositoryImpl.java</br>
-│   │           ├── service</br>
-│   │           │   ├── FileService.java</br>
-│   │           │   └── impl</br>
-│   │           │       └── FileServiceImpl.java</br>
-│   │           └── util</br>
-│   │               └── GlobalExceptionHandler.java</br>
-│   ├── group-service</br>
-│   │   ├── .gitignore</br>
-│   │   ├── Dockerfile</br>
-│   │   ├── build.gradle</br>
-│   │   ├── group.yaml</br>
-│   │   ├── redis</br>
-│   │   │   └── data</br>
-│   │   │       └── dump.rdb</br>
-│   │   └── src</br>
-│   │       └── groupservice</br>
-│   │           ├── GroupServiceApplication.java</br>
-│   │           ├── config</br>
-│   │           │   └── QuerydslConfig.java</br>
-│   │           ├── controller</br>
-│   │           │   ├── BookController.java</br>
-│   │           │   ├── GroupController.java</br>
-│   │           │   ├── GroupPostController.java</br>
-│   │           │   └── LikeBookController.java</br>
-│   │           ├── enums</br>
-│   │           │   ├── CodeEnum.java</br>
-│   │           │   └── GroupPostCategory.java</br>
-│   │           ├── model</br>
-│   │           │   ├── domain</br>
-│   │           │   │   ├── BookResponseModel.java</br>
-│   │           │   │   ├── ErrorField.java</br>
-│   │           │   │   ├── ExceptionResponseModel.java</br>
-│   │           │   │   ├── GroupModel.java</br>
-│   │           │   │   ├── GroupPostModel.java</br>
-│   │           │   │   ├── GroupPostResponseModel.java</br>
-│   │           │   │   ├── GroupResponseModel.java</br>
-│   │           │   │   ├── JoiningModel.java</br>
-│   │           │   │   └── LikeBookModel.java</br>
-│   │           │   ├── entity</br>
-│   │           │   │   ├── Book.java</br>
-│   │           │   │   ├── Group.java</br>
-│   │           │   │   ├── GroupPost.java</br>
-│   │           │   │   ├── Joining.java</br>
-│   │           │   │   └── LikeBooks.java</br>
-│   ├── book-service</br>
-│   │   ├── .gitignore</br>
-│   │   ├── Dockerfile</br>
-│   │   ├── build.gradle</br>
-│   │   ├── book.yaml</br>
-│   │   └── src</br>
-│   │       │   │           └── bookservice</br>
-│   │       │   │               ├── BookServiceApplication.java</br>
-│   │       │   │               ├── config</br>
-│   │       │   │               │   ├── QuerydslConfig.java</br>
-│   │       │   │               │   └── SwaggerConfig.java</br>
-│   │       │   │               ├── controller</br>
-│   │       │   │               │   ├── BookController.java</br>
-│   │       │   │               │   ├── GroupPostController.java</br>
-│   │       │   │               │   ├── GroupController.java</br>
-│   │       │   │               │   ├── JoiningController.java</br>
-│   │       │   │               │   └── LikeBookController.java</br>
-│   │       │   │               ├── model</br>
-│   │       │   │               │   ├── domain</br>
-│   │       │   │               │   │   ├── BookModel.java</br>
-│   │       │   │               │   │   ├── GroupPostModel.java</br>
-│   │       │   │               │   │   ├── GroupModel.java</br>
-│   │       │   │               │   │   ├── JoiningModel.java</br>
-│   │       │   │               │   │   ├── LikeBookModel.java</br>
-│   │       │   │               │   │   └── ErrorResponseModel.java</br>
-│   │       │   │               │   └── dto</br>
-│   │       │   │               │       ├── BookDTO.java</br>
-│   │       │   │               │       ├── GroupPostDTO.java</br>
-│   │       │   │               │       ├── GroupDTO.java</br>
-│   │       │   │               │       ├── JoiningDTO.java</br>
-│   │       │   │               │       └── LikeBookDTO.java</br>
-│   │       │   │               ├── entity</br>
-│   │       │   │               │   ├── Book.java</br>
-│   │       │   │               │   ├── GroupPost.java</br>
-│   │       │   │               │   ├── Group.java</br>
-│   │       │   │               │   ├── Joining.java</br>
-│   │       │   │               │   └── LikeBook.java</br>
-│   │       │   │               ├── repository</br>
-│   │       │   │               │   ├── BookRepository.java</br>
-│   │       │   │               │   ├── BookRepositoryCustom.java</br>
-│   │       │   │               │   ├── GroupPostRepository.java</br>
-│   │       │   │               │   ├── GroupPostRepositoryCustom.java</br>
-│   │       │   │               │   ├── GroupRepository.java</br>
-│   │       │   │               │   ├── GroupRepositoryCustom.java</br>
-│   │       │   │               │   ├── JoiningRepository.java</br>
-│   │       │   │               │   ├── LikeBooksRepository.java</br>
-│   │       │   │               │   ├── LikeBooksRepositoryCustom.java</br>
-│   │       │   │               │   └── impl</br>
-│   │       │   │               │       ├── BookRepositoryCustomImpl.java</br>
-│   │       │   │               │       ├── GroupPostRepositoryCustomImpl.java</br>
-│   │       │   │               │       ├── GroupRepositoryCustomImpl.java</br>
-│   │       │   │               │       └── LikeBooksRepositoryCustomImpl.java</br>
-│   │       │   │               ├── service</br>
-│   │       │   │               │   ├── BookService.java</br>
-│   │       │   │               │   ├── GroupPostService.java</br>
-│   │       │   │               │   ├── GroupService.java</br>
-│   │       │   │               │   ├── JoiningService.java</br>
-│   │       │   │               │   ├── LikeBookService.java</br>
-│   │       │   │               │   └── impl</br>
-│   │       │   │               │       ├── BookServiceImpl.java</br>
-│   │       │   │               │       ├── GroupPostServiceImpl.java</br>
-│   │       │   │               │       ├── GroupServiceImpl.java</br>
-│   │       │   │               │       ├── JoiningServiceImpl.java</br>
-│   │       │   │               │       └── LikeBookServiceImpl.java</br>
-│   │       │   │               └── util</br>
-│   │       │   │                   └── GlobalExceptionHandler.java</br>
-│   ├── room-service</br>
-│   │   ├── .gitignore</br>
-│   │   ├── Dockerfile</br>
-│   │   ├── build.gradle</br>
-│   │   ├── room.yaml</br>
-│   │   └── src</br>
-│   │       │   │           └── roomservice</br>
-│   │       │   │               ├── RoomServiceApplication.java</br>
-│   │       │   │               ├── config</br>
-│   │       │   │               │   ├── QuerydslConfig.java</br>
-│   │       │   │               │   └── SwaggerConfig.java</br>
-│   │       │   │               ├── controller</br>
-│   │       │   │               │   ├── AccountController.java</br>
-│   │       │   │               │   ├── AddressController.java</br>
-│   │       │   │               │   ├── BookingController.java</br>
-│   │       │   │               │   ├── ReviewController.java</br>
-│   │       │   │               │   ├── RoomController.java</br>
-│   │       │   │               │   └── TimeController.java</br>
-│   │       │   │               ├── model</br>
-│   │       │   │               │   ├── domain</br>
-│   │       │   │               │   │   ├── AccountCancelModel.java</br>
-│   │       │   │               │   │   ├── AccountModel.java</br>
-│   │       │   │               │   │   ├── AccountResultModel.java</br>
-│   │       │   │               │   │   ├── AddressModel.java</br>
-│   │       │   │               │   │   ├── AddressUpdateModel.java</br>
-│   │       │   │               │   │   ├── BookingModel.java</br>
-│   │       │   │               │   │   ├── ErrorField.java</br>
-│   │       │   │               │   │   ├── ExceptionResponseModel.java</br>
-│   │       │   │               │   │   ├── ReviewModel.java</br>
-│   │       │   │               │   │   ├── ReviewUpdateModel.java</br>
-│   │       │   │               │   │   ├── RoomModel.java</br>
-│   │       │   │               │   │   ├── RoomUpdateModel.java</br>
-│   │       │   │               │   │   ├── RoomWTimeModel.java</br>
-│   │       │   │               │   │   ├── TimeModel.java</br>
-│   │       │   │               │   │   └── TimeSaveModel.java</br>
-│   │       │   │               │   ├── entity</br>
-│   │       │   │               │   │   ├── Account.java</br>
-│   │       │   │               │   │   ├── Address.java</br>
-│   │       │   │               │   │   ├── Booking.java</br>
-│   │       │   │               │   │   ├── Review.java</br>
-│   │       │   │               │   │   ├── Room.java</br>
-│   │       │   │               │   │   └── Time.java</br>
-│   │       │   │               │   └── repository</br>
-│   │       │   │               │       ├── AccountCustomRepository.java</br>
-│   │       │   │               │       ├── AccountRepository.java</br>
-│   │       │   │               │       ├── AddressCustomRepository.java</br>
-│   │       │   │               │       ├── AddressRepository.java</br>
-│   │       │   │               │       ├── BookingCustomRepository.java</br>
-│   │       │   │               │       ├── BookingRepository.java</br>
-│   │       │   │               │       ├── ReviewCustomRepository.java</br>
-│   │       │   │               │       ├── ReviewRepository.java</br>
-│   │       │   │               │       ├── RoomCustomRepository.java</br>
-│   │       │   │               │       ├── RoomRepository.java</br>
-│   │       │   │               │       ├── TimeCustomRepository.java</br>
-│   │       │   │               │       ├── TimeRepository.java</br>
-│   │       │   │               │       └── impl</br>
-│   │       │   │               │           ├── AccountRepositoryImpl.java</br>
-│   │       │   │               │           ├── AddressRepositoryImpl.java</br>
-│   │       │   │               │           ├── BookingRepositoryImpl.java</br>
-│   │       │   │               │           ├── ReviewRepositoryImpl.java</br>
-│   │       │   │               │           ├── RoomRepositoryImpl.java</br>
-│   │       │   │               │           └── TimeRepositoryImpl.java</br>
-│   │       │   │               ├── service</br>
-│   │       │   │               │   ├── AccountService.java</br>
-│   │       │   │               │   ├── AddressService.java</br>
-│   │       │   │               │   ├── BookingService.java</br>
-│   │       │   │               │   ├── ReviewService.java</br>
-│   │       │   │               │   ├── RoomService.java</br>
-│   │       │   │               │   ├── TimeService.java</br>
-│   │       │   │               │   └── impl</br>
-│   │       │   │               │       ├── AccountServiceImpl.java</br>
-│   │       │   │               │       ├── AddressServiceImpl.java</br>
-│   │       │   │               │       ├── BookingServiceImpl.java</br>
-│   │       │   │               │       ├── ReviewServiceImpl.java</br>
-│   │       │   │               │       ├── RoomServiceImpl.java</br>
-│   │       │   │               │       └── TimeServiceImpl.java</br>
-│   │       │   │               └── util</br>
-│   │       │   │                   ├── Converter.java</br>
-│   │       │   │                   └── GlobalExceptionHandler.java</br>
-│   └── user-service</br>
-│       ├── .gitignore</br>
-│       ├── Dockerfile</br>
-│       ├── build.gradle</br>
-│       ├── gradle</br>
-│       │   └── wrapper</br>
-│       │       ├── gradle-wrapper.jar</br>
-│       │       └── gradle-wrapper.properties</br>
-│       ├── gradlew</br>
-│       ├── gradlew.bat</br>
-│       └── src</br>
-│           └── userservice</br>
-│               ├── UserServiceApplication.java</br>
-│               ├── config</br>
-│               │   ├── QuerydslConfig.java</br>
-│               │   └── SwaggerConfig.java</br>
-│               ├── controller</br>
-│               │   ├── AdminPostController.java</br>
-│               │   ├── DeclarationPostController.java</br>
-│               │   ├── FriendController.java</br>
-│               │   ├── LikePostController.java</br>
-│               │   └── LikeRoomController.java</br>
-│               ├── model</br>
-│               │   ├── domain</br>
-│               │   │   ├── AdminPostModel.java</br>
-│               │   │   ├── DeclarationPostModel.java</br>
-│               │   │   ├── FriendModel.java</br>
-│               │   │   ├── LikePostModel.java</br>
-│               │   │   └── LikeRoomModel.java</br>
-│               │   ├── entity</br>
-│               │   │   ├── AdminPosts.java</br>
-│               │   │   ├── DeclarationPosts.java</br>
-│               │   │   ├── Friends.java</br>
-│               │   │   ├── LikePosts.java</br>
-│               │   │   └── LikeRooms.java</br>
-│               │   └── repository</br>
-│               │       ├── AdminPostRepository.java</br>
-│               │       ├── DeclarationPostRepository.java</br>
-│               │       ├── FriendRepository.java</br>
-│               │       ├── Impl</br>
-│               │       │   ├── AdminPostRepositoryImpl.java</br>
-│               │       │   ├── DeclarationPostRepositoryImpl.java</br>
-│               │       │   ├── FriendRepositoryImpl.java</br>
-│               │       │   ├── LikePostRepositoryImpl.java</br>
-│               │       │   └── LikeRoomRepositoryImpl.java</br>
-│               │       ├── LikePostRepository.java</br>
-│               │       ├── LikeRoomRepository.java</br>
-│               │       └── custom</br>
-│               │           ├── AdminPostRepositoryCustom.java</br>
-│               │           ├── DeclarationPostRepositoryCustom.java</br>
-│               │           ├── FriendRepositoryCustom.java</br>
-│               │           ├── LikePostRepositoryCustom.java</br>
-│               │           └── LikeRoomRepositoryCustom.java</br>
-│               └── service</br>
-│                   ├── AdminPostService.java</br>
-│                   ├── DeclarationPostService.java</br>
-│                   ├── FriendService.java</br>
-│                   ├── LikePostService.java</br>
-│                   ├── LikeRoomService.java</br>
-│                   └── impl</br>
-│                       ├── AdminPostServiceImpl.java</br>
-│                       ├── DeclarationPostServiceImpl.java</br>
-│                       ├── FriendServiceImpl.java</br>
-│                       ├── LikePostServiceImpl.java</br>
-│                       └── LikeRoomServiceImpl.java</br>
-└── user.yaml</br>
-└── settings.gradle</br>
+📦paranmanzang-project<br/>
+┣ 📦server</br>
+┃ ┣ 📦config-server</br>
+┃ ┣ 📦eureka-server</br>
+┃ ┣ 📦gateway-server</br>
+┃ ┃ ┗ 📂gatewayserver</br>
+┃ ┃ ┣ 📂Enum</br>
+┃ ┃ ┃ ┣ 📜CodeEnum.java</br>
+┃ ┃ ┃ ┣ 📜ExceptionStatus.java</br>
+┃ ┃ ┃ ┗ 📜Role.java</br>
+┃ ┃ ┣ 📂Filter</br>
+┃ ┃ ┃ ┣ 📜GatewayRouter.java</br>
+┃ ┃ ┃ ┣ 📜LoginFilter.java</br>
+┃ ┃ ┃ ┣ 📜LogoutFilter.java</br>
+┃ ┃ ┃ ┗ 📜ReissueFilter.java</br>
+┃ ┃ ┣ 📜GatewayException.java</br>
+┃ ┃ ┣ 📜GatewayServerApplication.java</br>
+┃ ┃ ┣ 📂config</br>
+┃ ┃ ┃ ┣ 📜MongoConfig.java</br>
+┃ ┃ ┃ ┣ 📜RedisConfig.java</br>
+┃ ┃ ┃ ┣ 📜SecurityConfig.java</br>
+┃ ┃ ┃ ┣ 📜UriConfiguration.java</br>
+┃ ┃ ┃ ┣ 📜UserRoute.java</br>
+┃ ┃ ┃ ┗ 📜WebClientConfig.java</br>
+┃ ┃ ┣ 📂controller</br>
+┃ ┃ ┃ ┗ 📜UserController.java</br>
+┃ ┃ ┣ 📂jwt</br>
+┃ ┃ ┃ ┣ 📜CustomAuthenticationFailureHandler.java</br>
+┃ ┃ ┃ ┣ 📜CustomAuthenticationSuccessHandler.java</br>
+┃ ┃ ┃ ┣ 📜CustomReactiveAuthenticationManager.java</br>
+┃ ┃ ┃ ┣ 📜JWTUtil.java</br>
+┃ ┃ ┃ ┗ 📜JwtTokenServiceImpl.java</br>
+┃ ┃ ┣ 📂model</br>
+┃ ┃ ┃ ┣ 📂Domain</br>
+┃ ┃ ┃ ┃ ┣ 📜UserModel.java</br>
+┃ ┃ ┃ ┃ ┗📂oauth</br>
+┃ ┃ ┃ ┃  ┣ 📜CustomOAuth2User.java</br>
+┃ ┃ ┃ ┃  ┣ 📜CustomUserDetails.java</br>
+┃ ┃ ┃ ┃  ┣ 📜NaverResponse.java</br>
+┃ ┃ ┃ ┃  ┗ 📜OAuth2Response.java</br>
+┃ ┃ ┃ ┣ 📜LoginModel.java</br>
+┃ ┃ ┃ ┣ 📜RegisterModel.java</br>
+┃ ┃ ┃ ┣ 📂entity</br>
+┃ ┃ ┃ ┃ ┗ 📜User.java</br>
+┃ ┃ ┃ ┗📂repository</br>
+┃ ┃ ┃  ┗ 📜UserRepository.java</br>
+┃ ┃ ┣ 📂oauth</br>
+┃ ┃ ┃ ┣ 📜CustomOAuth2UserService.java</br>
+┃ ┃ ┃ ┣ 📜CustomReactiveUserDetailsService.java</br>
+┃ ┃ ┃ ┗ 📜CustomSuccessHandler.java</br>
+┃ ┃ ┗ 📂service</br>
+┃ ┃ ┃ ┣ 📂Impl</br>
+┃ ┃ ┃ ┃ ┗ 📜UserServiceImpl.java</br>
+┃ ┃ ┃ ┗ 📜UserService.java</br>
+┃ ┗ 📦secret-server</br>
+┣ 📦service</br>
+┃ ┣📦chat-service</br>
+┃ ┃ ┣ 📂config</br>
+┃ ┃ ┃ ┣ 📜ChatMessageRoute.java</br>
+┃ ┃ ┃ ┣ 📜ChatRoomRoute.java</br>
+┃ ┃ ┃ ┣ 📜ChatUserRoute.java</br>
+┃ ┃ ┃ ┣ 📜MongoConfig.java</br>
+┃ ┃ ┃ ┗ 📜RedisConfig.java</br>
+┃ ┃ ┣ 📂controller</br>
+┃ ┃ ┃ ┣ 📜ChatMessageHandler.java</br>
+┃ ┃ ┃ ┣ 📜ChatRoomHandler.java</br>
+┃ ┃ ┃ ┗ 📜ChatUserHandler.java</br>
+┃ ┃ ┣ 📂model</br>
+┃ ┃ ┃ ┣ 📂domain</br>
+┃ ┃ ┃ ┃ ┣ 📜ChatUnReadUserModel.java</br>
+┃ ┃ ┃ ┃ ┣ 📜ChatUserModel.java</br>
+┃ ┃ ┃ ┃ ┣ 📂message</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜ChatMessageModel.java</br>
+┃ ┃ ┃ ┃ ┃ ┗ 📜RequestChatMessageModel.java</br>
+┃ ┃ ┃ ┃ ┣ 📂room</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜ChatRoomModel.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜ChatRoomNameModel.java</br>
+┃ ┃ ┃ ┃ ┃ ┗ 📜ChatRoomPasswordModel.java</br>
+┃ ┃ ┃ ┣ 📂entity</br>
+┃ ┃ ┃ ┃ ┣ 📜ChatMessage.java</br>
+┃ ┃ ┃ ┃ ┣ 📜ChatRoom.java</br>
+┃ ┃ ┃ ┃ ┣ 📜ChatUser.java</br>
+┃ ┃ ┃ ┃ ┗ 📜ChatUserTimeStamp.java</br>
+┃ ┃ ┃ ┣ 📂enums</br>
+┃ ┃ ┃ ┃ ┗ 📜MessageType.java</br>
+┃ ┃ ┃ ┗ 📂repository</br>
+┃ ┃ ┃ ┃ ┣ 📜ChatMessageRepository.java</br>
+┃ ┃ ┃ ┃ ┣ 📜ChatRoomRepository.java</br>
+┃ ┃ ┃ ┃ ┣ 📜ChatUserRepository.java</br>
+┃ ┃ ┃ ┃ ┣ 📜ChatUserTimeStampRepository.java</br>
+┃ ┃ ┃ ┃ ┣ 📜CustomChatMessageRepository.java</br>
+┃ ┃ ┃ ┃ ┣ 📜CustomChatRoomRepository.java</br>
+┃ ┃ ┃ ┃ ┣ 📜CustomChatUserRepository.java</br>
+┃ ┃ ┃ ┃ ┗ 📜CustomChatUserTimeStampRepository.java</br>
+┃ ┃ ┃ ┗ 📂impl</br>
+┃ ┃ ┃ ┃ ┣ 📜CustomChatMessageRepositoryImpl.java</br>
+┃ ┃ ┃ ┃ ┣ 📜CustomChatRoomRepositoryImpl.java</br>
+┃ ┃ ┃ ┃ ┣ 📜CustomChatUserRepositoryImpl.java</br>
+┃ ┃ ┃ ┃ ┗ 📜CustomChatUserTimeStampRepositoryImpl.java</br>
+┃ ┃ ┣ 📂service</br>
+┃ ┃ ┃ ┣ 📜ChatService.java</br>
+┃ ┃ ┃ ┗ 📜impl</br>
+┃ ┃ ┃ ┗ 📜ChatServiceImpl.java</br>
+┃ ┃ ┗ 📂util</br>
+┃ ┃ ┃ ┗ 📜ProfanityFilter.java</br>
+┃ ┣ 📦comment-service</br>
+┃ ┃ ┣ 📂config</br>
+┃ ┃ ┃┗ 📜QuerydslConfig.java</br>
+┃ ┃ ┣ 📂controller</br>
+┃ ┃ ┃ ┗ 📜CommentController.java</br>
+┃ ┃ ┣ 📂model</br>
+┃ ┃ ┃ ┣ 📂domain</br>
+┃ ┃ ┃ ┃ ┣ 📜CommentRequestModel.java</br>
+┃ ┃ ┃ ┃ ┣ 📜CommentResponseModel.java</br>
+┃ ┃ ┃ ┃ ┣ 📜ErrorField.java</br>
+┃ ┃ ┃ ┃ ┗ 📜ExceptionResponseModel.java</br>
+┃ ┃ ┃ ┣ 📂entity</br>
+┃ ┃ ┃ ┃ ┗ 📜Comment.java</br>
+┃ ┃ ┃ ┗ 📂repository</br>
+┃ ┃ ┃ ┣ 📜CommentRepository.java</br>
+┃ ┃ ┃ ┣ 📜CustomCommentRepository.java</br>
+┃ ┃ ┃ ┗ 📂impl</br>
+┃ ┃ ┃ ┃ ┗ 📜CommentRepositoryImpl.java</br>
+┃ ┃ ┣ 📂service</br>
+┃ ┃ ┃ ┣ 📜CommentService.java</br>
+┃ ┃ ┃ ┗ 📂impl</br>
+┃ ┃ ┃ ┃ ┗ 📜CommentServiceImpl.java</br>
+┃ ┃ ┗ 📂util</br>
+┃ ┃ ┗ 📜GlobalExceptionHandler.java</br>
+┃ ┣📦file-service</br>
+┃ ┃ ┣ 📂config</br>
+┃ ┃ ┃ ┣ 📜MongoConfig.java</br>
+┃ ┃ ┃ ┣ 📜S3Config.java</br>
+┃ ┃ ┃ ┗ 📜SwaggerConfig.java</br>
+┃ ┃ ┣ 📂controller</br>
+┃ ┃ ┃ ┗ 📜FileController.java</br>
+┃ ┃ ┣ 📂model</br>
+┃ ┃ ┃ ┣ 📂domain</br>
+┃ ┃ ┃ ┃ ┣ 📜ErrorField.java</br>
+┃ ┃ ┃ ┃ ┣ 📜ExceptionResponseModel.java</br>
+┃ ┃ ┃ ┃ ┣ 📜FileDeleteModel.java</br>
+┃ ┃ ┃ ┃ ┗ 📜FileModel.java</br>
+┃ ┃ ┃ ┣ 📂entity</br>
+┃ ┃ ┃ ┃ ┗ 📜File.java</br>
+┃ ┃ ┃ ┣ 📂enums</br>
+┃ ┃ ┃ ┃ ┗ 📜FileType.java</br>
+┃ ┃ ┃ ┗ 📂repository</br>
+┃ ┃ ┃ ┃ ┣ 📜FileRepository.java</br>
+┃ ┃ ┃ ┣ 📂custom</br>
+┃ ┃ ┃ ┃ ┗ 📜FileCustomRepository.java</br>
+┃ ┃ ┃ ┗ 📂impl</br>
+┃ ┃ ┃ ┃ ┗ 📜FileCustomRepositoryImpl.java</br>
+┃ ┃ ┣ 📂service</br>
+┃ ┃ ┃ ┣ 📜FileService.java</br>
+┃ ┃ ┃ ┗ 📂impl</br>
+┃ ┃ ┃ ┃ ┗ 📜FileServiceImpl.java</br>
+┃ ┃ ┗ 📂util</br>
+┃ ┃ ┃ ┗ 📜GlobalExceptionHandler.java</br>
+┃ ┣ 📦group-service</br>
+┃ ┃ ┣ 📂config</br>
+┃ ┃ ┃ ┗ 📜QuerydslConfig.java</br>
+┃ ┃ ┣ 📂controller</br>
+┃ ┃ ┃ ┣ 📜BookController.java</br>
+┃ ┃ ┃ ┣ 📜GroupController.java</br>
+┃ ┃ ┃ ┣ 📜GroupPostController.java</br>
+┃ ┃ ┃ ┗ 📜LikeBookController.java</br>
+┃ ┃ ┣ 📂enums</br>
+┃ ┃ ┃ ┣ 📜CodeEnum.java</br>
+┃ ┃ ┃ ┗ 📜GroupPostCategory.java</br>
+┃ ┃ ┣ 📂model</br>
+┃ ┃ ┃ ┣ 📂domain</br>
+┃ ┃ ┃ ┃ ┣ 📜BookResponseModel.java</br>
+┃ ┃ ┃ ┃ ┣ 📜ErrorField.java</br>
+┃ ┃ ┃ ┃ ┣ 📜ExceptionResponseModel.java</br>
+┃ ┃ ┃ ┃ ┣ 📜GroupModel.java</br>
+┃ ┃ ┃ ┃ ┣ 📜GroupPostModel.java</br>
+┃ ┃ ┃ ┃ ┣ 📜GroupPostResponseModel.java</br>
+┃ ┃ ┃ ┃ ┣ 📜GroupResponseModel.java</br>
+┃ ┃ ┃ ┃ ┣ 📜JoiningModel.java</br>
+┃ ┃ ┃ ┃ ┗ 📜LikeBookModel.java</br>
+┃ ┃ ┃ ┣ 📂entity</br>
+┃ ┃ ┃ ┃ ┣ 📜Book.java</br>
+┃ ┃ ┃ ┃ ┣ 📜Group.java</br>
+┃ ┃ ┃ ┃ ┣ 📜GroupPost.java</br>
+┃ ┃ ┃ ┃ ┣ 📜Joining.java</br>
+┃ ┃ ┗ ┗ ┗ 📜LikeBooks.java</br>
+┃ ┣ 📦room-service</br>
+┃ ┃ ┗ 📂src</br>
+┃ ┃ ┃ ┣ 📂config</br>
+┃ ┃ ┃ ┃ ┣ 📜QuerydslConfig.java</br>
+┃ ┃ ┃ ┃ ┗ 📜SwaggerConfig.java</br>
+┃ ┃ ┃ ┣ 📂controller</br>
+┃ ┃ ┃ ┃ ┣ 📜AccountController.java</br>
+┃ ┃ ┃ ┃ ┣ 📜AddressController.java</br>
+┃ ┃ ┃ ┃ ┣ 📜BookingController.java</br>
+┃ ┃ ┃ ┃ ┣ 📜ReviewController.java</br>
+┃ ┃ ┃ ┃ ┣ 📜RoomController.java</br>
+┃ ┃ ┃ ┃ ┗ 📜TimeController.java</br>
+┃ ┃ ┃ ┣ 📂model</br>
+┃ ┃ ┃ ┃ ┣ 📂domain</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜AccountCancelModel.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜AccountModel.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜AccountResultModel.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜AddressModel.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜AddressUpdateModel.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜BookingModel.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜ErrorField.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜ExceptionResponseModel.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜ReviewModel.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜ReviewUpdateModel.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜RoomModel.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜RoomUpdateModel.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜RoomWTimeModel.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜TimeModel.java</br>
+┃ ┃ ┃ ┃ ┃ ┗ 📜TimeSaveModel.java</br>
+┃ ┃ ┃ ┃ ┣ 📂entity</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜Account.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜Address.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜Booking.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜Review.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜Room.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜Time.java</br>
+┃ ┃ ┃ ┃ ┃ ┗ 📂repository</br>
+┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜AccountCustomRepository.java</br>
+┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜AccountRepository.java</br>
+┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜AddressCustomRepository.java</br>
+┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜AddressRepository.java</br>
+┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜BookingCustomRepository.java</br>
+┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜BookingRepository.java</br>
+┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜ReviewCustomRepository.java</br>
+┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜ReviewRepository.java</br>
+┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RoomCustomRepository.java</br>
+┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RoomRepository.java</br>
+┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜TimeCustomRepository.java</br>
+┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜TimeRepository.java</br>
+┃ ┃ ┃ ┃ ┃ ┗ 📂impl</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜AccountRepositoryImpl.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜AddressRepositoryImpl.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜BookingRepositoryImpl.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜ReviewRepositoryImpl.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜RoomRepositoryImpl.java</br>
+┃ ┃ ┃ ┃ ┃ ┗ 📜TimeRepositoryImpl.java</br>
+┃ ┃ ┃ ┃ ┣ 📂service</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜AccountService.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜AddressService.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜BookingService.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜ReviewService.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜RoomService.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜TimeService.java</br>
+┃ ┃ ┃ ┃ ┃ ┗📂impl</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜AccountServiceImpl.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜AddressServiceImpl.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜BookingServiceImpl.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜ReviewServiceImpl.java</br>
+┃ ┃ ┃ ┃ ┃ ┣ 📜RoomServiceImpl.java</br>
+┃ ┃ ┃ ┃ ┃ ┗ 📜TimeServiceImpl.java</br>
+┃ ┃ ┃ ┃ ┗📂util</br>
+┃ ┃ ┃ ┃ ┣ 📜Converter.java</br>
+┃ ┃ ┗ ┗ ┗ 📜GlobalExceptionHandler.java</br>
+┃ ┗📦user-service</br>
+┃ ┃ ┣ 📂config</br>
+┃ ┃ ┃ ┣ 📜QuerydslConfig.java</br>
+┃ ┃ ┃ ┗ 📜SwaggerConfig.java</br>
+┃ ┃ ┣ 📂controller</br>
+┃ ┃ ┃ ┣ 📜AdminPostController.java</br>
+┃ ┃ ┃ ┣ 📜DeclarationPostController.java</br>
+┃ ┃ ┃ ┣ 📜FriendController.java</br>
+┃ ┃ ┃ ┣ 📜LikePostController.java</br>
+┃ ┃ ┃ ┗ 📜LikeRoomController.java</br>
+┃ ┃ ┣ 📂model</br>
+┃ ┃ ┃ ┣ 📂domain</br>
+┃ ┃ ┃ ┃ ┣ 📜AdminPostModel.java</br>
+┃ ┃ ┃ ┃ ┣ 📜DeclarationPostModel.java</br>
+┃ ┃ ┃ ┃ ┣ 📜FriendModel.java</br>
+┃ ┃ ┃ ┃ ┣ 📜LikePostModel.java</br>
+┃ ┃ ┃ ┃ ┗ 📜LikeRoomModel.java</br>
+┃ ┃ ┣ 📂entity</br>
+┃ ┃ ┃ ┣ 📜AdminPosts.java</br>
+┃ ┃ ┃ ┣ 📜DeclarationPosts.java</br>
+┃ ┃ ┃ ┣ 📜Friends.java</br>
+┃ ┃ ┃ ┣ 📜LikePosts.java</br>
+┃ ┃ ┃ ┗ 📜LikeRooms.java</br>
+┃ ┃ ┗ 📂repository</br>
+┃ ┃ ┃ ┣ 📜AdminPostRepository.java</br>
+┃ ┃ ┃ ┣ 📜DeclarationPostRepository.java</br>
+┃ ┃ ┃ ┣ 📜FriendRepository.java</br>
+┃ ┃ ┃ ┣ 📂Impl</br>
+┃ ┃ ┃ ┃ ┣ 📜AdminPostRepositoryImpl.java</br>
+┃ ┃ ┃ ┃ ┣ 📜DeclarationPostRepositoryImpl.java</br>
+┃ ┃ ┃ ┃ ┣ 📜FriendRepositoryImpl.java</br>
+┃ ┃ ┃ ┃ ┣ 📜LikePostRepositoryImpl.java</br>
+┃ ┃ ┃ ┃ ┗ 📜LikeRoomRepositoryImpl.java</br>
+┃ ┃ ┃ ┣ 📜LikePostRepository.java</br>
+┃ ┃ ┃ ┣ 📜LikeRoomRepository.java</br>
+┃ ┃ ┃ ┗ 📂custom</br>
+┃ ┃ ┃ ┣ 📜AdminPostRepositoryCustom.java</br>
+┃ ┃ ┃ ┣ 📜DeclarationPostRepositoryCustom.java</br>
+┃ ┃ ┃ ┣ 📜FriendRepositoryCustom.java</br>
+┃ ┃ ┃ ┣ 📜LikePostRepositoryCustom.java</br>
+┃ ┃ ┃ ┗ 📜LikeRoomRepositoryCustom.java</br>
+┃ ┃ ┗ 📂service</br>
+┃ ┃ ┣ 📜AdminPostService.java</br>
+┃ ┃ ┣ 📜DeclarationPostService.java</br>
+┃ ┃ ┣ 📜FriendService.java</br>
+┃ ┃ ┣ 📜LikePostService.java</br>
+┃ ┃ ┣ 📜LikeRoomService.java</br>
+┃ ┃ ┗ 📂impl</br>
+┃ ┃ ┃ ┣ 📜AdminPostServiceImpl.java</br>
+┃ ┃ ┃ ┣ 📜DeclarationPostServiceImpl.java</br>
+┃ ┃ ┃ ┣ 📜FriendServiceImpl.java</br>
+┃ ┃ ┃ ┣ 📜LikePostServiceImpl.java</br>
+┃ ┃ ┗ ┗ 📜LikeRoomServiceImpl.java</br>
+┗ ┗ 📜user.yaml</br>
 </details>
 
 
@@ -534,7 +563,7 @@
 
 <!--나중에 지피티로 돌려서 좀 예쁘게 수정....-->
 <h2>📚개발기간</h2>
-2024.08.21.~2024.10.
+2024.08.21.~2024.10.21
 
 <h2>📚프로젝트 산출물</h2>
 
@@ -554,6 +583,6 @@
   [발표자료](https://github.com/paranmanzang/paran_msa/blob/master/paranmanzang%20final_rev1.pptx)</li>
  <li>
   
-  [발표영상](https://www.youtube.com/)</li>
+  [발표영상](https://youtu.be/PUvr9OLc0JA)</li>
 </ul>
 
