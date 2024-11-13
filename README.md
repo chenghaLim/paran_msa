@@ -580,10 +580,7 @@
   
   [개발환경](https://www.notion.so/11e4a940b48480688ac3fcce8025d49b)</li>
  <li>
-     
-  [발표자료](https://github.com/paranmanzang/paran_msa/blob/master/paranmanzang%20final_rev1.pptx)</li>
- <li>
   
-  [발표영상](https://youtu.be/PUvr9OLc0JA)</li>
+  [발표영상](https://youtu.be/pcQpq7HNg5g?si=AnTBEnYKXX9-nfuJ)</li>
 </ul>
 
